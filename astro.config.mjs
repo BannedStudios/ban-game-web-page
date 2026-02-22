@@ -15,6 +15,8 @@ const redirectMap = Object.fromEntries(
 
 // https://astro.build/config
 export default defineConfig({
+  trailingSlash: "always",
+  
   image: {
     remotePatterns: [
       {

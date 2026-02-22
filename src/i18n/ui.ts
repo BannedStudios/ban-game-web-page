@@ -14,8 +14,8 @@ export const ui = {
     'nav.contact': 'Contact',
     
     'nav.projectsDesc': "Projects (events and series) we have done.",
-    'nav.staffDesc': 'Ban Game Studios team.',
-    'nav.applyDesc': "Do you want to join the Ban Game Studios team?",
+    'nav.staffDesc': 'Banned Studios team.',
+    'nav.applyDesc': "Do you want to join the Banned Studios team?",
 
     'hero.title': 'Creating for creators.',
     'hero.desc': 'Studio of server development (events or series) of Minecraft Semi-professionals.',
@@ -40,9 +40,9 @@ export const ui = {
     'index.projectsTitle': 'Our Projects',
     'index.projectsMore': 'See more...',
     'index.videosTitle': 'Featured Videos',
-    'index.timelineTitle': '2025 Timeline',
+    'index.timelineTitle': '2026 Timeline',
 
-    'staff.desc': 'Ban Game Studios Team.',
+    'staff.desc': 'Banned Studios Team.',
 
     'staff.skill.director': 'Director',
     'staff.skill.subDirector': 'Sub Director',
@@ -57,9 +57,9 @@ export const ui = {
     'staff.skill.programmer': 'Developer',
     'staff.tgb.skills': 'Exist',
 
-    'staff.miniTitle': 'Do you want to be part of the Ban Game Studios Team?',
+    'staff.miniTitle': 'Do you want to be part of the Banned Studios Team?',
     'staff.apply': 'Apply here',
-    'staff.teamTitle': 'Ban Game Studios Team',
+    'staff.teamTitle': 'Banned Studios Team',
     'staff.tgbTitle': 'The Mascot',
 
     'launcher.desc': 'Our launcher to get the resources needed to participate in our projects.',
@@ -73,10 +73,10 @@ export const ui = {
     'terms.miniTitle': 'Coming soon...',
 
     'contact.title': 'Contact',
-    'contact.desc': 'Form to contact to Ban Game Studios.',
+    'contact.desc': 'Form to contact to Banned Studios.',
 
     'apply.title': 'Apply',
-    'apply.desc': 'Form to apply to Ban Game Studios.',
+    'apply.desc': 'Form to apply to Banned Studios.',
 
     'projects.title': 'Projects',
     'projects.desc': 'Projects (events and series) that we have done.',
@@ -86,7 +86,7 @@ export const ui = {
     'projects.credits': 'Credits',
 
     'about.title': 'About Us',
-    'about.desc': 'Information and history of Ban Game Studios.',
+    'about.desc': 'Information and history of Banned Studios.',
     'about.miniTitle': 'About Us',
   },
   es: {
@@ -97,8 +97,8 @@ export const ui = {
     'nav.contact': 'Contacto',
 
     'nav.projectsDesc': "Proyectos (eventos y series) que hemos realizado.",
-    'nav.staffDesc': 'Equipo de Ban Game Studios.',
-    'nav.applyDesc': "¿Quieres formar parte del equipo de Ban Game Studios?",
+    'nav.staffDesc': 'Equipo de Banned Studios.',
+    'nav.applyDesc': "¿Quieres formar parte del equipo de Banned Studios?",
 
     'hero.title': 'Creando para creadores.',
     'hero.desc': 'Estudio de desarrollo de servidores (eventos o series) de Minecraft Semi-profesionales.',
@@ -123,9 +123,9 @@ export const ui = {
     'index.projectsTitle': 'Nuestros Proyectos',
     'index.projectsMore': 'Ver más...',
     'index.videosTitle': 'Videos destacados',
-    'index.timelineTitle': 'Agenda 2025',
+    'index.timelineTitle': 'Agenda 2026',
 
-    'staff.desc': 'Equipo de Ban Game Studios.',
+    'staff.desc': 'Equipo de Banned Studios.',
 
     'staff.skill.scripwriter': 'Guionista',
     'staff.skill.helper': 'Ayudante',
@@ -140,9 +140,9 @@ export const ui = {
     'staff.tgb.skills': 'Existir',
     'staff.skill.programmer': 'Programador',
 
-    'staff.miniTitle': '¿Quieres formar parte del equipo de Ban Game Studios?',
+    'staff.miniTitle': '¿Quieres formar parte del equipo de Banned Studios?',
     'staff.apply': 'Postulate aqui',
-    'staff.teamTitle': 'Equipo de Ban Game Studios',
+    'staff.teamTitle': 'Equipo de Banned Studios',
     'staff.tgbTitle': 'La Mascota',
 
     'launcher.desc': 'Nuestro launcher para obtener los recursos necesarios para participar en nuestros proyectos.',
@@ -156,10 +156,10 @@ export const ui = {
     'terms.miniTitle': 'Proximamente...',
 
     'contact.title': 'Contacto',
-    'contact.desc': 'Formulario para poder contactar con Ban Game Studios.',
+    'contact.desc': 'Formulario para poder contactar con Banned Studios.',
 
     'apply.title': 'Postulate',
-    'apply.desc': 'Formulario para poder postularse a Ban Game Studios.',
+    'apply.desc': 'Formulario para poder postularse a Banned Studios.',
 
     'projects.title': 'Proyectos',
     'projects.desc': 'Proyectos (eventos y series) que hemos realizado.',
@@ -169,7 +169,7 @@ export const ui = {
     'projects.credits': 'Creditos',
 
     'about.title': 'Sobre Nosotros',
-    'about.desc': 'Información e historia de Ban Game Studios.',
+    'about.desc': 'Información e historia de Banned Studios.',
     'about.miniTitle': 'Sobre Nosotros',
   },
 } as const;

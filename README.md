@@ -1,4 +1,4 @@
-# Ban Game Web Page
+# Banned Web Page
 
 ## Development
 

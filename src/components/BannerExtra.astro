@@ -1,0 +1,33 @@
+---
+import { Image } from "astro:assets"
+
+const { src } = Astro.props
+
+const { default: image } = await import(`../assets/banners/${src}.webp`)
+---
+
+<div class="opacity-0 transition-opacity duration-1000 ease-in-out overflow-hidden">
+    <Image src={image} alt="Banner" loading="eager" class="w-full" style="mask-image: linear-gradient(to bottom, black 40%, transparent);" onload="this.parentElement.classList.add('animate-fade-up')"/>
+    <div class="absolute inset-0 bg-black opacity-65 pointer-events-none"></div>
+</div>
+
+<style>
+    .animate-fade-up {
+        opacity: 1;
+    }
+
+    @keyframes fadeUp {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-up {
+        animation: fadeUp 1s ease-out forwards;
+    }
+</style>

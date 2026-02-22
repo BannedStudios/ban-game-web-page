@@ -1,8 +1,8 @@
-Somos un estudio de desarrollo de servidores de **Minecraft Java semi-profesional**, fundado por **Katto**, **FranNazurRM** y **Sir** el 10 de agosto de 2023.
+Somos un estudio de desarrollo de servidores de **Minecraft Java semi-profesional**, fundado por **Katto**, **FranNazurRM** y **Sir_Reviaj** el 10 de agosto de 2023.
 
 Trabajamos mayormente en el lado de los mods con la ayuda de plugins, siempre intentando innovar con estos recursos sin perder calidad. Además de ser distribuidores de mods y plugins útiles para la creación de eventos o series a través de [Modrinth](https://modrinth.com/organization/bangamestudios).
 
-Nuestro fundador principal, **Katto**, llevaba creando servidores años antes de la fundación del estudio, algunos pocos públicos, pero en general para jugar con amigos. Normalmente, los desarrollaba junto a **FranNazurRM** y **Sir**.
+Nuestro fundador principal, **Katto**, llevaba creando servidores años antes de la fundación del estudio, algunos pocos públicos, pero en general para jugar con amigos. Normalmente, los desarrollaba junto a **FranNazurRM** y **Sir_Reviaj**.
 
 Hasta que llegaron a un proyecto que iba a ser tan grande que decidieron hacerlo más público, creando un estudio en un principio ficticio para hacerle promoción a ese proyecto, que luego sería publicado en episodios en YouTube por los participantes (amigos).
 

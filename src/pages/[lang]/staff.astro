@@ -1,12 +1,12 @@
 ---
 import StaffCard from '../../components/StaffCard.astro';
 import Layout from '../../layouts/Layout.astro';
-import Banner from '../../components/Banner.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 import { getAllStaff } from '../../libs/firestore/staff';
 import MainPage from '../../components/MainPage.astro';
 import BriefCase from '../../components/Icons/BriefCase.astro';
 import MiniTitle from '../../components/MiniTitle.astro';
+import BannerExtra from '../../components/BannerExtra.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -37,13 +37,13 @@ const tgb = [
     {
         name: "T.G.B",
         skills: `${t("staff.tgb.skills")}`,
-        avatar: "https://web.bangame.tech/staff/tgb.webp"
+        avatar: "https://web.b4nned.xyz/staff/tgb.webp"
     },
 ];
 ---
 
-<Layout title="Staff" image="/pages/staff.webp" desc={`${t("staff.desc")}`}>
-    <Banner src="banner3"/>
+<Layout title="Staff" image="/index/index2.webp" desc={`${t("staff.desc")}`}>
+    <BannerExtra src="staff"/>
     <MainPage>
       <MiniTitle class="mb-5">{t("staff.miniTitle")}</MiniTitle>
       <a class="flex flex-row items-center gap-2 px-5 py-3 bg-[#333] rounded-[20px] text-white transition-all duration-300 ease-in hover:bg-[#222222]" href="/postulate/">

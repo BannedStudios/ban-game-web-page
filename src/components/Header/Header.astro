@@ -25,19 +25,19 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
 <div class="mb-[55px]">
     <header class="bg-[#00000099] backdrop-blur-[8px] fixed w-full h-[55px] z-[1000] border-b-[0.5px] border-b-[#1c1c1c]">
         <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto px-4 h-full">
-            <div class="hamburger hidden gap-[5px] cursor-pointer mt-[5px] z-[1001] relative w-[30px] h-[25px] max-[1100px]:flex flex-col" id="hamburger">
+            <div class="hamburger hidden gap-[5px] cursor-pointer mt-[5px] z-[1001] relative w-[30px] h-[25px] max-[1050px]:flex flex-col" id="hamburger">
                 <span class="block w-[28px] h-[3px] bg-white rounded-[3px] transition-all duration-300 ease-in-out"></span>
                 <span class="block w-[28px] h-[3px] bg-white rounded-[3px] transition-all duration-150 ease-in-out"></span>
                 <span class="block w-[28px] h-[3px] bg-white rounded-[3px] transition-all duration-300 ease-in-out"></span>
             </div>
             
             <nav>
-                <ul class="flex flex-row gap-5 max-[1100px]:hidden">
+                <ul class="flex flex-row gap-5 max-[1050px]:hidden">
                     <NavButtons/>
                 </ul>
             </nav>
     
-            <a class="text-[1.5em] font-bold text-center justify-center absolute transition-colors duration-300 ease top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-[960px]:hidden hover:text-[#ccc]" href=`/${lang}/`>BAN GAME STUDIOS</a>
+            <a class="text-[1.5em] font-bold text-center justify-center absolute transition-colors duration-300 ease top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-[1150px]:hidden hover:text-[#ccc]" href=`/${lang}/`>BANNED STUDIOS</a>
         
             <div class="flex flex-row gap-2.5">
                 <a href={switchLangUrl()} class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] max-[420px]:hidden">
@@ -53,7 +53,7 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
                     Ban Game Launcher
                 </a>
 
-                <div class="flex max-[420px]:hidden">
+                <div class="flex max-[515px]:hidden">
                     <SignedOut>
                         <SignInButton mode="modal" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer">
                             Iniciar Sesión
@@ -72,7 +72,7 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
     <ul class="flex flex-col gap-5">
         <NavButtons/>
         
-        <li class="hidden max-[420px]:flex">
+        <li class="hidden max-[515px]:flex">
             <SignedOut>
                 <SignInButton mode="modal" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer w-max">
                     Iniciar Sesión

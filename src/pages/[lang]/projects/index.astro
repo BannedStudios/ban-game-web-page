@@ -2,10 +2,10 @@
 import ProjectCard from '../../../components/ProjectCard.astro';
 import Layout from '../../../layouts/Layout.astro';
 import Title from '../../../components/Title.astro';
-import Banner from '../../../components/Banner.astro';
 import MainPage from '../../../components/MainPage.astro';
 import { getCollection, render } from "astro:content";
 import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+import BannerExtra from '../../../components/BannerExtra.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -23,8 +23,8 @@ const projects = info
 const { Content } = await render(projects!)
 ---
 
-<Layout title={t("projects.title")} image="/pages/proyectos.webp" desc={t("projects.desc")}>
-    <Banner src="banner2"/>
+<Layout title={t("projects.title")} image="/index/index3.webp" desc={t("projects.desc")}>
+    <BannerExtra src="projects"/>
     <MainPage>
         <Title class="mb-2">{t("projects.miniTitle")}</Title>
         <div class="px-4 max-w-[900px] prose prose-invert text-left">

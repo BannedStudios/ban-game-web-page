@@ -9,32 +9,32 @@ import X from "../components/Icons/X.astro"
 export const networks = [
     {
         alt: 'X',
-        href: 'https://x.com/BanGameStudios',
+        href: 'https://x.com/B4nnedStudios',
         icon: X
     },
     {
         alt: 'Patreon',
-        href: 'https://patreon.com/c/BanGameStudios',
+        href: 'https://patreon.com/c/BannedStudios',
         icon: Patreon
     },
     {
         alt: 'YouTube',
-        href: 'https://youtube.com/@BanGameStudios',
+        href: 'https://youtube.com/@BannedStudios',
         icon: YouTube
     },
     {
         alt: 'Modrinth',
-        href: 'https://modrinth.com/organization/bangamestudios',
+        href: 'https://modrinth.com/organization/bannedstudios',
         icon: Modrinth
     },
     {
         alt: 'GitHub',
-        href: 'https://github.com/bangamestudios',
+        href: 'https://github.com/BannedStudios',
         icon: GitHub
     },
     {
         alt: "Mail",
-        href: 'mailto:contacto@bangame.tech',
+        href: 'mailto:contact@b4nned.xyz',
         icon: Mail
     },
     {

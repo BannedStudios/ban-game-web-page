@@ -1,6 +1,11 @@
 export const timeline = [
     {
         date: "2026",
+        title: "Hell is a warm and pleasant place... right?",
+        desc: "???.",
+    },
+    {
+        date: "2026",
         title: "SONIC CHAMPIONS!",
         desc: "???.",
         link: "/en/projects/sonic/"
@@ -12,46 +17,21 @@ export const timeline = [
         link: "/en/projects/tab/"
     },
     {
-        date: "2026",
-        title: "— B.R.O.S.",
-        desc: "???.",
-        link: "/en/projects/ep/"
-    },
-    {
-        date: "August 2025",
-        title: "TTT Re-Played",
-        desc: "Replay of the event inspired in the TTT (Trouble in Terrorist Town) game mode of Garry's Mod.",
-        link: "/en/projects/ttt2/"
-    },
-    {
         date: "August 2025",
         title: "Anniversary",
-        desc: "Anniversary of Ban Game Studios."
+        desc: "Anniversary of Banned Studios."
     },
     {
-        date: "June 2025",
-        title: "Campo de Guerra",
-        desc: "Event, collaboration with SonPancho and Crysis Studios, inspired in the famous modalidad known as UHC Item Flower.",
-        link: "/en/projects/cdg/"
+        date: "2026",
+        title: "UHC",
+        desc: "???.",
     },
     {
-        date: "May 2025",
-        title: "Flower Power",
-        desc: "Event, collaboration with Crysis Studios, inspired in the famous modalidad known as UHC Item Flower.",
-        link: "/en/projects/fp/"
+        date: "Junary 2026",
+        title: "Escape de la prisión: El gran golpe",
+        desc: "Escape de la prisión: El gran golpe is an event where they had to overcome different puzzles and challenges to be the only one who could obtain freedom.",
+        link: "/en/projects/ep/"
     },
-    {
-        date: "April 2025",
-        title: "TTT",
-        desc: "Event inspired in the TTT (Trouble in Terrorist Town) game mode of Garry's Mod.",
-        link: "/en/projects/ttt/"
-    },
-    {
-        date: "March 2025",
-        title: "Un UHC Más 2",
-        desc: "PvP Event inspired in the famous modalidad known as UHC but with great additions.",
-        link: "/en/projects/uuhcm2/"
-    }
 ]
 
 export const videos = [

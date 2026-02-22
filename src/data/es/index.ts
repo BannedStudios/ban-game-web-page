@@ -1,9 +1,19 @@
 export const timeline = [
     {
         date: "2026",
+        title: "El infierno es un lugar calido y agradable... ¿cierto?",
+        desc: "???.",
+    },
+    {
+        date: "2026",
         title: "SONIC CHAMPIONS!",
         desc: "???.",
         link: "/es/projects/sonic/"
+    },
+    {
+        date: "Agosto 2026",
+        title: "Aniversario",
+        desc: "Aniversario de Banned Studios."
     },
     {
         date: "2026",
@@ -13,45 +23,15 @@ export const timeline = [
     },
     {
         date: "2026",
-        title: "— B.R.O.S.",
+        title: "UHC",
         desc: "???.",
+    },
+    {
+        date: "Enero 2026",
+        title: "Escape de la prisión: El gran golpe",
+        desc: "Escape de la prisión: El gran golpe es un evento en donde tuvieron que superar distintos puzles y desafíos para ser el único que pueda obtener la libertad.",
         link: "/es/projects/ep/"
     },
-    {
-        date: "Agosto 2025",
-        title: "TTT Re-Played",
-        desc: "Rejugación del evento inspirado en el modo de juego TTT (Trouble in Terrorist Town) de Garry's Mod.",
-        link: "/es/projects/ttt2/"
-    },
-    {
-        date: "Agosto 2025",
-        title: "Aniversario",
-        desc: "Aniversario de Ban Game Studios."
-    },
-    {
-        date: "Junio 2025",
-        title: "Campo de Guerra",
-        desc: "Evento, en colaboración con SonPancho y Crysis Studios, inspirado en la famosa modalidad conocida como UHC Item Flower.",
-        link: "/es/projects/cdg/"
-    },
-    {
-        date: "Mayo 2025",
-        title: "Flower Power",
-        desc: "Evento, en colaboración con Crysis Studios, inspirado en la famosa modalidad conocida como UHC Item Flower.",
-        link: "/es/projects/fp/"
-    },
-    {
-        date: "Abril 2025",
-        title: "TTT",
-        desc: "Evento inspirado en el modo de juego TTT (Trouble in Terrorist Town) de Garry's Mod.",
-        link: "/es/projects/ttt/"
-    },
-    {
-        date: "Marzo 2025",
-        title: "Un UHC Más 2",
-        desc: "Evento PvP inspirado en la famosa modalidad conocida como UHC pero con grandes adiciones.",
-        link: "/es/projects/uuhcm2/"
-    }
 ]
 
 export const videos = [

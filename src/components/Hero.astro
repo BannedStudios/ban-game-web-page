@@ -6,7 +6,7 @@ import { getLangFromUrl, useTranslations } from "../i18n/utils";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const { default: bangame } = await import(`../assets/bangame.webp`)
+const { default: banned } = await import(`../assets/banned.webp`)
 
 const isHome = Astro.url.pathname === `/${lang}/`;
 ---
@@ -23,16 +23,15 @@ const isHome = Astro.url.pathname === `/${lang}/`;
     />
     <div class="absolute inset-0 bg-black opacity-65 pointer-events-none"></div>
 
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 gap-4">
         <Image 
-            src={bangame} 
+            src={banned} 
             alt="Banner" 
-            class="max-w-[800px] w-full" 
+            class="max-w-[550px] w-full" 
             loading="eager" 
             onload="this.parentElement.classList.add('animate-fade-up')"
         />
         <section class="max-w-[500px]">
-            <!-- <Title>BAN GAME STUDIOS</Title> -->
             <h2 class="text-[1.2rem] mb-2.5 text-[#ccc] font-medium">{t('hero.title')}</h2>
             {isHome && (
                 <Desc>

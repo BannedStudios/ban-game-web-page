@@ -19,7 +19,7 @@ export default defineConfig({
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "web.bangame.tech",
+        hostname: "web.b4nned.xyz",
         pathname: "/**",
       },
     ],

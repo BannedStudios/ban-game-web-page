@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { getAllProjects } from "../libs/firestore/projects";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const rawProjects = await getAllProjects(Astro.url.pathname.split("/")[1]);
+
+const projectPictures = await Promise.all(
+  rawProjects.map(async (project) => {  
+      const image = await import(`../assets/projects/${project.slug}.webp`);
+      return { ...project, avatar: image.default };
+  })
+);
+---
+
+<div class="flex flex-wrap gap-[2rem] justify-center max-w-[1500px] px-5">
+  {
+    projectPictures.map((project) => {
+      return (
+        // <article class="flex flex-col text-center items-center bg-[#111] text-white rounded-[10px] p-[1.2rem] pt-0 w-[240px] drop-shadow-[0_0_15px_rgba(42,42,42,0.35)] border-[1.5px] border-[rgba(42,42,42,0.500)] overflow-hidden relative group">
+        //   <Image src={avatar} alt={title} quality="high" class="absolute w-[240px] h-[240px] object-cover opacity-[0.15] transition-opacity duration-1000 z-[-10] blur-[2rem] group-hover:opacity-[0.45]" />
+        //   <a href={`/proyectos/${slug}`}>
+        //     <Image src={avatar} alt={title} quality="high" class="w-[200px] h-[200px] rounded-[10px] object-cover transition-transform duration-300 ease-in-out mt-[1.2rem] hover:scale-[1.05]" transition:name={slug} />
+        //   </a>
+        //   <div class="mt-[8px] p-[8px] text-[1.4rem] font-semibold">{title}</div>
+        //   <p class="text-[#7b7b7b] font-medium">{type} - {date}</p>
+        // </article>
+
+        <article class="flex flex-col gap-3 text-left bg-[#111] text-white w-[300px] border-[1.5px] border-[rgba(42,42,42,0.500)] overflow-hidden relative z-[0] group">
+          <a href={`/${lang}/projects/${project.slug}/`}>
+            <Image src={project.avatar} alt={project.title} quality="high" class="w-full h-full" transition:name={project.slug} />
+          </a>
+          <Image src={project.avatar} alt={project.title} quality="high" class="absolute w-full h-full object-cover opacity-[0.10] blur-[2rem] z-[-2] transition-opacity duration-1000 group-hover:opacity-[0.20]" />
+          <div class=" relative z-[-1] px-3 pb-3">
+            <div class="text-[1.2rem] font-medium">{project.title}</div>
+            <p class="text-[0.9rem] text-[#7b7b7b] font-medium">{project.type} - {project.date}</p>
+          </div>
+        </article>
+      )
+    })
+  }
+</div>

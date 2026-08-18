@@ -1,0 +1,15 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
+  return new Response(null, { status: 404 });
+}
+---
+
+<Layout title={t("contact.title")} image="/pages/index.webp" desc={t("contact.desc")}>
+    <iframe id="" allowtransparency="true" allowfullscreen="true" allow="geolocation; microphone; camera" src="https://3a6m514f.forms.app/form/67bde7c566142596360f06ec" frameborder="0" class="w-full h-[calc(100vh-55px)]"></iframe>
+</Layout>

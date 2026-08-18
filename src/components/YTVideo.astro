@@ -1,0 +1,7 @@
+---
+import { YouTube } from '@astro-community/astro-embed-youtube';
+
+const { url, title } = Astro.props;
+---
+
+<YouTube id={url} title={title} posterQuality="max" class="object-cover rounded-[10px] w-full drop-shadow-[0_0_20px_rgba(42,42,42,0.250)] border-[1px] border-[#ffffff3e]"/>

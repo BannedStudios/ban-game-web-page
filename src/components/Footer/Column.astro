@@ -1,0 +1,19 @@
+---
+import Title from "./Title.astro"
+
+const title = Astro.props.title
+const COL = Astro.props.col
+---
+
+<div>
+    <Title>{title}</Title>
+    <ul class="text-gray-400 flex flex-col gap-1.5 font-medium">
+        {
+            COL.map((col: any) => (
+                <li>
+                    <a href={col.url} target={`${col.blank === true ? "_blank" : ""}`} class="hover:underline">{col.name}</a>
+                </li>
+            ))
+        }
+    </ul>
+</div>

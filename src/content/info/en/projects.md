@@ -1,0 +1,1 @@
+During the years we have had since our foundation, we have worked on different types of projects, among them competitive events and roleplay, challenging series, and much more proximamente. All of it includes interesting constructions, custom mods and plugins, and organization. If you are interested in working with us, contact us [here](/en/contact/).

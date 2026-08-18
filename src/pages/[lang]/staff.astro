@@ -1,0 +1,60 @@
+---
+import StaffCard from '../../components/StaffCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getAllStaff } from '../../libs/firestore/staff';
+import MainPage from '../../components/MainPage.astro';
+import BriefCase from '../../components/Icons/BriefCase.astro';
+import MiniTitle from '../../components/MiniTitle.astro';
+import BannerExtra from '../../components/BannerExtra.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
+  return new Response(null, { status: 404 });
+}
+
+const rawStaff = await getAllStaff();
+
+const staff = rawStaff.map((member) => {
+    const translatedSkills = member.skills
+        ? member.skills
+            .split(',')
+            .map(key => t(key.trim()))
+            .join(', ') 
+        : '';
+
+    return {
+        name: member.name,
+        link: member.link,
+        avatar: member.avatar,
+        skills: translatedSkills
+    };
+});
+
+const tgb = [
+    {
+        name: "T.G.B",
+        skills: `${t("staff.tgb.skills")}`,
+        avatar: "https://web.b4nned.xyz/staff/tgb.webp"
+    },
+];
+---
+
+<Layout title="Staff" image="/index/index2.webp" desc={`${t("staff.desc")}`}>
+    <BannerExtra src="staff"/>
+    <MainPage>
+      <MiniTitle class="mb-5">{t("staff.miniTitle")}</MiniTitle>
+      <a class="flex flex-row items-center gap-2 px-5 py-3 bg-[#333] rounded-[20px] text-white transition-all duration-300 ease-in hover:bg-[#222222]" href="/postulate/">
+        <BriefCase class="w-8 h-8"/>
+        <span class="text-[1.6em]">{t("staff.apply")}</span>
+      </a>
+
+      <MiniTitle class="mt-10 mb-5">{t("staff.teamTitle")}</MiniTitle>
+      <StaffCard profiles={staff}/>
+
+      <MiniTitle class="mt-10 mb-5">{t("staff.tgbTitle")}</MiniTitle>
+      <StaffCard profiles={tgb}/>
+    </MainPage>
+</Layout>

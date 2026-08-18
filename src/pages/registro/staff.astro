@@ -1,0 +1,268 @@
+---
+import MainPage from "../../components/MainPage.astro";
+import Title from "../../components/Title.astro";
+import { defaultLang } from "../../i18n/ui";
+import { useTranslations } from '../../i18n/utils';
+import Layout from "../../layouts/Layout.astro";
+
+const t = useTranslations(defaultLang);
+
+import { getAllStaff } from "../../libs/firestore/staff"
+const staff = await getAllStaff()
+---
+<Layout title="Registro">
+    <MainPage>
+        <section id="proyectos" class="flex flex-col justify-center items-center px-5 max-w-[1000px]">
+            <Title class="mb-5 mt-5">Registro de Staff</Title>
+
+            <form id="addStaffForm" class="flex flex-row flex-wrap gap-3 mb-10 justify-center items-center">
+                <input
+                    id="nameInput"
+                    type="text"
+                    placeholder="Name"
+                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
+                    required
+                />
+                <input
+                    id="linkInput"
+                    type="text"
+                    placeholder="Link"
+                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
+                    required
+                />
+                <input
+                    id="skillsInput"
+                    type="text"
+                    placeholder="Skills"
+                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
+                    required
+                />
+                <input
+                    id="avatarInput"
+                    type="text"
+                    placeholder="Avatar"
+                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
+                    required
+                />
+                <input
+                    id="orderInput"
+                    type="number"
+                    placeholder="Order"
+                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
+                    required
+                />
+                <button
+                    type="submit"
+                    class="bg-[#7070701a] border-[1.5px] border-[#7070704d] cursor-pointer px-5 py-3 rounded-lg font-medium text-white"
+                >
+                Agregar
+                </button>
+            </form>
+    
+            <ul id="staffList" class="space-y-3 w-full">
+                {staff.map((staff) => (
+                    <li data-id={staff.id} class="bg-[#7070701a] border-[1.5px] border-[#7070704d] p-4 rounded-xl flex justify-between items-center gap-2">
+                        <span class="text-sm sm:text-base text-left flex flex-col">
+                            <span class="text-white">Name: <span class="text-gray-300">{staff.name}</span></span>
+                            <span class="text-white">Link: <span class="text-gray-300">{staff.link}</span></span>
+                            <span class="text-white">Skills: <span class="text-gray-300">{staff.skills}</span></span>
+                            <span class="text-white">Avatar: <span class="text-gray-300">{staff.avatar}</span></span>
+                            <span class="text-white">Order: <span class="text-gray-300">{staff.order}</span></span>
+                        </span>
+                        <div class="flex flex-wrap gap-2">
+                            <button
+                                class="edit-btn bg-blue-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer mr-2"
+                            >
+                                Editar
+                            </button>
+                            <button
+                                class="delete-btn bg-red-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+
+            <div id="editModal" class="fixed inset-0 bg-black/60 hidden justify-center items-center z-50">
+                <div class="bg-[#1f1f1f] p-6 rounded-xl w-[90%] max-w-md border border-[#7070704d]">
+                  <h2 class="text-white text-lg mb-4">Editar de Staff</h2>
+              
+                  <form id="editStaffForm" class="flex flex-col gap-3">
+                    <input id="editName" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
+                    <input id="editLink" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
+                    <input id="editSkills" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
+                    <input id="editAvatar" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
+                    <input id="editOrder" type="number" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
+              
+                    <div class="flex justify-end gap-3 mt-4">
+                      <button
+                        type="button"
+                        id="closeModalBtn"
+                        class="px-3 py-1.5 bg-gray-500 rounded-lg text-white cursor-pointer"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="submit"
+                        class="px-3 py-1.5 bg-blue-600 rounded-lg text-white cursor-pointer"
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+        </section>
+    </MainPage>
+  </Layout>
+  
+  <script>
+    init();
+  
+    function init() {
+      const form = document.getElementById("addStaffForm");
+      const list = document.getElementById("staffList");
+  
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("nameInput").value.trim();
+        const link = document.getElementById("linkInput").value.trim();
+        const skills = document.getElementById("skillsInput").value.trim();
+        const avatar = document.getElementById("avatarInput").value.trim();
+        const order = Number(document.getElementById("orderInput").value.trim());
+
+        if (!name || !link || !skills || !avatar || !order) return alert("Complete todos los campos");
+  
+        const res = await fetch("/api/staff", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, link, skills, avatar, order })
+        });
+  
+        if (res.ok) {
+          const newCode = await res.json();
+          const li = document.createElement("li");
+          li.dataset.id = newCode.id;
+          li.className = "bg-[#7070701a] border-[1.5px] border-[#7070704d] p-4 rounded-xl flex justify-between items-center";
+          li.innerHTML = `<span class="text-sm sm:text-base text-left flex flex-col">
+                  <span class="text-white">Name: <span class="text-gray-300">${newCode.name}</span></span>
+                  <span class="text-white">Link: <span class="text-gray-300">${newCode.link}</span></span>
+                  <span class="text-white">Skills: <span class="text-gray-300">${newCode.skills}</span></span>
+                  <span class="text-white">Avatar: <span class="text-gray-300">${newCode.avatar}</span></span>
+                  <span class="text-white">Order: <span class="text-gray-300">${newCode.order}</span></span>
+                </span>
+                <div class="flex flex-wrap gap-2">
+                    <button
+                        class="edit-btn bg-blue-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer mr-2"
+                    >
+                        Editar
+                    </button>
+                    <button
+                        class="delete-btn bg-red-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer"
+                    >
+                        Eliminar
+                    </button>
+                </div>`;
+          list.appendChild(li);
+  
+          form.reset();
+        } else {
+          alert("Error al agregar el staff");
+        }
+      });
+  
+      list.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("delete-btn")) {
+          const li = e.target.closest("li");
+          const id = li.dataset.id;
+  
+          if (!confirm("¿Eliminar este staff?")) return;
+  
+          const res = await fetch("/api/staff", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id }),
+          });
+  
+          if (res.ok) {
+            li.remove();
+          } else {
+            alert("Error al eliminar el staff");
+          }
+        }
+      });
+
+        const editModal = document.getElementById("editModal");
+        const editForm = document.getElementById("editStaffForm");
+
+        let currentEditId = null;
+
+        function openModal(data) {
+            editModal.classList.remove("hidden");
+            editModal.classList.add("flex");
+
+            document.getElementById("editName").value = data.name;
+            document.getElementById("editLink").value = data.link;
+            document.getElementById("editSkills").value = data.skills;
+            document.getElementById("editAvatar").value = data.avatar;
+            document.getElementById("editOrder").value = data.order;
+        }
+
+        function closeModal() {
+            editModal.classList.add("hidden");
+            editModal.classList.remove("flex");
+        }
+
+        document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+
+        document.getElementById("staffList").addEventListener("click", (e) => {
+            if (e.target.classList.contains("edit-btn")) {
+                const li = e.target.closest("li");
+                const id = li.dataset.id;
+
+                currentEditId = id;
+
+                const name = li.querySelector("span span:nth-child(1) span").textContent;
+                const link = li.querySelector("span span:nth-child(2) span").textContent;
+                const skills = li.querySelector("span span:nth-child(3) span").textContent;
+                const avatar = li.querySelector("span span:nth-child(4) span").textContent;
+                const order = li.querySelector("span span:nth-child(5) span").textContent;
+
+                openModal({ name, link, skills, avatar, order });
+            }
+        });
+
+        editForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("editName").value.trim();
+            const link = document.getElementById("editLink").value.trim();
+            const skills = document.getElementById("editSkills").value.trim();
+            const avatar = document.getElementById("editAvatar").value.trim();
+            const order = Number(document.getElementById("editOrder").value.trim());
+
+            const res = await fetch("/api/staff", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: currentEditId, name, link, skills, avatar, order }),
+            });
+
+            if (!res.ok) return alert("Error al actualizar");
+
+            const li = document.querySelector(`li[data-id="${currentEditId}"]`);
+            li.querySelector("span span:nth-child(1) span").textContent = name;
+            li.querySelector("span span:nth-child(2) span").textContent = link;
+            li.querySelector("span span:nth-child(3) span").textContent = skills;
+            li.querySelector("span span:nth-child(4) span").textContent = avatar;
+            li.querySelector("span span:nth-child(5) span").textContent = order;
+
+            closeModal();
+        });
+    }
+  
+    document.addEventListener("astro:after-swap", () => {
+      init();
+    })
+</script>

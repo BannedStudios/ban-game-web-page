@@ -1,0 +1,77 @@
+---
+import { ClientRouter } from 'astro:transitions'
+
+import Header from '../components/Header/Header.astro'
+import Footer from '../components/Footer/Footer.astro'
+import { getLangFromUrl } from '../i18n/utils';
+
+const getLang = getLangFromUrl(Astro.url);
+
+export interface Profile {
+	title: string;
+	desc?: string;
+	image?: string;
+}
+
+const { title, desc, image } = Astro.props as Profile;
+
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang={getLang}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/icon.svg"/>
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={desc} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={'https://b4nned.xyz' + Astro.url.pathname} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={desc} />
+		<meta property="og:image" content={image} />
+		<meta property="og:site_name" content="Banned Studios" />
+		<meta property="og:locale" content={getLang === 'en' ? 'en_US' : 'es_ES'} />
+
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={'https://b4nned.xyz' + Astro.url.pathname} />
+		<meta name="twitter:site" content="@B4nnedStudios" />
+		<meta name="twitter:creator" content="@SoyKatto1" />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={desc} />
+		<meta property="twitter:image" content={image} />
+
+		<ClientRouter/>
+	</head>
+	<body>
+		<Header />
+		<slot />
+		<Footer />
+	</body>
+</html>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+	html {
+		scrollbar-color: #262626 transparent !important;
+		scroll-behavior: smooth;
+	}
+
+	body {
+		margin: 0;
+		padding: 0;
+		font-family: "Inter", sans-serif;
+		color: white;
+		background-color: black;
+		display: flex;
+        flex-direction: column;
+		min-height: 100vh;
+		scroll-behavior: smooth;
+	}
+</style>

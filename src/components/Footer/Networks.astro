@@ -1,0 +1,14 @@
+---
+import { networks } from '../../data/networks'
+---
+
+<div class="flex mt-4 sm:justify-center sm:mt-0 gap-4.5">
+    {
+        networks.map(network => (
+            <a href={network.href} target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300 ease">
+                <network.icon class="w-4.5 h-4.5"/>
+                <span class="sr-only">{network.alt}</span>
+            </a>
+        ))
+    }
+</div>

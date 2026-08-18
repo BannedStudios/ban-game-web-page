@@ -1,0 +1,133 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Title from '../../../components/Title.astro';
+import YTVideo from '../../../components/YTVideo.astro';
+import { Image } from 'astro:assets';
+import MiniTitle from '../../../components/MiniTitle.astro';
+import MainPage from '../../../components/MainPage.astro';
+import Prev from '../../../components/Icons/Prev.astro';
+import Next from '../../../components/Icons/Next.astro';
+import Banner from '../../../components/Banner.astro';
+import StaffCard from '../../../components/StaffCard.astro';
+import Desc from '../../../components/Desc.astro';
+import TweetEmbed from '../../../components/TweetEmbed.astro';
+import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
+import { getProjectBySlug } from "../../../libs/firestore/projects";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
+  return new Response(null, { status: 404 });
+}
+
+const proyecto = await getProjectBySlug(id, Astro.url.pathname.split("/")[1]);
+
+if (!proyecto) {
+  return new Response(null, { status: 404 });
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const { default: image } = await import(`../../../assets/projects/${proyecto.slug}.webp`);
+
+const gallery = proyecto.gallery || [];
+const videos = gallery ? gallery.filter((item: { type: string }) => item.type === "video") : [];
+const images = gallery ? gallery.filter((item: { type: string }) => item.type === "image") : [];
+
+const tweets = proyecto.tweets || [];
+
+const credits = proyecto.credits || [];
+---
+
+<Layout title={proyecto.title} desc={proyecto.desc}>
+    {proyecto.banner && <Banner src={proyecto.slug}/>}
+    <MainPage>
+        {!proyecto.banner && <section class="flex flex-col justify-center items-center">
+            <Image src={image} alt={proyecto.title} quality="high" class="absolute mt-[22px] w-[260px] h-[260px] object-cover opacity-[0.25] justify-center z-[-10] blur-[1rem]"/>
+            <Image src={image} alt={proyecto.title} quality="high" class="w-[250px] h-[250px] rounded-[10px] object-cover transition-transform duration-300 ease-in-out flex justify-center mt-[25px] group" transition:name={proyecto.slug}/>
+        </section>}
+
+        <Title class="mt-5">{proyecto.title}</Title>
+        <Desc class="mt-2.5">{proyecto.type} - {proyecto.date}</Desc>
+        <div class="px-4 mt-5 max-w-[900px] prose prose-invert">
+            {proyecto.content}
+        </div>
+
+        {gallery.length > 0 && (
+            <>
+                <MiniTitle class="mt-5">{t("projects.gallery")}</MiniTitle>
+                <div class="w-[calc(100vw-20px)] pr-2.5 pl-2.5 max-w-[800px] mt-5 mb-5 overflow-hidden">
+                    <div id="carousel" class="flex items-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory">
+                        {
+                            videos.map((video) => (
+                                <div class="w-[370px] snap-start shrink-0 overflow-hidden">
+                                    <YTVideo url={video.src} title={video.title}/>
+                                </div>
+                            ))
+                        }
+                        {
+                            images.map((image) => (
+                                <a href={image.link} title={image.title} target="_blank" class="w-[370px] snap-start shrink-0 overflow-hidden rounded-[10px] drop-shadow-[0_0_20px_rgba(42,42,42,0.250)] border-[1px] border-[#ffffff3e]">
+                                    <img src={image.src} class="object-cover w-full transition duration-500 ease hover:scale-[1.1] aspect-[16/9]" />
+                                </a>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div class="flex flex-row gap-2">
+                    <button id="prev" class="bg-[#333] hover:bg-[#222222] transition-colors duration-300 ease text-white p-2 rounded-full"><Prev class="w-6 h-6"/></button>
+                    <button id="next" class="bg-[#333] hover:bg-[#222222] transition-colors duration-300 ease text-white p-2 rounded-full"><Next class="w-6 h-6"/></button>
+                </div>
+            </>
+        )}
+
+        {credits.length > 0 && (
+            <>
+                <MiniTitle class="mt-5 mb-5">{t("projects.credits")}</MiniTitle>
+                <StaffCard profiles={credits}/>
+            </>
+        )}
+
+        {tweets.length > 0 && (
+            <>
+                <TweetEmbed profiles={tweets} />
+            </>
+        )}
+    </MainPage>
+</Layout>
+
+<style>
+    #carousel::-webkit-scrollbar {
+        display: none;
+    }
+    #carousel {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+
+<script>
+    init();
+
+    document.addEventListener('astro:after-swap', init);
+
+    function init () {
+        const carousel = document.getElementById('carousel');
+        const prev = document.getElementById('prev');
+        const next = document.getElementById('next');
+
+        if (next == null || prev == null || carousel == null) return;
+        
+        next.addEventListener('click', () => {
+            carousel.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+        
+        prev.addEventListener('click', () => {
+            carousel.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+    }
+</script>

@@ -1,0 +1,9 @@
+---
+import { defaultLang } from "../i18n/ui";
+import { useTranslations } from '../i18n/utils';
+import Layout from "../layouts/Layout.astro";
+
+const t = useTranslations(defaultLang);
+---
+
+<Layout title="Banned Studios" image="/pages/index.webp" desc={t("index.desc")} />

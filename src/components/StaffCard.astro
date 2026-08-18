@@ -1,0 +1,41 @@
+---
+export interface Profile {
+  name: string;
+  link?: string;
+  skills: string;
+  avatar: string;
+}
+
+const { profiles } = Astro.props;
+
+const staffPictures = await Promise.all(
+  profiles.map(async (profile: { avatar: string }) => {
+    let avatar: string;
+
+    if (profile.avatar.startsWith("http://") || profile.avatar.startsWith("https://")) {
+      avatar = profile.avatar;
+    } else {
+      const image = await import(`../assets/staff/${profile.avatar}.webp`);
+      avatar = image.default;
+    }
+
+    return { ...profile, avatar };
+  })
+);
+---
+
+<div class="flex flex-wrap justify-center gap-6 max-w-[1200px] mx-5">
+  {
+    staffPictures.map((profile) => (
+      <article class={`bg-[#111] text-white p-4 pt-0 text-center flex flex-col items-center w-[190px] overflow-hidden relative drop-shadow-[0_0_0_rgba(42,42,42,0)] group ${profile.name === "Katto" || profile.name === "Kozurat" || profile.name === "Salmon" ? "shadow-[0_0_10px_#2a2a2a59] border-[1.5px] border-solid border-[#2a2a2a80]" : "rounded-[10px]"}`}>
+        <img src={profile.avatar} alt={profile.name} width="190" height="190" loading="lazy" class="absolute w-[190px] h-[190px] object-cover opacity-[0.15] transition-opacity duration-1000 z-[-10] blur-[2rem] group-hover:opacity-[0.45]" />
+        <a href={profile.link} target="_blank" rel="noopener noreferrer">
+          <img src={profile.avatar} alt={profile.name} width="160" height="160" loading="lazy" class="w-[160px] h-[160px] rounded-[10px] mt-4 object-cover transition-transform duration-300 ease-in-out hover:scale-[1.05]" />
+        </a>
+
+        <div class="mt-[5px] p-[10px] text-[1.2rem] ">{profile.name}</div>
+        <p class="text-[0.9rem] text-[#7b7b7b]">{profile.skills}</p>
+      </article>
+    ))
+  }
+</div>

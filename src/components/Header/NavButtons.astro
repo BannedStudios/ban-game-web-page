@@ -1,0 +1,44 @@
+---
+const currentPath = Astro.url.pathname;
+
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const sections = [
+    {
+        label: t('nav.home'),
+        href: `/${lang}/`,
+    },
+    {
+        label: t('nav.projects'),
+        href: `/${lang}/projects/`,
+        desc: t('nav.projectsDesc')
+    },
+    {
+        label: t('nav.staff'),
+        href: `/${lang}/staff/`,
+        desc: t('nav.staffDesc')
+    },
+    {
+        label: t('nav.apply'),
+        href: `/${lang}/apply/`,
+        desc: t('nav.applyDesc')
+    },
+    {
+        label: t('nav.contact'),
+        href: `/${lang}/contact/`,
+    }
+];
+---
+
+{
+    sections.map(section => (
+        <li>
+            <a href={section.href} title={section.desc} class={` transition-colors duration-300 ease hover:text-[#ccc] ${currentPath === section.href ? "text-[#9a9999] font-medium" : ""}`}>
+                {section.label}
+            </a>
+        </li>
+    ))
+}

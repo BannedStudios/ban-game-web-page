@@ -1,0 +1,88 @@
+---
+import Networks from "./Networks.astro"
+import Column from "./Column.astro"
+import { Image } from "astro:assets"
+import Title from "./Title.astro"
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const COMPANY = [
+    {
+        name: t('footer.company.about'),
+        url: `/${lang}/about/`
+    },
+    {
+        name: t('footer.company.contact'),
+        url: `/${lang}/contact/`
+    },
+    {
+        name: t('footer.company.series'),
+        url: "https://x.com/BannedSeries",
+        blank: true
+    }
+]
+
+const COMMUNITY = [
+    {
+        name: t('footer.community.discord'),
+        url: "https://discord.gg/sKRYYyVCnw",
+        blank: true
+    }
+]
+
+const LEGAL = [
+    {
+        name: t('footer.legal.terms'),
+        url: `/${lang}/terms/`
+    }
+]
+
+const { default: minemu } = await import(`../../assets/minemu.webp`)
+const { default: crysis } = await import(`../../assets/crysis.webp`)
+---
+<footer class="bg-[#1c1c1c] mt-auto">
+    <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+        <div class="md:flex md:justify-between">
+            <div class="mb-6 md:mb-0">
+                <a href=`/${lang}/` class="flex items-center">
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap text-white hover:text-[#ccc] transition-colors duration-300 ease">
+                        BANNED STUDIOS
+                    </span>
+                </a>
+                <div class="mt-4">
+                    <Title>{t('footer.affiliates')}</Title>
+                    <div class="flex flex-row gap-5">
+                        <a href="https://minemu.es/" target="_blank" class="flex flex-row items-center gap-2.5 hover:underline">
+                            <Image src={minemu} alt={"title"} quality="high" class="w-10 h-10" />
+                            <div class="flex flex-col">
+                                <span>Minemu</span>
+                                <span>(Hosting)</span>
+                            </div>
+                        </a>
+                        <a href="" target="_blank" class="flex flex-row items-center gap-2.5 hover:underline">
+                            <Image src={crysis} alt={"title"} quality="high" class="w-10 h-10" />
+                            <div class="flex flex-col">
+                                <span>Ysis</span>
+                                <span>Creative</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                <Column col={COMPANY} title={t('footer.company')}/>
+                <Column col={COMMUNITY} title={t('footer.community')}/>
+                <Column col={LEGAL} title={t('footer.legal')}/>
+            </div>
+        </div>
+
+        <hr class="my-6 sm:mx-auto border-gray-700 lg:my-8" />
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <span class="text-[15px] sm:text-center text-gray-400">© 2026 <a class="text-white hover:text-[#ccc] transition-colors duration-300 ease" href="/">Banned Studios</a>.</span>
+            <Networks/>
+        </div>
+    </div>
+</footer>

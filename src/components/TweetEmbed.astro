@@ -1,0 +1,35 @@
+---
+import { Tweet } from "astro-embed";
+
+const { profiles } = Astro.props;
+---
+
+<script is:inline>
+  init();
+
+  document.addEventListener("astro:after-swap", init);
+  
+  function init() {
+    if (window.twttr?.widgets) {
+      window.twttr.widgets.load();
+      return;
+    }
+
+    if (!document.querySelector('script[src="https://platform.twitter.com/widgets.js"]')) {
+      const script = document.createElement("script");
+      script.src = "https://platform.twitter.com/widgets.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }
+</script>
+
+<div class="flex flex-wrap justify-center gap-x-5 max-w-[1200px] mx-5 mt-5">
+  {
+    profiles.map((profile) => (
+      <article class="w-full max-w-[360px]">
+        <Tweet theme="dark" id={profile.src} />
+      </article>
+    ))
+  }
+</div>

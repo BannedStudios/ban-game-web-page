@@ -1,0 +1,21 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import Title from "../../components/Title.astro"
+import MainPage from "../../components/MainPage.astro"
+import Desc from "../../components/Desc.astro"
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
+  return new Response(null, { status: 404 });
+}
+---
+
+<Layout title={t("terms.title")} image="/pages/terms.webp" desc={t("terms.desc")}>
+    <MainPage class="h-[calc(100vh-125px)]">
+        <Title>{t("terms.title")}</Title>
+        <Desc class="mt-2.5">{t("terms.miniTitle")}</Desc>
+    </MainPage>
+</Layout>

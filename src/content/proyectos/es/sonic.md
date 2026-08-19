@@ -1,23 +1,21 @@
 ---
-title: SONIC CHAMPIONS!
-type: Evento
-date: "2025"
-desc: Proximamente...
 banner: true
-order: 11
-
-credits:
-- name: "The VYROX Project"
-  link: "https://linktr.ee/VYROXProject"
-  skills: "Colaboración"
-  avatar: "https://web.bangame.tech/staff/vyrox.webp"
-
-gallery:
-- type: video
-  src: https://www.youtube.com/watch?v=osygu3aYL4k
-  title: 'SONIC CHAMPIONS! | Próximo evento colaboración con The VYROX Project 🌻'
-
+title: SONIC CHAMPIONS!
 tweets:
-- src: https://x.com/TheVYROXProject/status/1941643253843194093
+  - src: 'https://x.com/TheVYROXProject/status/1941643253843194093'
+type: Evento
+gallery:
+  - type: video
+    title: "SONIC CHAMPIONS! | Próximo evento colaboración con The VYROX Project \U0001F33B"
+    src: 'https://www.youtube.com/watch?v=osygu3aYL4k'
+desc: Proximamente...
+order: 11
+date: '2026'
+credits:
+  - skills: Colaboración
+    avatar: 'https://web.b4nned.xyz/staff/vyrox.webp'
+    link: 'https://linktr.ee/VYROXProject'
+    name: The VYROX Project
 ---
+
 Proximamente...

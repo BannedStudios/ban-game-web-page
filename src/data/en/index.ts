@@ -1,39 +1,3 @@
-export const timeline = [
-    {
-        date: "2026",
-        title: "Hell is a warm and pleasant place... right?",
-        desc: "???.",
-    },
-    {
-        date: "2026",
-        title: "SONIC CHAMPIONS!",
-        desc: "???.",
-        link: "/en/projects/sonic/"
-    },
-    {
-        date: "2026",
-        title: "The Abyss Below",
-        desc: "???.",
-        link: "/en/projects/tab/"
-    },
-    {
-        date: "August 2025",
-        title: "Anniversary",
-        desc: "Anniversary of Banned Studios."
-    },
-    {
-        date: "2026",
-        title: "UHC",
-        desc: "???.",
-    },
-    {
-        date: "Junary 2026",
-        title: "Escape de la prisión: El gran golpe",
-        desc: "Escape de la prisión: El gran golpe is an event where they had to overcome different puzzles and challenges to be the only one who could obtain freedom.",
-        link: "/en/projects/ep/"
-    },
-]
-
 export const videos = [
     {
         src: "BcpE8pbG9Nk",

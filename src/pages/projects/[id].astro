@@ -1,37 +1,44 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import Title from '../../../components/Title.astro';
-import YTVideo from '../../../components/YTVideo.astro';
+import Layout from '../../layouts/Layout.astro';
+import Title from '../../components/Title.astro';
+import YTVideo from '../../components/YTVideo.astro';
 import { Image } from 'astro:assets';
-import MiniTitle from '../../../components/MiniTitle.astro';
-import MainPage from '../../../components/MainPage.astro';
-import Prev from '../../../components/Icons/Prev.astro';
-import Next from '../../../components/Icons/Next.astro';
-import Banner from '../../../components/Banner.astro';
-import StaffCard from '../../../components/StaffCard.astro';
-import Desc from '../../../components/Desc.astro';
-import TweetEmbed from '../../../components/TweetEmbed.astro';
-import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
-import { getProjectBySlug } from "../../../libs/firestore/projects";
+import MiniTitle from '../../components/MiniTitle.astro';
+import MainPage from '../../components/MainPage.astro';
+import Prev from '../../components/Icons/Prev.astro';
+import Next from '../../components/Icons/Next.astro';
+import Banner from '../../components/Banner.astro';
+import StaffCard from '../../components/StaffCard.astro';
+import Desc from '../../components/Desc.astro';
+import TweetEmbed from '../../components/TweetEmbed.astro';
+import { getLang, useTranslations } from "../../i18n/utils";
+import { getCollection, render } from "astro:content";
+
+import type { ImageMetadata } from 'astro';
 
 export const prerender = false;
 
 const { id } = Astro.params;
 
-if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
-  return new Response(null, { status: 404 });
-}
-
-const proyecto = await getProjectBySlug(id, Astro.url.pathname.split("/")[1]);
-
-if (!proyecto) {
-  return new Response(null, { status: 404 });
-}
-
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
-const { default: image } = await import(`../../../assets/projects/${proyecto.slug}.webp`);
+const allProjects = await getCollection('proyectos');
+const projectEntry = allProjects.find((item) => item.slug === `${lang}/${id}`);
+
+if (!projectEntry) {
+  return new Response(null, { status: 404 });
+}
+
+const proyecto = {
+  slug: id,
+  ...projectEntry.data,
+};
+
+const { Content } = await render(projectEntry);
+
+const projectImages = import.meta.glob<{ default: ImageMetadata }>('../../assets/projects/*.webp', { eager: true });
+const image = projectImages[`../../assets/projects/${proyecto.slug}.webp`]?.default;
 
 const gallery = proyecto.gallery || [];
 const videos = gallery ? gallery.filter((item: { type: string }) => item.type === "video") : [];
@@ -53,7 +60,7 @@ const credits = proyecto.credits || [];
         <Title class="mt-5">{proyecto.title}</Title>
         <Desc class="mt-2.5">{proyecto.type} - {proyecto.date}</Desc>
         <div class="px-4 mt-5 max-w-[900px] prose prose-invert">
-            {proyecto.content}
+            <Content />
         </div>
 
         {gallery.length > 0 && (

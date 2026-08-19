@@ -1,26 +1,22 @@
 ---
-import ProjectCard from '../../../components/ProjectCard.astro';
-import Layout from '../../../layouts/Layout.astro';
-import Title from '../../../components/Title.astro';
-import MainPage from '../../../components/MainPage.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import Title from '../../components/Title.astro';
+import MainPage from '../../components/MainPage.astro';
 import { getCollection, render } from "astro:content";
-import { getLangFromUrl, useTranslations } from "../../../i18n/utils";
-import BannerExtra from '../../../components/BannerExtra.astro';
+import { getLang, useTranslations } from "../../i18n/utils";
+import BannerExtra from '../../components/BannerExtra.astro';
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
-if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
-  return new Response(null, { status: 404 });
-}
-
-const info = await getCollection('info')
+const info = await getCollection('info');
 const projects = info
   .filter((item) => item.slug.startsWith(`${lang}/`))
   .map((item) => ({ ...item, slug: item.slug.replace(`${lang}/`, "") }))
   .find((item) => item.slug === "projects");
 
-const { Content } = await render(projects!)
+const { Content } = await render(projects!);
 ---
 
 <Layout title={t("projects.title")} image="/index/index3.webp" desc={t("projects.desc")}>

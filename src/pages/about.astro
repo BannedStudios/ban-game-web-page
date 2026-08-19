@@ -1,25 +1,21 @@
 ---
 import { getCollection, render } from "astro:content";
-import MainPage from "../../components/MainPage.astro";
-import Title from "../../components/Title.astro";
-import Layout from "../../layouts/Layout.astro";
-import Hero from "../../components/Hero.astro";
-import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import MainPage from "../components/MainPage.astro";
+import Title from "../components/Title.astro";
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import { getLang, useTranslations } from "../i18n/utils";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
-if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
-  return new Response(null, { status: 404 });
-}
-
-const info = await getCollection('info')
+const info = await getCollection('info');
 const about = info
   .filter((item) => item.slug.startsWith(`${lang}/`))
   .map((item) => ({ ...item, slug: item.slug.replace(`${lang}/`, "") }))
   .find((item) => item.slug === "about");
 
-const { Content } = await render(about!)
+const { Content } = await render(about!);
 ---
 
 <Layout title={t("about.title")} image="/pages/index.webp" desc={t("about.desc")}>

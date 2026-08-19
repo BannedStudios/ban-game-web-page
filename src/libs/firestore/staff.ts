@@ -27,13 +27,3 @@ export async function updateStaff(id: string, data: { name?: string; link?: stri
     await docRef.update(data);
     return { success: true };
 }
-
-export async function getStaffByName(slug: string) {
-    const query = db.where("name", "==", slug).limit(1)
-    const snapshot = await query.get()
-  
-    if (snapshot.empty) return null
-  
-    const doc = snapshot.docs[0]
-    return { id: doc.id, ...doc.data() }
-}

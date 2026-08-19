@@ -1,13 +1,9 @@
 ---
-import Layout from "../../layouts/Layout.astro"
-import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import Layout from "../layouts/Layout.astro"
+import { getLang, useTranslations } from "../i18n/utils";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
-
-if (!["es", "en"].includes(Astro.url.pathname.split("/")[1])) {
-  return new Response(null, { status: 404 });
-}
 ---
 
 <Layout title={t("apply.title")} image="/pages/staff.webp" desc={t("apply.desc")}>

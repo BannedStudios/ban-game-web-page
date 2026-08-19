@@ -1,21 +1,11 @@
 ---
 import Download from "../Icons/Download.astro";
 import NavButtons from "./NavButtons.astro";
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getLang, useTranslations } from '../../i18n/utils';
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/astro/components";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
-
-function switchLangUrl() {
-  const segments = Astro.url.pathname.split("/").filter(Boolean);
-
-  if (segments.length > 0) {
-    segments[0] = lang === "es" ? "en" : "es";
-  }
-
-  return "/" + segments.join("/") + "/";
-}
 
 const targetLang = lang === "es" ? "en" : "es";
 const targetLabel = lang === "es" ? "English" : "Español";
@@ -37,18 +27,18 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
                 </ul>
             </nav>
     
-            <a class="text-[1.5em] font-bold text-center justify-center absolute transition-colors duration-300 ease top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-[1150px]:hidden hover:text-[#ccc]" href=`/${lang}/`>BANNED STUDIOS</a>
+            <a class="text-[1.5em] font-bold text-center justify-center absolute transition-colors duration-300 ease top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-[1150px]:hidden hover:text-[#ccc]" href="/">BANNED STUDIOS</a>
         
             <div class="flex flex-row gap-2.5">
-                <a href={switchLangUrl()} class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] max-[420px]:hidden">
+                <button type="button" id="lang-toggle" data-target-lang={targetLang} class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer max-[420px]:hidden">
                     {targetLabel}
-                </a>
+                </button>
 
-                <a href={switchLangUrl()} class="hidden flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] max-[420px]:flex">
+                <button type="button" id="lang-toggle-mobile" data-target-lang={targetLang} class="hidden flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer max-[420px]:flex">
                     {targetLabelFlag}
-                </a>
+                </button>
 
-                <a href=`/${lang}/launcher/` class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222]">
+                <a href="/launcher/" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222]">
                     <Download class="w-5 h-5"/>
                     Ban Game Launcher
                 </a>
@@ -56,7 +46,7 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
                 <div class="flex max-[515px]:hidden">
                     <SignedOut>
                         <SignInButton mode="modal" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer">
-                            Iniciar Sesión
+                            {t('nav.login')}
                         </SignInButton> 
                     </SignedOut>
                     <SignedIn>
@@ -75,7 +65,7 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
         <li class="hidden max-[515px]:flex">
             <SignedOut>
                 <SignInButton mode="modal" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer w-max">
-                    Iniciar Sesión
+                    {t('nav.login')}
                 </SignInButton> 
             </SignedOut>
             <SignedIn>
@@ -124,17 +114,26 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
         const hamburger = document.getElementById("hamburger");
         const menu = document.getElementById("menu");
 
-        if (hamburger == null || menu == null) return;
-
-        hamburger.addEventListener("click", () => {
+        if (hamburger != null && menu != null) {
+            hamburger.addEventListener("click", () => {
                 menu.classList.toggle("open");
                 hamburger.classList.toggle("open");
-        });
-        window.addEventListener("resize", () => {
-            if (window.innerWidth >= 960) {
-                menu.classList.remove("open");
-                hamburger.classList.remove("open");
-            }
+            });
+            window.addEventListener("resize", () => {
+                if (window.innerWidth >= 960) {
+                    menu.classList.remove("open");
+                    hamburger.classList.remove("open");
+                }
+            });
+        }
+
+        const toggleButtons = document.querySelectorAll('[id^="lang-toggle"]');
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetLang = btn.getAttribute('data-target-lang') || 'es';
+                document.cookie = `user_lang=${targetLang}; path=/; max-age=31536000; SameSite=Lax`;
+                window.location.reload();
+            });
         });
     }
 </script>

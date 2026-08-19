@@ -1,8 +1,3 @@
-export const languages = {
-  en: 'English',
-  es: 'Español',
-};
-
 export const defaultLang = 'es';
 
 export const ui = {
@@ -12,6 +7,7 @@ export const ui = {
     'nav.staff': 'Staff',
     'nav.apply': 'Apply',
     'nav.contact': 'Contact',
+    'nav.login': 'Sign In',
     
     'nav.projectsDesc': "Projects (events and series) we have done.",
     'nav.staffDesc': 'Banned Studios team.',
@@ -40,7 +36,17 @@ export const ui = {
     'index.projectsTitle': 'Our Projects',
     'index.projectsMore': 'See more...',
     'index.videosTitle': 'Featured Videos',
-    'index.timelineTitle': '2026 Timeline',
+    'index.servicesTitle': 'What We Offer',
+    'index.services.mods.title': 'Mods & Plugins',
+    'index.services.mods.desc': 'Development of custom mechanics, items, interfaces, and systems tailored to your server or project.',
+    'index.services.builds.title': 'Building & Maps',
+    'index.services.builds.desc': 'Detailed maps, structures, and environments crafted and optimized for any gameplay experience.',
+    'index.services.events.title': 'Organization & Support',
+    'index.services.events.desc': 'Technical configuration, server setup, and assistance during the execution of your project.',
+    'index.cta.title': 'Have a project in mind?',
+    'index.cta.desc': 'Get in touch with us to collaborate or apply to become part of our team.',
+    'index.cta.contact': 'Contact Us',
+    'index.cta.apply': 'Join the Staff',
 
     'staff.desc': 'Banned Studios Team.',
 
@@ -95,6 +101,7 @@ export const ui = {
     'nav.staff': 'Staff',
     'nav.apply': 'Postulate',
     'nav.contact': 'Contacto',
+    'nav.login': 'Iniciar Sesión',
 
     'nav.projectsDesc': "Proyectos (eventos y series) que hemos realizado.",
     'nav.staffDesc': 'Equipo de Banned Studios.',
@@ -123,7 +130,17 @@ export const ui = {
     'index.projectsTitle': 'Nuestros Proyectos',
     'index.projectsMore': 'Ver más...',
     'index.videosTitle': 'Videos destacados',
-    'index.timelineTitle': 'Agenda 2026',
+    'index.servicesTitle': '¿Qué Ofrecemos?',
+    'index.services.mods.title': 'Mods y Plugins',
+    'index.services.mods.desc': 'Desarrollo de mecánicas, items, interfaces y sistemas personalizados adaptados a tu servidor o proyecto.',
+    'index.services.builds.title': 'Construcción y Mapas',
+    'index.services.builds.desc': 'Creación de mapas, estructuras y escenarios detallados y optimizados para cualquier tipo de dinámica.',
+    'index.services.events.title': 'Organización y Soporte',
+    'index.services.events.desc': 'Configuración técnica, preparación del servidor y asistencia durante la realización de tu proyecto.',
+    'index.cta.title': '¿Tienes un proyecto en mente?',
+    'index.cta.desc': 'Ponte en contacto con nosotros para colaborar o postúlate para formar parte de nuestro equipo.',
+    'index.cta.contact': 'Contáctanos',
+    'index.cta.apply': 'Únete al Staff',
 
     'staff.desc': 'Equipo de Banned Studios.',
 

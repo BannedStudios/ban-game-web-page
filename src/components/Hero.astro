@@ -1,27 +1,27 @@
 ---
 import { Image } from "astro:assets";
 import Desc from "./Desc.astro";
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { getLang, useTranslations } from "../i18n/utils";
+import banned from "../assets/banned.webp";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
-const { default: banned } = await import(`../assets/banned.webp`)
-
-const isHome = Astro.url.pathname === `/${lang}/`;
+const isHome = Astro.url.pathname === "/";
 ---
 
 <div class="relative overflow-hidden">
-    <img 
-        id="banner-image" 
-        src="/index/index1.webp"
-        alt="Banner" 
-        loading="eager" 
-        class=`${Astro.props.class} w-full object-cover transition-opacity duration-1000 ease-in-out`
-        style="mask-image: linear-gradient(to bottom, black 40%, transparent);" 
-        onload="this.parentElement.classList.add('animate-fade-up')"
-    />
-    <div class="absolute inset-0 bg-black opacity-65 pointer-events-none"></div>
+    <div class="w-full relative" style="mask-image: linear-gradient(to bottom, black 40%, transparent);">
+        <img 
+            id="banner-image" 
+            src="/index/index1.webp"
+            alt="Banner" 
+            loading="eager" 
+            class=`${Astro.props.class} w-full object-cover transition-opacity duration-1000 ease-in-out`
+            onload="this.parentElement.parentElement.classList.add('animate-fade-up')"
+        />
+        <div class="absolute inset-0 bg-black opacity-65 pointer-events-none"></div>
+    </div>
 
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 gap-4">
         <Image 
@@ -36,7 +36,7 @@ const isHome = Astro.url.pathname === `/${lang}/`;
             {isHome && (
                 <Desc>
                     {t('hero.desc')}
-                    <a href={`/${lang}/about/`} class="text-white hover:text-[#ccc] transition-colors duration-300 ease"> {t('hero.descLink')}</a>
+                    <a href="/about/" class="text-white hover:text-[#ccc] transition-colors duration-300 ease"> {t('hero.descLink')}</a>
                 </Desc>
             )}
         </section>

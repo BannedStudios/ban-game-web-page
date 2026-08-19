@@ -3,19 +3,19 @@ import Networks from "./Networks.astro"
 import Column from "./Column.astro"
 import { Image } from "astro:assets"
 import Title from "./Title.astro"
-import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import { getLang, useTranslations } from "../../i18n/utils";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
 const COMPANY = [
     {
         name: t('footer.company.about'),
-        url: `/${lang}/about/`
+        url: `/about/`
     },
     {
         name: t('footer.company.contact'),
-        url: `/${lang}/contact/`
+        url: `/contact/`
     },
     {
         name: t('footer.company.series'),
@@ -35,18 +35,18 @@ const COMMUNITY = [
 const LEGAL = [
     {
         name: t('footer.legal.terms'),
-        url: `/${lang}/terms/`
+        url: `/terms/`
     }
 ]
 
-const { default: minemu } = await import(`../../assets/minemu.webp`)
-const { default: crysis } = await import(`../../assets/crysis.webp`)
+import minemu from "../../assets/minemu.webp";
+import crysis from "../../assets/crysis.webp";
 ---
 <footer class="bg-[#1c1c1c] mt-auto">
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div class="md:flex md:justify-between">
             <div class="mb-6 md:mb-0">
-                <a href=`/${lang}/` class="flex items-center">
+                <a href="/" class="flex items-center">
                     <span class="self-center text-2xl font-semibold whitespace-nowrap text-white hover:text-[#ccc] transition-colors duration-300 ease">
                         BANNED STUDIOS
                     </span>

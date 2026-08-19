@@ -1,19 +1,27 @@
 ---
 import { Image } from 'astro:assets';
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
-import { getAllProjects } from "../libs/firestore/projects";
+import type { ImageMetadata } from 'astro';
+import { getCollection } from "astro:content";
+import { getLang, useTranslations } from "../i18n/utils";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
-const rawProjects = await getAllProjects(Astro.url.pathname.split("/")[1]);
+const allProjects = await getCollection('proyectos');
+const rawProjects = allProjects
+  .filter((item) => item.slug.startsWith(`${lang}/`))
+  .map((item) => ({
+    ...item.data,
+    slug: item.slug.replace(`${lang}/`, "")
+  }))
+  .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
-const projectPictures = await Promise.all(
-  rawProjects.map(async (project) => {  
-      const image = await import(`../assets/projects/${project.slug}.webp`);
-      return { ...project, avatar: image.default };
-  })
-);
+const projectImages = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.webp', { eager: true });
+
+const projectPictures = rawProjects.map((project) => {  
+    const avatar = projectImages[`../assets/projects/${project.slug}.webp`]?.default;
+    return { ...project, avatar };
+});
 ---
 
 <div class="flex flex-wrap gap-[2rem] justify-center max-w-[1500px] px-5">
@@ -30,7 +38,7 @@ const projectPictures = await Promise.all(
         // </article>
 
         <article class="flex flex-col gap-3 text-left bg-[#111] text-white w-[300px] border-[1.5px] border-[rgba(42,42,42,0.500)] overflow-hidden relative z-[0] group">
-          <a href={`/${lang}/projects/${project.slug}/`}>
+          <a href={`/projects/${project.slug}/`}>
             <Image src={project.avatar} alt={project.title} quality="high" class="w-full h-full" transition:name={project.slug} />
           </a>
           <Image src={project.avatar} alt={project.title} quality="high" class="absolute w-full h-full object-cover opacity-[0.10] blur-[2rem] z-[-2] transition-opacity duration-1000 group-hover:opacity-[0.20]" />

@@ -1,34 +1,34 @@
 ---
 const currentPath = Astro.url.pathname;
 
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getLang, useTranslations } from '../../i18n/utils';
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
 const sections = [
     {
         label: t('nav.home'),
-        href: `/${lang}/`,
+        href: `/`,
     },
     {
         label: t('nav.projects'),
-        href: `/${lang}/projects/`,
+        href: `/projects/`,
         desc: t('nav.projectsDesc')
     },
     {
         label: t('nav.staff'),
-        href: `/${lang}/staff/`,
+        href: `/staff/`,
         desc: t('nav.staffDesc')
     },
     {
         label: t('nav.apply'),
-        href: `/${lang}/apply/`,
+        href: `/apply/`,
         desc: t('nav.applyDesc')
     },
     {
         label: t('nav.contact'),
-        href: `/${lang}/contact/`,
+        href: `/contact/`,
     }
 ];
 ---

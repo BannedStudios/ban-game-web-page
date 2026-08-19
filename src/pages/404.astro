@@ -4,15 +4,15 @@ import MainPage from "../components/MainPage.astro";
 import MiniTitle from "../components/MiniTitle.astro";
 import Title from "../components/Title.astro";
 import Layout from "../layouts/Layout.astro";
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { getLang, useTranslations } from "../i18n/utils";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 ---
 
-<Layout title="404" desc={t("404.desc")}>
+<Layout title={t("404.title")} desc={t("404.desc")}>
     <MainPage class="h-[calc(100vh-125px)]">
-        <Title>404</Title>
+        <Title>{t("404.title")}</Title>
         <MiniTitle class="mb-2.5">{t("404.miniTitle")}</MiniTitle>
         <Desc>{t("404.desc")} <a class="text-white transition-colors duration-300 ease hover:text-[#ccc]" href="/">{t("404.descLink")}</a>.</Desc>
     </MainPage>

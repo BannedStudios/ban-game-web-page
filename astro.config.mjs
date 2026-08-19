@@ -10,7 +10,7 @@ import { esES } from "@clerk/localizations";
 import netlify from '@astrojs/netlify';
 
 const redirectMap = Object.fromEntries(
-  redirects.map(({ id, url }) => [`/${id}`, url])
+  redirects.map(({ id, url }) => [`/${id}/`, url])
 );
 
 // https://astro.build/config
@@ -32,7 +32,22 @@ export default defineConfig({
   },
 
   redirects: {
-    "/": "/es/",
+    "/es/": "/",
+    "/en/": "/",
+    "/es/projects/": "/projects/",
+    "/en/projects/": "/projects/",
+    "/es/staff/": "/staff/",
+    "/en/staff/": "/staff/",
+    "/es/launcher/": "/launcher/",
+    "/en/launcher/": "/launcher/",
+    "/es/about/": "/about/",
+    "/en/about/": "/about/",
+    "/es/contact/": "/contact/",
+    "/en/contact/": "/contact/",
+    "/es/apply/": "/apply/",
+    "/en/apply/": "/apply/",
+    "/es/terms/": "/terms/",
+    "/en/terms/": "/terms/",
     ...redirectMap
   },
 

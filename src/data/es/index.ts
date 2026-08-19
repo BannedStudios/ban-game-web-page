@@ -1,39 +1,3 @@
-export const timeline = [
-    {
-        date: "2026",
-        title: "El infierno es un lugar calido y agradable... ¿cierto?",
-        desc: "???.",
-    },
-    {
-        date: "2026",
-        title: "SONIC CHAMPIONS!",
-        desc: "???.",
-        link: "/es/projects/sonic/"
-    },
-    {
-        date: "Agosto 2026",
-        title: "Aniversario",
-        desc: "Aniversario de Banned Studios."
-    },
-    {
-        date: "2026",
-        title: "The Abyss Below",
-        desc: "???.",
-        link: "/es/projects/tab/"
-    },
-    {
-        date: "2026",
-        title: "UHC",
-        desc: "???.",
-    },
-    {
-        date: "Enero 2026",
-        title: "Escape de la prisión: El gran golpe",
-        desc: "Escape de la prisión: El gran golpe es un evento en donde tuvieron que superar distintos puzles y desafíos para ser el único que pueda obtener la libertad.",
-        link: "/es/projects/ep/"
-    },
-]
-
 export const videos = [
     {
         src: "BcpE8pbG9Nk",

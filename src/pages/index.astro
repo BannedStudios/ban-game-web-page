@@ -22,10 +22,13 @@ const t = useTranslations(lang);
 
 const { videos, proyectos } = await import(`../data/${lang}/index.ts`);
 
-const projectImages = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.webp', { eager: true });
+const projectImages = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.{png,jpg,jpeg,webp,avif,svg}', { eager: true });
 
 const projectPictures = proyectos.map((proyecto: { slug: string; }) => {
-    const avatar = projectImages[`../assets/projects/${proyecto.slug}.webp`]?.default;
+    const avatar = Object.entries(projectImages).find(([path]) => {
+        const filename = path.split('/').pop()?.replace(/\.[^.]+$/, '');
+        return filename === proyecto.slug;
+    })?.[1]?.default;
     return { ...proyecto, avatar };
 });
 ---
@@ -48,9 +51,9 @@ const projectPictures = proyectos.map((proyecto: { slug: string; }) => {
                         return (
                             <article class="flex flex-col gap-3 justify-center text-left bg-[#111] text-white w-[300px] border-[1.5px] border-[rgba(42,42,42,0.500)] overflow-hidden relative z-[0] group">
                                 <a href={`/projects/${slug}/`}>
-                                    <Image src={avatar} alt={title} quality="high" class="w-full h-full" />
+                                    <Image src={avatar} alt={title} format="webp" quality="high" class="w-full h-full" />
                                 </a>
-                                <Image src={avatar} alt={title} quality="high" class="absolute w-full h-full object-cover opacity-[0.10] blur-[2rem] z-[-2] transition-opacity duration-1000 group-hover:opacity-[0.20]" />
+                                <Image src={avatar} alt={title} format="webp" quality="high" class="absolute w-full h-full object-cover opacity-[0.10] blur-[2rem] z-[-2] transition-opacity duration-1000 group-hover:opacity-[0.20]" />
                                 <div class=" relative z-[-1] px-3 pb-3">
                                 <div class="text-[1.2rem] font-medium">{title}</div>
                                 <p class="text-[0.9rem] text-[#7b7b7b] font-medium">{type} - {date}</p>

@@ -16,10 +16,13 @@ const rawProjects = allProjects
   }))
   .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 
-const projectImages = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.webp', { eager: true });
-
+const projectImages = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.{png,jpg,jpeg,webp,avif,svg}', { eager: true });
+ 
 const projectPictures = rawProjects.map((project) => {  
-    const avatar = projectImages[`../assets/projects/${project.slug}.webp`]?.default;
+    const avatar = Object.entries(projectImages).find(([path]) => {
+        const filename = path.split('/').pop()?.replace(/\.[^.]+$/, '');
+        return filename === project.slug;
+    })?.[1]?.default;
     return { ...project, avatar };
 });
 ---
@@ -39,9 +42,9 @@ const projectPictures = rawProjects.map((project) => {
 
         <article class="flex flex-col gap-3 text-left bg-[#111] text-white w-[300px] border-[1.5px] border-[rgba(42,42,42,0.500)] overflow-hidden relative z-[0] group">
           <a href={`/projects/${project.slug}/`}>
-            <Image src={project.avatar} alt={project.title} quality="high" class="w-full h-full" transition:name={project.slug} />
+            <Image src={project.avatar} alt={project.title} format="webp" quality="high" class="w-full h-full" transition:name={project.slug} />
           </a>
-          <Image src={project.avatar} alt={project.title} quality="high" class="absolute w-full h-full object-cover opacity-[0.10] blur-[2rem] z-[-2] transition-opacity duration-1000 group-hover:opacity-[0.20]" />
+          <Image src={project.avatar} alt={project.title} format="webp" quality="high" class="absolute w-full h-full object-cover opacity-[0.10] blur-[2rem] z-[-2] transition-opacity duration-1000 group-hover:opacity-[0.20]" />
           <div class=" relative z-[-1] px-3 pb-3">
             <div class="text-[1.2rem] font-medium">{project.title}</div>
             <p class="text-[0.9rem] text-[#7b7b7b] font-medium">{project.type} - {project.date}</p>

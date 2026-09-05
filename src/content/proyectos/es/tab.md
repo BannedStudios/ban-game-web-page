@@ -7,7 +7,7 @@ gallery:
     type: video
     src: 'https://www.youtube.com/watch?v=EORvdnrSQYk'
 desc: Proximamente...
-order: 10
+order: 12
 date: '2026'
 tweets:
   - src: 'https://x.com/BanGameStudios/status/1909310124876836873'

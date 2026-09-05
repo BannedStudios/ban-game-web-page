@@ -8,4 +8,4 @@ Hasta que llegaron a un proyecto que iba a ser tan grande que decidieron hacerlo
 
 El estudio escaló a tal punto que decidieron cambiar de idea y hacer el proyecto público, al cual se ingresaría a través de un formulario. Además, se empezó a tomar con mayor seriedad el estudio.
 
-A lo largo del tiempo, hemos llegado a colaborar y afiliarnos con [Ysis Creative](), casi afiliarnos con [Infected MC](https://sites.google.com/view/creeperx365/infected-mc?authuser=0) y, actualmente, estamos afiliados con [Minemu](https://minemu.es), que nos brinda servicios de hosting (servidor).
+A lo largo del tiempo, hemos llegado a colaborar y afiliarnos con [Elysis Creative](https://elysiscreative.com/), casi afiliarnos con [Infected MC](https://sites.google.com/view/creeperx365/infected-mc?authuser=0) y, actualmente, estamos afiliados con [Minemu](https://minemu.es), que nos brinda servicios de hosting (servidor).

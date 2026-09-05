@@ -7,7 +7,7 @@ gallery:
     title: Teaser de nuestra próxima serie | BanGameStudios
     type: video
 desc: Coming soon...
-order: 10
+order: 12
 date: '2026'
 tweets:
   - src: 'https://x.com/BanGameStudios/status/1909310124876836873'

@@ -8,4 +8,4 @@ When they reached a project that was going to be so big that they decided to mak
 
 The studio scaled to such an extent that they decided to change their idea and make the project public, to which access would be through a form. Also, they started to take the studio more seriously.
 
-Over time, we have reached to collaborate and affiliate with [Ysis Creative](), almost affiliate with [Infected MC](https://sites.google.com/view/creeperx365/infected-mc?authuser=0) and, currently, we are affiliates with [Minemu](https://minemu.es), which provides us hosting services (server).
+Over time, we have reached to collaborate and affiliate with [Elysis Creative](https://elysiscreative.com/), almost affiliate with [Infected MC](https://sites.google.com/view/creeperx365/infected-mc?authuser=0) and, currently, we are affiliates with [Minemu](https://minemu.es), which provides us hosting services (server).

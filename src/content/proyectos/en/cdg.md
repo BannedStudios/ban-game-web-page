@@ -11,7 +11,7 @@ gallery:
     src: 'https://www.youtube.com/watch?v=p6dksY67fNs'
     type: video
 desc: >-
-  Campo de Guerra is an event inspired in the famous modalidad known as UHC Item
+  Campo de Guerra is an event inspired in the famous mode known as UHC Item
   Flower.
 order: 7
 credits:
@@ -61,6 +61,6 @@ credits:
     skills: Moderation
 ---
 
-Campo de Guerra is an event, in collaboration with SonPancho and Crysis Studios, inspired in the famous modalidad known as UHC Item Flower, which consists in that when breaking flowers these can give random objects useful for the combat. Where 80 people, alone and in teams, had to equip themselves and fight to see which is the best in 3 matches.
+Campo de Guerra is an event, in collaboration with SonPancho and Crysis Studios, inspired in the famous mode known as UHC Item Flower, which consists in that when breaking flowers these can give random objects useful for the combat. Where 80 people, alone and in teams, had to equip themselves and fight to see which is the best in 3 matches.
 
 A great addition that it had was a crafting system for special objects, which cannot be obtained through the flowers, but their objects necessary for the crafting (also that these are more common to drop when breaking the flowers).

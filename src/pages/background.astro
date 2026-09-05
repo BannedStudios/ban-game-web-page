@@ -1,0 +1,126 @@
+---
+import MainPage from "../components/MainPage.astro";
+import Title from "../components/Title.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Fondo">
+    <MainPage>
+        <section class="flex flex-col justify-center items-center px-5 max-w-[1000px]">
+            <Title class="mb-5 mt-5">Descarga de Fondo</Title>
+
+            <div class="flex flex-row flex-wrap gap-3 mb-10 justify-center items-center">
+                <button
+                    id="btn-png"
+                    class="bg-[#7070701a] border-[1.5px] border-[#7070704d] cursor-pointer px-5 py-3 rounded-lg font-medium text-white hover:bg-[#70707033] transition-colors"
+                >
+                    Descargar 4K (PNG)
+                </button>
+                <button
+                    id="btn-webp"
+                    class="bg-[#7070701a] border-[1.5px] border-[#7070704d] cursor-pointer px-5 py-3 rounded-lg font-medium text-white hover:bg-[#70707033] transition-colors"
+                >
+                    Descargar 4K (WebP)
+                </button>
+                <button
+                    id="btn-svg"
+                    class="bg-[#7070701a] border-[1.5px] border-[#7070704d] cursor-pointer px-5 py-3 rounded-lg font-medium text-white hover:bg-[#70707033] transition-colors"
+                >
+                    Descargar SVG
+                </button>
+            </div>
+        </section>
+    </MainPage>
+</Layout>
+
+<script>
+    init();
+
+    function init() {
+        const btnPng = document.getElementById('btn-png');
+        const btnWebp = document.getElementById('btn-webp');
+        const btnSvg = document.getElementById('btn-svg');
+
+        function renderCanvas4K(format: 'image/png' | 'image/webp', filename: string) {
+            const width = 3840;
+            const height = 2160;
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+
+            if (!ctx) return;
+
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, width, height);
+
+            const tileW = 60;
+            const tileH = 104;
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
+            for (let x = 0; x <= width + tileW; x += tileW) {
+                for (let y = -tileH; y <= height + tileH; y += tileH) {
+                    ctx.moveTo(x + 30, y);
+                    ctx.lineTo(x + 30, y + 104);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x, y + 104);
+                    ctx.moveTo(x + 60, y);
+                    ctx.lineTo(x + 60, y + 104);
+
+                    ctx.moveTo(x, y + 17.32);
+                    ctx.lineTo(x + 60, y + 52);
+                    ctx.moveTo(x, y + 69.28);
+                    ctx.lineTo(x + 60, y + 104);
+                    ctx.moveTo(x, y - 34.64);
+                    ctx.lineTo(x + 60, y);
+                    ctx.moveTo(x, y + 121.28);
+                    ctx.lineTo(x + 60, y + 156);
+
+                    ctx.moveTo(x + 60, y + 17.32);
+                    ctx.lineTo(x, y + 52);
+                    ctx.moveTo(x + 60, y + 69.28);
+                    ctx.lineTo(x, y + 104);
+                    ctx.moveTo(x + 60, y - 34.64);
+                    ctx.lineTo(x, y);
+                    ctx.moveTo(x + 60, y + 121.28);
+                    ctx.lineTo(x, y + 156);
+                }
+            }
+            ctx.stroke();
+
+            const dataUrl = canvas.toDataURL(format, 1.0);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        btnPng?.addEventListener('click', () => {
+            renderCanvas4K('image/png', 'banned-background-4k.png');
+        });
+
+        btnWebp?.addEventListener('click', () => {
+            renderCanvas4K('image/webp', 'banned-background-4k.webp');
+        });
+
+        btnSvg?.addEventListener('click', () => {
+            const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="60" height="104" viewBox="0 0 60 104"><rect width="100%" height="100%" fill="#000000"/><path d="M30 0 v104 M0 0 v104 M60 0 v104 M0 17.32 L60 52 M0 69.28 L60 104 M0 -34.64 L60 0 M0 121.28 L60 156 M60 17.32 L0 52 M60 69.28 L0 104 M60 -34.64 L0 0 M60 121.28 L0 156" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/></svg>`;
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const link = document.createElement('a');
+            link.download = 'banned-background-pattern.svg';
+            link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
+    document.addEventListener("astro:after-swap", () => {
+        init();
+    });
+</script>

@@ -37,8 +37,11 @@ const proyecto = {
 
 const { Content } = await render(projectEntry);
 
-const projectImages = import.meta.glob<{ default: ImageMetadata }>('../../assets/projects/*.webp', { eager: true });
-const image = projectImages[`../../assets/projects/${proyecto.slug}.webp`]?.default;
+const projectImages = import.meta.glob<{ default: ImageMetadata }>('../../assets/projects/*.{png,jpg,jpeg,webp,avif,svg}', { eager: true });
+const image = Object.entries(projectImages).find(([path]) => {
+  const filename = path.split('/').pop()?.replace(/\.[^.]+$/, '');
+  return filename === proyecto.slug;
+})?.[1]?.default;
 
 const gallery = proyecto.gallery || [];
 const videos = gallery ? gallery.filter((item: { type: string }) => item.type === "video") : [];
@@ -53,8 +56,8 @@ const credits = proyecto.credits || [];
     {proyecto.banner && <Banner src={proyecto.slug}/>}
     <MainPage>
         {!proyecto.banner && <section class="flex flex-col justify-center items-center">
-            <Image src={image} alt={proyecto.title} quality="high" class="absolute mt-[22px] w-[260px] h-[260px] object-cover opacity-[0.25] justify-center z-[-10] blur-[1rem]"/>
-            <Image src={image} alt={proyecto.title} quality="high" class="w-[250px] h-[250px] rounded-[10px] object-cover transition-transform duration-300 ease-in-out flex justify-center mt-[25px] group" transition:name={proyecto.slug}/>
+            <Image src={image} alt={proyecto.title} format="webp" quality="high" class="absolute mt-[22px] w-[260px] h-[260px] object-cover opacity-[0.25] justify-center z-[-10] blur-[1rem]"/>
+            <Image src={image} alt={proyecto.title} format="webp" quality="high" class="w-[250px] h-[250px] rounded-[10px] object-cover transition-transform duration-300 ease-in-out flex justify-center mt-[25px] group" transition:name={proyecto.slug}/>
         </section>}
 
         <Title class="mt-5">{proyecto.title}</Title>

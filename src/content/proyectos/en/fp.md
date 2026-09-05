@@ -9,7 +9,7 @@ tweets:
 type: Event
 desc: >-
   Flower Power is an event, in collaboration with Crysis Studios, inspired in
-  the famous modalidad known as UHC Item Flower.
+  the famous mode known as UHC Item Flower.
 order: 6
 credits:
   - link: 'https://minemu.es/'
@@ -53,6 +53,6 @@ credits:
     link: 'https://linktr.ee/sannsalmon'
 ---
 
-Flower Power is an event, in collaboration with Crysis Studio, inspired in the famous modalidad known as UHC Item Flower, which consists in that when breaking flowers these can give random objects useful for the combat. Where 50 people had to equip themselves and fight to see which is the best in 3 matches.
+Flower Power is an event, in collaboration with Crysis Studio, inspired in the famous mode known as UHC Item Flower, which consists in that when breaking flowers these can give random objects useful for the combat. Where 50 people had to equip themselves and fight to see which is the best in 3 matches.
 
 A great addition that it had was a crafting system for special objects, which cannot be obtained through the flowers, but their objects necessary for the crafting (also that these are more common to drop when breaking the flowers).

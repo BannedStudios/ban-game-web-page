@@ -27,6 +27,7 @@ const isHome = Astro.url.pathname === "/";
         <Image 
             src={banned} 
             alt="Banner" 
+            format="webp"
             class="max-w-[550px] w-full" 
             loading="eager" 
             onload="this.parentElement.classList.add('animate-fade-up')"

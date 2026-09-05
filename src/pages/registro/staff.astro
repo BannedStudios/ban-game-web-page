@@ -1,11 +1,7 @@
 ---
 import MainPage from "../../components/MainPage.astro";
 import Title from "../../components/Title.astro";
-import { defaultLang } from "../../i18n/ui";
-import { useTranslations } from '../../i18n/utils';
 import Layout from "../../layouts/Layout.astro";
-
-const t = useTranslations(defaultLang);
 
 import { getAllStaff } from "../../libs/firestore/staff"
 const staff = await getAllStaff()

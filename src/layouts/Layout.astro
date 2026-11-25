@@ -24,6 +24,9 @@ import "../styles/global.css";
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/icon.svg"/>
+		<meta name="theme-color" content="#0b0a08" />
+		<link rel="preload" href="/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin />
+		<link rel="preload" href="/brand/gato.png" as="image" />
 		<meta name="generator" content={Astro.generator} />
 
 		<title>{title}</title>
@@ -58,23 +61,13 @@ import "../styles/global.css";
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-	html {
-		scrollbar-color: #262626 transparent !important;
-		scroll-behavior: smooth;
-	}
-
+	/* el fondo y los colores de la marca están en styles/global.css */
 	body {
 		margin: 0;
 		padding: 0;
 		font-family: "Inter", sans-serif;
-		color: white;
-		background-color: #000000;
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104' viewBox='0 0 60 104'%3E%3Cpath d='M30 0 v104 M0 0 v104 M60 0 v104 M0 17.32 L60 52 M0 69.28 L60 104 M0 -34.64 L60 0 M0 121.28 L60 156 M60 17.32 L0 52 M60 69.28 L0 104 M60 -34.64 L0 0 M60 121.28 L0 156' fill='none' stroke='rgba(255,255,255,0.02)' stroke-width='1'/%3E%3C/svg%3E");
-		background-size: 60px 104px;
-		background-attachment: fixed;
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
-		scroll-behavior: smooth;
 	}
 </style>

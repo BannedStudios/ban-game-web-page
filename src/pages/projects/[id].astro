@@ -56,31 +56,35 @@ const credits = proyecto.credits || [];
     {proyecto.banner && <Banner src={proyecto.slug}/>}
     <MainPage>
         {!proyecto.banner && <section class="flex flex-col justify-center items-center">
-            <Image src={image} alt={proyecto.title} format="webp" quality="high" class="absolute mt-[22px] w-[260px] h-[260px] object-cover opacity-[0.25] justify-center z-[-10] blur-[1rem]"/>
-            <Image src={image} alt={proyecto.title} format="webp" quality="high" class="w-[250px] h-[250px] rounded-[10px] object-cover transition-transform duration-300 ease-in-out flex justify-center mt-[25px] group" transition:name={proyecto.slug}/>
+            <div class="frame frame-lg mt-8">
+                <Image src={image} alt={proyecto.title} format="webp" quality="high" class="w-[250px] h-[250px] object-cover chamfer-lg" transition:name={proyecto.slug}/>
+            </div>
         </section>}
 
-        <Title class="mt-5">{proyecto.title}</Title>
-        <Desc class="mt-2.5">{proyecto.type} - {proyecto.date}</Desc>
-        <div class="px-4 mt-5 max-w-[900px] prose prose-invert">
+        <Title class="mt-8">{proyecto.title}</Title>
+        <div class="flex items-center gap-4 mt-4">
+            <span class={`tag ${proyecto.type?.toLowerCase().startsWith('seri') ? 'tag-serie' : ''}`}>{proyecto.type}</span>
+            <span class="mono text-[0.85rem] text-texto-3">{proyecto.date}</span>
+        </div>
+        <div class="px-4 mt-6 max-w-[900px] prose prose-invert prose-marca">
             <Content />
         </div>
 
         {gallery.length > 0 && (
             <>
-                <MiniTitle class="mt-5">{t("projects.gallery")}</MiniTitle>
-                <div class="w-[calc(100vw-20px)] pr-2.5 pl-2.5 max-w-[800px] mt-5 mb-5 overflow-hidden">
-                    <div id="carousel" class="flex items-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory">
+                <MiniTitle class="mt-12">{t("projects.gallery")}</MiniTitle>
+                <div class="w-[calc(100vw-40px)] max-w-[800px] mt-6 mb-5 overflow-hidden">
+                    <div id="carousel" class="flex items-center gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory">
                         {
                             videos.map((video) => (
-                                <div class="w-[370px] snap-start shrink-0 overflow-hidden">
+                                <div class="w-[370px] max-w-[85vw] snap-start shrink-0 overflow-hidden chamfer-lg">
                                     <YTVideo url={video.src} title={video.title}/>
                                 </div>
                             ))
                         }
                         {
                             images.map((image) => (
-                                <a href={image.link} title={image.title} target="_blank" class="w-[370px] snap-start shrink-0 overflow-hidden rounded-[10px] drop-shadow-[0_0_20px_rgba(42,42,42,0.250)] border-[1px] border-[#ffffff3e]">
+                                <a href={image.link} title={image.title} target="_blank" class="w-[370px] max-w-[85vw] snap-start shrink-0 overflow-hidden chamfer-lg">
                                     <img src={image.src} class="object-cover w-full transition duration-500 ease hover:scale-[1.1] aspect-[16/9]" />
                                 </a>
                             ))
@@ -89,15 +93,15 @@ const credits = proyecto.credits || [];
                 </div>
 
                 <div class="flex flex-row gap-2">
-                    <button id="prev" class="bg-[#333] hover:bg-[#222222] transition-colors duration-300 ease text-white p-2 rounded-full"><Prev class="w-6 h-6"/></button>
-                    <button id="next" class="bg-[#333] hover:bg-[#222222] transition-colors duration-300 ease text-white p-2 rounded-full"><Next class="w-6 h-6"/></button>
+                    <button id="prev" class="btn btn-ghost btn-icon" aria-label="Anterior"><Prev class="w-5 h-5"/></button>
+                    <button id="next" class="btn btn-ghost btn-icon" aria-label="Siguiente"><Next class="w-5 h-5"/></button>
                 </div>
             </>
         )}
 
         {credits.length > 0 && (
             <>
-                <MiniTitle class="mt-5 mb-5">{t("projects.credits")}</MiniTitle>
+                <MiniTitle class="mt-14 mb-6">{t("projects.credits")}</MiniTitle>
                 <StaffCard profiles={credits}/>
             </>
         )}

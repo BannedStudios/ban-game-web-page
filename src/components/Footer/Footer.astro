@@ -42,46 +42,46 @@ const LEGAL = [
 import minemu from "../../assets/minemu.webp";
 import elysis from "../../assets/elysis.png";
 ---
-<footer class="bg-[#1c1c1c] mt-auto">
-    <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-        <div class="md:flex md:justify-between">
-            <div class="mb-6 md:mb-0">
-                <a href="/" class="flex items-center">
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap text-white hover:text-[#ccc] transition-colors duration-300 ease">
-                        BANNED STUDIOS
-                    </span>
+<footer class="mt-auto border-t border-linea-2 bg-fondo/70">
+    <div class="mx-auto w-full max-w-[1200px] px-5 py-12">
+        <div class="flex justify-between gap-10 max-[860px]:flex-col">
+            <div>
+                <a href="/" class="flex items-center gap-3 group w-max">
+                    <span class="mark w-[34px] transition-transform duration-300 group-hover:scale-110"></span>
+                    <span class="display text-[1.5rem] tracking-[.05em] text-texto">Banned Studios</span>
                 </a>
-                <div class="mt-4">
+                <p class="kicker mt-3">{t('hero.title')}</p>
+
+                <div class="mt-8">
                     <Title>{t('footer.affiliates')}</Title>
-                    <div class="flex flex-row gap-5">
-                        <a href="https://minemu.es/" target="_blank" class="flex flex-row items-center gap-2.5 hover:underline">
-                            <Image src={minemu} alt={"Minemu"} format="webp" quality="high" class="w-10 h-10" />
-                            <div class="flex flex-col">
-                                <span>Minemu</span>
-                                <span>(Hosting)</span>
+                    <div class="flex flex-row gap-6">
+                        <a href="https://minemu.es/" target="_blank" class="flex flex-row items-center gap-3 group">
+                            <Image src={minemu} alt={"Minemu"} format="webp" quality="high" class="w-10 h-10 chamfer-sm" />
+                            <div class="flex flex-col leading-tight">
+                                <span class="text-texto group-hover:text-oro transition-colors duration-300">Minemu</span>
+                                <span class="mono text-[0.75rem] text-texto-3">Hosting</span>
                             </div>
                         </a>
-                        <a href="https://elysiscreative.com/" target="_blank" class="flex flex-row items-center gap-2.5 hover:underline">
-                            <Image src={elysis} alt={"Elysis Creative"} format="webp" quality="high" class="w-10 h-10" />
-                            <div class="flex flex-col">
-                                <span>Elysis</span>
-                                <span>Creative</span>
+                        <a href="https://elysiscreative.com/" target="_blank" class="flex flex-row items-center gap-3 group">
+                            <Image src={elysis} alt={"Elysis Creative"} format="webp" quality="high" class="w-10 h-10 chamfer-sm" />
+                            <div class="flex flex-col leading-tight">
+                                <span class="text-texto group-hover:text-oro transition-colors duration-300">Elysis</span>
+                                <span class="mono text-[0.75rem] text-texto-3">Creative</span>
                             </div>
                         </a>
                     </div>
                 </div>
             </div>
-            
-            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+
+            <div class="grid grid-cols-3 gap-12 max-[520px]:grid-cols-2 max-[520px]:gap-8">
                 <Column col={COMPANY} title={t('footer.company')}/>
                 <Column col={COMMUNITY} title={t('footer.community')}/>
                 <Column col={LEGAL} title={t('footer.legal')}/>
             </div>
         </div>
 
-        <hr class="my-6 sm:mx-auto border-gray-700 lg:my-8" />
-        <div class="sm:flex sm:items-center sm:justify-between">
-            <span class="text-[15px] sm:text-center text-gray-400">© 2026 <a class="text-white hover:text-[#ccc] transition-colors duration-300 ease" href="/">Banned Studios</a>.</span>
+        <div class="rule mt-10 pt-6 flex items-center justify-between gap-4 max-[560px]:flex-col max-[560px]:items-start">
+            <span class="mono text-[0.8rem] text-texto-3">© 2026 <a class="text-texto hover:text-oro transition-colors duration-300" href="/">Banned Studios</a> · b4nned.xyz</span>
             <Networks/>
         </div>
     </div>

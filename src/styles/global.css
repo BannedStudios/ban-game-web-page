@@ -1,2 +1,193 @@
 @import "tailwindcss";
 @plugin '@tailwindcss/typography';
+
+/* ============================================================
+   Banned Studios · sistema visual de la web (según el manual de marca)
+   Paleta Oro, Anton para titulares, Inter para texto, mono para datos.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Anton';
+  src: url('/fonts/Anton-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@theme {
+  --color-oro: #f0b83a;
+  --color-oro-claro: #f6c445;
+  --color-oro-oscuro: #ca9b31;
+  --color-fondo: #0b0a08;
+  --color-sup: #14110d;
+  --color-sup-2: #1a1610;
+  --color-fantasma: #24201a;
+  --color-texto: #f4ede0;
+  --color-texto-2: #b9ae9a;
+  --color-texto-3: #8a8070;
+  --color-linea: rgba(255, 236, 200, 0.08);
+  --color-linea-2: rgba(255, 236, 200, 0.14);
+
+  --font-display: 'Anton', 'Impact', sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: Consolas, ui-monospace, 'SFMono-Regular', monospace;
+}
+
+@layer base {
+  html { scrollbar-color: #2a251c transparent; scroll-behavior: smooth; }
+  ::selection { background: rgba(240, 184, 58, 0.35); color: #fff; }
+
+  /* Fondo de la marca: negro cálido, halo dorado y retícula isométrica */
+  body {
+    background-color: var(--color-fondo);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(224, 184, 98, 0.07) 0%, transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 0 v104 M0 0 v104 M60 0 v104 M0 17.32 L60 52 M0 69.28 L60 104 M0 -34.64 L60 0 M0 121.28 L60 156 M60 17.32 L0 52 M60 69.28 L0 104 M60 -34.64 L0 0 M60 121.28 L0 156' fill='none' stroke='rgba(255,214,120,0.045)'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 60% 90% at 50% 50%, #17140f 0%, #0f0d0a 55%, #0b0a08 100%);
+    background-size: auto, 60px 104px, auto;
+    background-attachment: fixed;
+    color: var(--color-texto-2);
+  }
+}
+
+@layer components {
+  /* --- Esquinas cortadas, como la arista del cubo --- */
+  .chamfer { clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+  .chamfer-sm { clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); }
+  .chamfer-lg { clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px); }
+
+  /* --- Botones --- */
+  .btn {
+    --cut: 8px;
+    position: relative; isolation: isolate;
+    display: inline-flex; align-items: center; justify-content: center; gap: .55em;
+    padding: .8em 1.3em; font-family: var(--font-sans); font-weight: 700; font-size: .8rem; line-height: 1;
+    letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; cursor: pointer;
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+    transition: background-color .25s ease, color .25s ease, transform .25s ease;
+  }
+  .btn svg { width: 1.15em; height: 1.15em; flex: none; }
+  .btn-sm { --cut: 6px; padding: .65em 1em; font-size: .7rem; }
+  .btn-lg { --cut: 10px; padding: 1em 1.6em; font-size: .9rem; }
+  /* Acción principal: un solo botón dorado por sección */
+  .btn-primary { background: var(--color-oro); color: var(--color-fondo); }
+  .btn-primary:hover { background: var(--color-oro-claro); }
+  /* Contorno dorado (el launcher) */
+  .btn-secondary { background: var(--color-oro); color: var(--color-oro); }
+  .btn-secondary::before {
+    content: ""; position: absolute; inset: 1px; z-index: -1; background: var(--color-fondo);
+    clip-path: polygon(calc(var(--cut) - .4px) 0, 100% 0, 100% calc(100% - var(--cut) + .4px), calc(100% - var(--cut) + .4px) 100%, 0 100%, 0 calc(var(--cut) - .4px));
+    transition: background-color .25s ease;
+  }
+  .btn-secondary:hover::before { background: var(--color-sup-2); }
+  /* Fantasma: idioma, sesión y acciones secundarias */
+  .btn-ghost { background: var(--color-fantasma); color: var(--color-texto); }
+  .btn-ghost:hover { background: #2e2920; }
+  /* Botón cuadrado con icono (carruseles) */
+  .btn-icon { --cut: 6px; padding: .6em; }
+
+  /* Enlace subrayado con flecha */
+  .link-arrow {
+    display: inline-flex; align-items: center; gap: .45em; padding-bottom: 3px;
+    font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+    color: var(--color-texto); border-bottom: 1px solid var(--color-oro); transition: gap .25s ease, color .25s ease;
+  }
+  .link-arrow::after { content: "→"; color: var(--color-oro); }
+  .link-arrow:hover { gap: .75em; color: #fff; }
+
+  /* --- Tipografía --- */
+  /* Titular en Anton con el degradado dorado (el padding deja ver las tildes) */
+  .word {
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: .03em; line-height: .95;
+    background: linear-gradient(180deg, #f2c256 0%, #f0b83a 55%, #ce9e32 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    padding-top: .12em; margin-top: -.12em;
+  }
+  .display { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .03em; line-height: 1; color: #fff; }
+  /* Antetítulo con línea dorada */
+  .kicker {
+    display: inline-flex; align-items: center; gap: .75em; font-size: .72rem; font-weight: 600;
+    letter-spacing: .34em; text-transform: uppercase; color: var(--color-texto-2);
+  }
+  .kicker::before { content: ""; width: 22px; height: 1.5px; background: var(--color-oro); flex: none; }
+  .mono { font-family: var(--font-mono); }
+  .num { font-family: var(--font-mono); color: var(--color-oro); }
+
+  /* --- Logo (gato) como máscara, para teñirlo con la paleta --- */
+  .mark {
+    display: inline-block; flex: none; aspect-ratio: 1;
+    -webkit-mask: url('/brand/gato.png') center / contain no-repeat; mask: url('/brand/gato.png') center / contain no-repeat;
+    background: linear-gradient(135deg, #f2c35a 0%, #f0b83a 50%, #ca9b31 100%);
+  }
+
+  /* --- Marco de esquinas: la firma de la marca --- */
+  .frame { position: relative; padding: 10px; }
+  .frame::before {
+    --fc: rgba(255, 214, 120, .75); --fs: 16px; --fw: 2px;
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(var(--fc), var(--fc)) top left / var(--fs) var(--fw) no-repeat,
+      linear-gradient(var(--fc), var(--fc)) top left / var(--fw) var(--fs) no-repeat,
+      linear-gradient(var(--fc), var(--fc)) top right / var(--fs) var(--fw) no-repeat,
+      linear-gradient(var(--fc), var(--fc)) top right / var(--fw) var(--fs) no-repeat,
+      linear-gradient(var(--fc), var(--fc)) bottom left / var(--fs) var(--fw) no-repeat,
+      linear-gradient(var(--fc), var(--fc)) bottom left / var(--fw) var(--fs) no-repeat,
+      linear-gradient(var(--fc), var(--fc)) bottom right / var(--fs) var(--fw) no-repeat,
+      linear-gradient(var(--fc), var(--fc)) bottom right / var(--fw) var(--fs) no-repeat;
+    transition: opacity .3s ease, inset .3s ease;
+  }
+  .frame-sm::before { --fs: 12px; --fw: 1.5px; }
+  .frame-lg::before { --fs: 22px; }
+  /* Marco que aparece al pasar el cursor */
+  .frame-hover::before { opacity: 0; inset: 6px; }
+  .group:hover .frame-hover::before, .frame-hover:hover::before, .frame-hover:focus-visible::before { opacity: 1; inset: 0; }
+
+  /* --- Tarjetas y superficies --- */
+  .card { background: var(--color-sup); clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px); }
+
+  /* --- Etiquetas con rombo: el color indica el tipo --- */
+  .tag {
+    --c: var(--color-oro);
+    display: inline-flex; align-items: center; gap: .5em; padding: .35em .75em .35em .65em;
+    font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; line-height: 1;
+    color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
+    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+  }
+  .tag::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); flex: none; }
+  .tag-serie { --c: #c3c8d0; }
+  .tag-beta { --c: #f0854a; }
+  .tag-pronto { --c: #8fc4ff; }
+
+  /* --- Avisos: borde lateral y título en mono --- */
+  .notice {
+    --c: #f0854a;
+    border-left: 2px solid var(--c); background: var(--color-sup-2); padding: .9rem 1.2rem 1rem 1.1rem; text-align: left;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+  }
+  .notice-title { display: flex; align-items: center; gap: .55em; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+  .notice-title::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); }
+
+  /* Línea de sección */
+  .rule { border-top: 1px solid var(--color-linea-2); }
+}
+
+/* Contenido en markdown (about, proyectos) con la paleta de la marca */
+.prose-marca {
+  --tw-prose-invert-body: var(--color-texto-2);
+  --tw-prose-invert-headings: var(--color-texto);
+  --tw-prose-invert-links: var(--color-oro);
+  --tw-prose-invert-bold: var(--color-texto);
+  --tw-prose-invert-bullets: var(--color-oro);
+  --tw-prose-invert-hr: var(--color-linea-2);
+  --tw-prose-invert-quotes: var(--color-texto);
+  --tw-prose-invert-quote-borders: var(--color-oro);
+}
+.prose-marca :where(h1, h2, h3) { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .03em; font-weight: 400; }
+
+/* Tweets incrustados (astro-embed): versión sin widget con la superficie de la marca */
+astro-embed-tweet blockquote, .twitter-tweet:not(.twitter-tweet-rendered) {
+  border: 1px solid var(--color-linea-2) !important;
+  background: var(--color-sup) !important;
+  border-radius: 0 !important;
+  color: var(--color-texto-2) !important;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+astro-embed-tweet a { color: var(--color-oro) !important; }

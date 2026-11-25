@@ -41,16 +41,17 @@ const tgb = [
 <Layout title="Staff" image="/index/index2.webp" desc={`${t("staff.desc")}`}>
     <BannerExtra src="staff"/>
     <MainPage>
-      <MiniTitle class="mb-5">{t("staff.miniTitle")}</MiniTitle>
-      <a class="flex flex-row items-center gap-2 px-5 py-3 bg-[#333] rounded-[20px] text-white transition-all duration-300 ease-in hover:bg-[#222222]" href="/apply/">
-        <BriefCase class="w-8 h-8"/>
-        <span class="text-[1.6em]">{t("staff.apply")}</span>
+      <div class="kicker">Staff</div>
+      <MiniTitle class="mt-3 mb-6">{t("staff.miniTitle")}</MiniTitle>
+      <a class="btn btn-primary btn-lg" href="/apply/">
+        <BriefCase />
+        <span>{t("staff.apply")}</span>
       </a>
 
-      <MiniTitle class="mt-10 mb-5">{t("staff.teamTitle")}</MiniTitle>
+      <MiniTitle class="mt-16 mb-6">{t("staff.teamTitle")}</MiniTitle>
       <StaffCard profiles={staff}/>
 
-      <MiniTitle class="mt-10 mb-5">{t("staff.tgbTitle")}</MiniTitle>
+      <MiniTitle class="mt-16 mb-6">{t("staff.tgbTitle")}</MiniTitle>
       <StaffCard profiles={tgb}/>
     </MainPage>
 </Layout>

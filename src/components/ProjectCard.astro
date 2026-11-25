@@ -2,11 +2,11 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { getCollection } from "astro:content";
-import { getLang, useTranslations } from "../i18n/utils";
+import { getLang } from "../i18n/utils";
 
 const lang = getLang(Astro.cookies, Astro.request);
-const t = useTranslations(lang);
 
+// Más recientes primero; el número es el "order" del proyecto, como en el índice de la portada
 const allProjects = await getCollection('proyectos');
 const rawProjects = allProjects
   .filter((item) => item.slug.startsWith(`${lang}/`))
@@ -14,11 +14,11 @@ const rawProjects = allProjects
     ...item.data,
     slug: item.slug.replace(`${lang}/`, "")
   }))
-  .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  .sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
 
 const projectImages = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.{png,jpg,jpeg,webp,avif,svg}', { eager: true });
- 
-const projectPictures = rawProjects.map((project) => {  
+
+const projectPictures = rawProjects.map((project) => {
     const avatar = Object.entries(projectImages).find(([path]) => {
         const filename = path.split('/').pop()?.replace(/\.[^.]+$/, '');
         return filename === project.slug;
@@ -27,29 +27,28 @@ const projectPictures = rawProjects.map((project) => {
 });
 ---
 
-<div class="flex flex-wrap gap-[2rem] justify-center max-w-[1500px] px-5">
+<!-- Tarjeta de proyecto (manual de marca · componentes web): imagen, número, título, tipo y fecha; marco al pasar el cursor -->
+<div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 w-full max-w-[1200px] px-5">
   {
     projectPictures.map((project) => {
+      const isSerie = project.type?.toLowerCase().startsWith('seri');
       return (
-        // <article class="flex flex-col text-center items-center bg-[#111] text-white rounded-[10px] p-[1.2rem] pt-0 w-[240px] drop-shadow-[0_0_15px_rgba(42,42,42,0.35)] border-[1.5px] border-[rgba(42,42,42,0.500)] overflow-hidden relative group">
-        //   <Image src={avatar} alt={title} quality="high" class="absolute w-[240px] h-[240px] object-cover opacity-[0.15] transition-opacity duration-1000 z-[-10] blur-[2rem] group-hover:opacity-[0.45]" />
-        //   <a href={`/proyectos/${slug}`}>
-        //     <Image src={avatar} alt={title} quality="high" class="w-[200px] h-[200px] rounded-[10px] object-cover transition-transform duration-300 ease-in-out mt-[1.2rem] hover:scale-[1.05]" transition:name={slug} />
-        //   </a>
-        //   <div class="mt-[8px] p-[8px] text-[1.4rem] font-semibold">{title}</div>
-        //   <p class="text-[#7b7b7b] font-medium">{type} - {date}</p>
-        // </article>
-
-        <article class="flex flex-col gap-3 text-left bg-[#111] text-white w-[300px] border-[1.5px] border-[rgba(42,42,42,0.500)] overflow-hidden relative z-[0] group">
-          <a href={`/projects/${project.slug}/`}>
-            <Image src={project.avatar} alt={project.title} format="webp" quality="high" class="w-full h-full" transition:name={project.slug} />
-          </a>
-          <Image src={project.avatar} alt={project.title} format="webp" quality="high" class="absolute w-full h-full object-cover opacity-[0.10] blur-[2rem] z-[-2] transition-opacity duration-1000 group-hover:opacity-[0.20]" />
-          <div class=" relative z-[-1] px-3 pb-3">
-            <div class="text-[1.2rem] font-medium">{project.title}</div>
-            <p class="text-[0.9rem] text-[#7b7b7b] font-medium">{project.type} - {project.date}</p>
-          </div>
-        </article>
+        <a href={`/projects/${project.slug}/`} class="frame frame-sm frame-hover group block">
+          <article class="card p-2.5 h-full flex flex-col">
+            <div class="overflow-hidden chamfer">
+              <Image src={project.avatar!} alt={project.title} format="webp" quality="high" width={520} height={520}
+                     class="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-[1.04]" transition:name={project.slug} />
+            </div>
+            <div class="px-2 pt-4 pb-2 flex flex-col gap-3 flex-1">
+              <span class="num text-[0.8rem]">{String(project.order).padStart(2, '0')}</span>
+              <h3 class="display text-[1.35rem] leading-[1.05] text-white group-hover:text-oro transition-colors duration-300">{project.title}</h3>
+              <div class="flex items-center justify-between gap-3 mt-auto">
+                <span class={`tag ${isSerie ? 'tag-serie' : ''}`}>{project.type}</span>
+                <span class="mono text-[0.78rem] text-texto-3">{project.date}</span>
+              </div>
+            </div>
+          </article>
+        </a>
       )
     })
   }

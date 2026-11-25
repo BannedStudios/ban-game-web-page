@@ -13,7 +13,7 @@ const image = Object.entries(bannerImages).find(([path]) => {
 
 <div class="opacity-0 transition-opacity duration-1000 ease-in-out overflow-hidden relative" style="mask-image: linear-gradient(to bottom, black 40%, transparent);">
     <Image src={image} alt="Banner" format="webp" loading="eager" class="w-full" onload="this.parentElement.classList.add('animate-fade-up')"/>
-    <div class="absolute inset-0 bg-black opacity-65 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-fondo opacity-65 pointer-events-none"></div>
 </div>
 
 <style>

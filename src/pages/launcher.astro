@@ -14,17 +14,24 @@ const t = useTranslations(lang);
 
 <Layout title="Launcher" image="/pages/launcher.webp" desc={t("launcher.desc")}>
     <MainPage class="mt-15">
-        <Title>Ban Game Launcher</Title>
-        <Desc class="mt-2">{t("launcher.desc2")}</Desc>
-        <Desc class="mt-3"><b>{t("launcher.warningTitle")}</b> {t("launcher.warning")} <a href="https://discord.gg/sKRYYyVCnw" target="_blank" class="text-white hover:text-[oklch(0.872_0.01_258.338)] transition-colors ease duration-300">discord</a>.</Desc>
-        
-        <div class="flex flex-wrap flex-col items-center justify-center mt-6">
-            <a href="https://cdn.stackedhost.crysistudio.xyz/ban-game-launcher/release/latest/ban-game-launcher-setup.exe" class="flex items-center px-5 py-3 bg-[#333] rounded-[10px] text-white transition-all duration-300 ease text-[1.2rem] hover:bg-[#222222]">
-                <Windows class="w-[24px] h-[24px] mr-[15px]"/>
-                <span class="text-[1.1em]">{t("launcher.downloadWindows")}</span>
+        <div class="kicker">Launcher</div>
+        <Title class="mt-3">Ban Game Launcher</Title>
+        <Desc class="mt-3 max-w-[640px]">{t("launcher.desc2")}</Desc>
+
+        <div class="notice mt-7 max-w-[640px] mx-5">
+            <div class="notice-title">{t("launcher.warningTitle")}</div>
+            <p class="text-[0.9rem] leading-relaxed mt-1.5">{t("launcher.warning")}<a href="https://discord.gg/sKRYYyVCnw" target="_blank" class="text-texto underline decoration-oro underline-offset-4 hover:text-oro transition-colors duration-300">Discord</a>.</p>
+        </div>
+
+        <div class="flex flex-wrap flex-col items-center justify-center mt-8">
+            <a href="https://cdn.stackedhost.crysistudio.xyz/ban-game-launcher/release/latest/ban-game-launcher-setup.exe" class="btn btn-primary btn-lg">
+                <Windows />
+                <span>{t("launcher.downloadWindows")}</span>
             </a>
         </div>
 
-        <Image src={launcher} alt="Launcher" format="webp" loading="eager" quality="high" class="w-[90%] h-[90%] max-w-[900px] rounded-[10px] object-cover drop-shadow-[0_0_20px_rgba(42,42,42,0.250)] border-[1.5px] border-[#ffffff3e] mt-7"/>
+        <div class="frame frame-lg mt-12 w-[90%] max-w-[920px]">
+            <Image src={launcher} alt="Launcher" format="webp" loading="eager" quality="high" class="w-full object-cover chamfer-lg"/>
+        </div>
     </MainPage>
 </Layout>

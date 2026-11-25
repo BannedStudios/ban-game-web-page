@@ -9,45 +9,47 @@ const t = useTranslations(lang);
 
 const targetLang = lang === "es" ? "en" : "es";
 const targetLabel = lang === "es" ? "English" : "Español";
-const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
+const targetLabelShort = lang === "es" ? "EN" : "ES";
 ---
 
-<div class="mb-[55px]">
-    <header class="bg-[#00000099] backdrop-blur-[8px] fixed w-full h-[55px] z-[1000] border-b-[0.5px] border-b-[#1c1c1c]">
-        <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto px-4 h-full">
-            <div class="hamburger hidden gap-[5px] cursor-pointer mt-[5px] z-[1001] relative w-[30px] h-[25px] max-[1050px]:flex flex-col" id="hamburger">
-                <span class="block w-[28px] h-[3px] bg-white rounded-[3px] transition-all duration-300 ease-in-out"></span>
-                <span class="block w-[28px] h-[3px] bg-white rounded-[3px] transition-all duration-150 ease-in-out"></span>
-                <span class="block w-[28px] h-[3px] bg-white rounded-[3px] transition-all duration-300 ease-in-out"></span>
+<div class="mb-[64px]">
+    <!-- Barra superior fija sobre el fondo (manual de marca · componentes web) -->
+    <header class="bg-fondo/80 backdrop-blur-[10px] fixed w-full h-[64px] z-[1000] border-b border-linea">
+        <div class="max-w-[1200px] flex items-center justify-between gap-6 mx-auto px-5 h-full">
+            <div class="flex items-center gap-4">
+                <button type="button" aria-label="Menú" class="hamburger hidden flex-col gap-[4px] cursor-pointer z-[1001] relative w-[22px] max-[1050px]:flex" id="hamburger">
+                    <span class="block w-[22px] h-[2px] bg-texto rounded-[2px] transition-all duration-300 ease-in-out"></span>
+                    <span class="block w-[22px] h-[2px] bg-texto rounded-[2px] transition-all duration-150 ease-in-out"></span>
+                    <span class="block w-[22px] h-[2px] bg-texto rounded-[2px] transition-all duration-300 ease-in-out"></span>
+                </button>
+
+                <a href="/" class="flex items-center gap-2.5 group" aria-label="Banned Studios">
+                    <span class="mark w-[28px] transition-transform duration-300 group-hover:scale-110"></span>
+                    <span class="display text-[1.15rem] tracking-[.05em] text-texto max-[420px]:hidden">Banned Studios</span>
+                </a>
             </div>
-            
-            <nav>
-                <ul class="flex flex-row gap-5 max-[1050px]:hidden">
+
+            <nav class="max-[1050px]:hidden">
+                <ul class="flex flex-row gap-7">
                     <NavButtons/>
                 </ul>
             </nav>
-    
-            <a class="text-[1.5em] font-bold text-center justify-center absolute transition-colors duration-300 ease top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-[1150px]:hidden hover:text-[#ccc]" href="/">BANNED STUDIOS</a>
-        
-            <div class="flex flex-row gap-2.5">
-                <button type="button" id="lang-toggle" data-target-lang={targetLang} class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer max-[420px]:hidden">
-                    {targetLabel}
+
+            <div class="flex flex-row items-center gap-2">
+                <button type="button" data-lang-toggle data-target-lang={targetLang} class="btn btn-ghost btn-sm" title={targetLabel}>
+                    <span class="max-[560px]:hidden">{targetLabel}</span><span class="hidden max-[560px]:inline">{targetLabelShort}</span>
                 </button>
 
-                <button type="button" id="lang-toggle-mobile" data-target-lang={targetLang} class="hidden flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer max-[420px]:flex">
-                    {targetLabelFlag}
-                </button>
-
-                <a href="/launcher/" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222]">
-                    <Download class="w-5 h-5"/>
-                    Ban Game Launcher
+                <a href="/launcher/" class="btn btn-secondary btn-sm">
+                    <Download class="w-4 h-4"/>
+                    <span class="max-[720px]:hidden">Ban Game Launcher</span><span class="hidden max-[720px]:inline">Launcher</span>
                 </a>
 
-                <div class="flex max-[515px]:hidden">
+                <div class="flex max-[640px]:hidden">
                     <SignedOut>
-                        <SignInButton mode="modal" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer">
+                        <SignInButton mode="modal" class="btn btn-ghost btn-sm">
                             {t('nav.login')}
-                        </SignInButton> 
+                        </SignInButton>
                     </SignedOut>
                     <SignedIn>
                         <UserButton/>
@@ -58,15 +60,16 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
     </header>
 </div>
 
-<div class="menu fixed top-[50px] left-0 w-full h-full bg-[#000000e6] p-5 z-[999]" id="menu">
-    <ul class="flex flex-col gap-5">
+<!-- Menú lateral en móvil -->
+<div class="menu fixed top-[64px] left-0 w-full max-w-[360px] h-[calc(100%-64px)] bg-fondo/95 backdrop-blur-[10px] border-r border-linea p-6 z-[999]" id="menu">
+    <ul class="flex flex-col gap-5 text-[1.05rem]">
         <NavButtons/>
-        
-        <li class="hidden max-[515px]:flex">
+
+        <li class="hidden max-[640px]:flex pt-3 rule">
             <SignedOut>
-                <SignInButton mode="modal" class="flex flex-row items-center gap-1.5 px-3.5 p-1 bg-[#333] rounded-[15px] transition-all duration-300 ease hover:bg-[#222222] cursor-pointer w-max">
+                <SignInButton mode="modal" class="btn btn-ghost btn-sm mt-3">
                     {t('nav.login')}
-                </SignInButton> 
+                </SignInButton>
             </SignedOut>
             <SignedIn>
                 <UserButton/>
@@ -77,7 +80,7 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
 
 <style>
     .hamburger.open span:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
+        transform: translateY(6px) rotate(45deg);
     }
 
     .hamburger.open span:nth-child(2) {
@@ -86,11 +89,11 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
     }
 
     .hamburger.open span:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
+        transform: translateY(-6px) rotate(-45deg);
     }
 
     .hamburger:hover span {
-        background-color: #ccc;
+        background-color: var(--color-oro);
     }
 
     .menu {
@@ -120,14 +123,14 @@ const targetLabelFlag = lang === "es" ? "🇬🇧" : "🇪🇸";
                 hamburger.classList.toggle("open");
             });
             window.addEventListener("resize", () => {
-                if (window.innerWidth >= 960) {
+                if (window.innerWidth >= 1050) {
                     menu.classList.remove("open");
                     hamburger.classList.remove("open");
                 }
             });
         }
 
-        const toggleButtons = document.querySelectorAll('[id^="lang-toggle"]');
+        const toggleButtons = document.querySelectorAll('[data-lang-toggle]');
         toggleButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const targetLang = btn.getAttribute('data-target-lang') || 'es';

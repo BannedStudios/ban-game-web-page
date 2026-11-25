@@ -6,11 +6,8 @@ import { getLang, useTranslations } from '../../i18n/utils';
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
+// Enlaces numerados (manual de marca · barra superior). El logo lleva a Inicio.
 const sections = [
-    {
-        label: t('nav.home'),
-        href: `/`,
-    },
     {
         label: t('nav.projects'),
         href: `/projects/`,
@@ -34,11 +31,16 @@ const sections = [
 ---
 
 {
-    sections.map(section => (
-        <li>
-            <a href={section.href} title={section.desc} class={` transition-colors duration-300 ease hover:text-[#ccc] ${currentPath === section.href ? "text-[#9a9999] font-medium" : ""}`}>
-                {section.label}
-            </a>
-        </li>
-    ))
+    sections.map((section, i) => {
+        const active = currentPath.startsWith(section.href);
+        return (
+            <li>
+                <a href={section.href} title={section.desc} aria-current={active ? "page" : undefined}
+                   class={`group flex items-baseline gap-1.5 text-[0.9rem] transition-colors duration-300 ease ${active ? "text-texto" : "text-texto-2 hover:text-texto"}`}>
+                    <span class="num text-[0.75rem]">0{i + 1}</span>
+                    <span class={`border-b pb-0.5 transition-colors duration-300 ${active ? "border-oro" : "border-transparent group-hover:border-linea-2"}`}>{section.label}</span>
+                </a>
+            </li>
+        )
+    })
 }

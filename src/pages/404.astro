@@ -12,9 +12,10 @@ const t = useTranslations(lang);
 
 <Layout title={t("404.title")} desc={t("404.desc")}>
     <MainPage class="h-[calc(100vh-125px)]">
-        <Title>{t("404.title")}</Title>
-        <MiniTitle class="mb-2.5">{t("404.miniTitle")}</MiniTitle>
-        <Desc>{t("404.desc")} <a class="text-white transition-colors duration-300 ease hover:text-[#ccc]" href="/">{t("404.descLink")}</a>.</Desc>
+        <span class="mark w-[64px] opacity-80"></span>
+        <h1 class="word text-[clamp(5rem,14vw,9rem)] mt-4">{t("404.title")}</h1>
+        <MiniTitle class="mb-3">{t("404.miniTitle")}</MiniTitle>
+        <Desc>{t("404.desc")} <a class="text-texto underline decoration-oro underline-offset-4 hover:text-oro transition-colors duration-300" href="/">{t("404.descLink")}</a>.</Desc>
     </MainPage>
 </Layout>
 

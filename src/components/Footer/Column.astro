@@ -7,11 +7,11 @@ const COL = Astro.props.col
 
 <div>
     <Title>{title}</Title>
-    <ul class="text-gray-400 flex flex-col gap-1.5 font-medium">
+    <ul class="flex flex-col gap-2.5 text-[0.92rem]">
         {
             COL.map((col: any) => (
                 <li>
-                    <a href={col.url} target={`${col.blank === true ? "_blank" : ""}`} class="hover:underline">{col.name}</a>
+                    <a href={col.url} target={`${col.blank === true ? "_blank" : ""}`} class="text-texto-2 hover:text-texto transition-colors duration-300">{col.name}</a>
                 </li>
             ))
         }

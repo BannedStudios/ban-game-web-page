@@ -67,7 +67,8 @@
     display: block; overflow: hidden; background: var(--color-superficie);
     clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
   }
-  .media > * { display: block; overflow: hidden; }
+  .media > :not(script, style, noscript) { display: block; overflow: hidden; }
+  .media > script, .media > style { display: none; }  /* en producción Astro mete aquí el script del reproductor */
   .media lite-youtube, .media iframe { border-radius: 0; }
 
   /* --- Botones (manual · CB): md 10,5 px · 9×15 · corte 8 / sm 9,5 px · 6×11 · corte 6 --- */

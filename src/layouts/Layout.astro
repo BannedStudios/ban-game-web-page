@@ -10,10 +10,49 @@ const currentLang = getLang(Astro.cookies, Astro.request);
 export interface Profile {
 	title: string;
 	desc?: string;
-	image?: string;
+	image?: string;       // imagen para compartir (ruta o URL); por defecto la de la marca, 1200×630
+	imageAlt?: string;
+	noindex?: boolean;    // páginas que no deben salir en buscadores (admin, 404)
+	type?: 'website' | 'article';
+	jsonld?: object | object[];   // datos estructurados extra de la página
 }
 
-const { title, desc, image } = Astro.props as Profile;
+const { title, desc, image, imageAlt, noindex = false, type = 'website', jsonld } = Astro.props as Profile;
+
+// --- SEO ---
+const SITE = 'https://b4nned.xyz';
+const DEFAULT_DESC = currentLang === 'en'
+	? 'Banned Studios is a Minecraft studio: we develop servers, events and series with our own mods, maps and organisation.'
+	: 'Banned Studios es un estudio de Minecraft: desarrollamos servidores, eventos y series con mods, mapas y organización propios.';
+const fullTitle = title === 'Banned Studios' ? 'Banned Studios · Minecraft Studio' : `${title} · Banned Studios`;
+const description = (desc && desc.trim()) || DEFAULT_DESC;
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
+const canonical = SITE + path;
+const ogImage = image ? new URL(image, SITE).href : `${SITE}/og/default.jpg`;
+const ogAlt = imageAlt || (image ? title : 'Banned Studios · Minecraft Studio');
+
+// Datos del estudio para buscadores (Organization + WebSite), en todas las páginas
+const organization = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	'@id': `${SITE}/#organization`,
+	name: 'Banned Studios',
+	alternateName: 'Ban Game Studios',
+	url: SITE,
+	logo: `${SITE}/brand/logo3d.webp`,
+	foundingDate: '2023-08-10',
+	email: 'contact@b4nned.xyz',
+	description: DEFAULT_DESC,
+	sameAs: [
+		'https://x.com/B4nnedStudios',
+		'https://youtube.com/@BannedStudios',
+		'https://patreon.com/c/BannedStudios',
+		'https://modrinth.com/organization/bannedstudios',
+		'https://github.com/BannedStudios',
+	],
+};
+const website = { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE}/#website`, name: 'Banned Studios', url: SITE, inLanguage: currentLang, publisher: { '@id': `${SITE}/#organization` } };
+const structured = [organization, website, ...(jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : [])];
 
 import "../styles/global.css";
 ---
@@ -29,25 +68,33 @@ import "../styles/global.css";
 		<link rel="preload" href="/brand/gato.png" as="image" />
 		<meta name="generator" content={Astro.generator} />
 
-		<title>{title}</title>
-		<meta name="title" content={title} />
-		<meta name="description" content={desc} />
+		<title>{fullTitle}</title>
+		<meta name="title" content={fullTitle} />
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+		<meta name="author" content="Banned Studios" />
 
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={'https://b4nned.xyz' + Astro.url.pathname} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={desc} />
-		<meta property="og:image" content={image} />
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content={fullTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:alt" content={ogAlt} />
+		{!image && <meta property="og:image:width" content="1200" />}
+		{!image && <meta property="og:image:height" content="630" />}
 		<meta property="og:site_name" content="Banned Studios" />
 		<meta property="og:locale" content={currentLang === 'en' ? 'en_US' : 'es_ES'} />
 
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={'https://b4nned.xyz' + Astro.url.pathname} />
+		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:site" content="@B4nnedStudios" />
 		<meta name="twitter:creator" content="@SoyKatto1" />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={desc} />
-		<meta property="twitter:image" content={image} />
+		<meta name="twitter:title" content={fullTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image:alt" content={ogAlt} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(structured)} />
 
 		<ClientRouter/>
 	</head>

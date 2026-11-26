@@ -38,7 +38,7 @@ const tgb = [
 ];
 ---
 
-<Layout title="Staff" image="/index/index2.webp" desc={`${t("staff.desc")}`}>
+<Layout title="Staff" desc={`${t("staff.desc")}`}>
     <MainPage class="mt-16">
       <PhotoStack items={staff.slice(0, 5).map((m) => ({ src: m.avatar, alt: m.name }))} more={Math.max(0, staff.length - 5)} class="mb-9" />
       <div class="kicker">Staff</div>

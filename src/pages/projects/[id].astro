@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Title from '../../components/Title.astro';
 import YTVideo from '../../components/YTVideo.astro';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import MiniTitle from '../../components/MiniTitle.astro';
 import MainPage from '../../components/MainPage.astro';
 import Prev from '../../components/Icons/Prev.astro';
@@ -49,9 +49,45 @@ const images = gallery ? gallery.filter((item: { type: string }) => item.type ==
 const tweets = proyecto.tweets || [];
 
 const credits = proyecto.credits || [];
+
+// Descripción para buscadores: la del proyecto, o una generada si es muy corta (p. ej. «Próximamente...»)
+const seoDesc = (proyecto.desc || '').replace(/\s+/g, ' ').trim().length >= 60
+  ? proyecto.desc
+  : (lang === 'es'
+      ? `${proyecto.title}: ${String(proyecto.type || 'proyecto').toLowerCase()} de Minecraft de Banned Studios (${proyecto.date}). Mods, mapas y organización propios.`
+      : `${proyecto.title}: a Minecraft ${String(proyecto.type || 'project').toLowerCase()} by Banned Studios (${proyecto.date}), with its own mods, maps and organisation.`);
+
+// SEO: el flyer del proyecto como imagen para compartir y datos estructurados (obra + ruta de migas)
+const ogImage = image ? await getImage({ src: image, width: Math.min(1200, image.width), format: 'jpg', quality: 85 }) : null;
+const SITE = 'https://b4nned.xyz';
+const pageUrl = `${SITE}/projects/${proyecto.slug}/`;
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: proyecto.title,
+    description: seoDesc,
+    genre: proyecto.type,
+    url: pageUrl,
+    inLanguage: lang,
+    ...(ogImage ? { image: new URL(ogImage.src, SITE).href } : {}),
+    creator: { '@id': `${SITE}/#organization` },
+    about: 'Minecraft',
+    ...(videos.length ? { video: videos.map((v: { src: string; title: string }) => ({ '@type': 'VideoObject', name: v.title, embedUrl: `https://www.youtube.com/embed/${v.src}`, thumbnailUrl: `https://i.ytimg.com/vi/${v.src}/hqdefault.jpg` })) } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Banned Studios', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: t('projects.title'), item: `${SITE}/projects/` },
+      { '@type': 'ListItem', position: 3, name: proyecto.title, item: pageUrl },
+    ],
+  },
+];
 ---
 
-<Layout title={proyecto.title} desc={proyecto.desc}>
+<Layout title={proyecto.title} desc={seoDesc} image={ogImage?.src} imageAlt={proyecto.title} type="article" jsonld={jsonld}>
     <MainPage class="mt-8">
         <section class="flex flex-col justify-center items-center">
             <div class="frame frame-lg mt-8">

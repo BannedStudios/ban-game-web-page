@@ -32,7 +32,7 @@ const stack = allProjects.map((p) => ({
 })).filter((p) => p.src).slice(0, 5) as { alt: string; src: ImageMetadata }[];
 ---
 
-<Layout title={t("projects.title")} image="/index/index3.webp" desc={t("projects.desc")}>
+<Layout title={t("projects.title")} desc={t("projects.desc")}>
     <MainPage class="mt-16">
         <PhotoStack items={stack} more={Math.max(0, allProjects.length - stack.length)} class="mb-9" />
         <SectionHead kicker={t("nav.projects")} title={t("projects.miniTitle")} size="lg" as="h1" />

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /registro/
+Disallow: /api/
+
+Sitemap: https://b4nned.xyz/sitemap.xml

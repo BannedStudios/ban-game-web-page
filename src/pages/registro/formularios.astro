@@ -21,7 +21,7 @@ const labelOf = (field: string, value: unknown) => {
 const date = (ms: number) => new Date(ms).toLocaleString("es", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 const titleOf = (d: Record<string, unknown>) => String(d.name || d.discord || d.email || "Sin nombre");
 ---
-<Layout title="Formularios">
+<Layout title="Formularios" noindex>
     <MainPage class="mt-14">
         <section class="w-full max-w-[1040px] px-5 text-left">
             <AdminNav active="forms" badge={all.filter((s) => !s.read).length} />

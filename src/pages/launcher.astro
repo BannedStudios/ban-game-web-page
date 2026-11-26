@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro"
 import Title from "../components/Title.astro"
 import { Image } from "astro:assets"
 import launcher from '../assets/launcher.webp'
+import { getImage } from 'astro:assets'
+const ogImage = await getImage({ src: launcher, width: 1200, format: 'jpg', quality: 85 })
 import MainPage from "../components/MainPage.astro"
 import Desc from "../components/Desc.astro"
 import Windows from "../components/Icons/Windows.astro"
@@ -12,7 +14,7 @@ const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 ---
 
-<Layout title="Launcher" image="/pages/launcher.webp" desc={t("launcher.desc")}>
+<Layout title="Ban Game Launcher" image={ogImage.src} imageAlt="Ban Game Launcher" desc={t("launcher.desc")}>
     <MainPage class="mt-16">
         <div class="kicker">Launcher</div>
         <Title class="mt-3">Ban Game Launcher</Title>

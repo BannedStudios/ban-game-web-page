@@ -10,7 +10,7 @@ const t = useTranslations(lang);
 ---
 
 <!-- Formulario propio (antes forms.app): las respuestas se guardan en Firebase y se ven en /registro/formularios/ -->
-<Layout title={t("contact.title")} image="/pages/index.webp" desc={t("contact.desc")}>
+<Layout title={t("contact.title")} desc={t("contact.desc")}>
     <MainPage class="mt-16 px-5">
         <SectionHead kicker={t("contact.title")} title={t("contact.heading")} size="md" as="h1" align="center" class="mb-10 max-w-[860px]" />
         <BrandForm form="contact" />

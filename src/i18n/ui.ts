@@ -33,7 +33,7 @@ export const ui = {
     'footer.legal': 'Legal',
     'footer.legal.terms': 'Terms and Conditions',
 
-    'index.desc': 'Studio of server development (events or series) of Minecraft Semi-professionals.',
+    'index.desc': 'Banned Studios is a Minecraft studio: we create servers, events and series with our own mods, plugins and maps. Check out our projects and join the team.',
     'index.projectsTitle': 'Our Projects',
     'index.projectsMore': 'See all projects',
     'index.projectsIndex': 'Index',
@@ -60,7 +60,7 @@ export const ui = {
     'index.cta.contact': 'Contact Us',
     'index.cta.apply': 'Join the Staff',
 
-    'staff.desc': 'Banned Studios Team.',
+    'staff.desc': 'Meet the Banned Studios team: developers, builders, designers and composers behind our Minecraft events and series.',
 
     'staff.skill.director': 'Director',
     'staff.skill.subDirector': 'Sub Director',
@@ -80,33 +80,33 @@ export const ui = {
     'staff.teamTitle': 'Banned Studios Team',
     'staff.tgbTitle': 'The Mascot',
 
-    'launcher.desc': 'Our launcher to get the resources needed to participate in our projects.',
+    'launcher.desc': 'Download Ban Game Launcher for Windows: it installs the mods and resources you need to join Banned Studios Minecraft events and series.',
     'launcher.desc2': 'Our launcher for being able to get the resources needed to participate in our projects.',
     'launcher.warningTitle': 'Notice · Beta',
     'launcher.warning': 'The launcher is in beta, so some features are disabled. If you run into a problem, report it with a ticket on our ',
     'launcher.downloadWindows': 'Download for Windows',
 
     'terms.title': 'Terms and Conditions',
-    'terms.desc': 'Terms and conditions for the participation in our projects.',
+    'terms.desc': 'Terms and conditions for taking part in Banned Studios projects, events and series.',
     'terms.miniTitle': 'Coming soon...',
 
     'contact.title': 'Contact',
     'contact.heading': "Let's talk",
-    'contact.desc': 'Form to contact to Banned Studios.',
+    'contact.desc': 'Contact Banned Studios to create a Minecraft event, series or server with us: mods, maps, setup and support.',
 
     'apply.title': 'Apply',
     'apply.heading': 'Join the team',
-    'apply.desc': 'Form to apply to Banned Studios.',
+    'apply.desc': 'Join Banned Studios: apply as a developer, builder, designer, animator, composer or moderator for our Minecraft projects.',
 
     'projects.title': 'Projects',
-    'projects.desc': 'Projects (events and series) that we have done.',
+    'projects.desc': 'All Banned Studios projects: Minecraft events and series with custom mods, maps and gameplay, from UHC to survival series.',
     'projects.miniTitle': 'Our Projects',
 
     'projects.gallery': 'Gallery',
     'projects.credits': 'Credits',
 
     'about.title': 'About Us',
-    'about.desc': 'Information and history of Banned Studios.',
+    'about.desc': 'History of Banned Studios, the Minecraft studio founded in 2023 by Katto, FranNazurRM and Sir_Reviaj to create events and series.',
     'about.miniTitle': 'About Us',
   },
   es: {
@@ -141,7 +141,7 @@ export const ui = {
     'footer.legal': 'Legal',
     'footer.legal.terms': 'Términos y condiciones',
 
-    'index.desc': 'Estudio de desarrollo de servidores (eventos o series) de Minecraft Semi-profesionales.',
+    'index.desc': 'Banned Studios es un estudio de Minecraft: creamos servidores, eventos y series con mods, plugins y mapas propios. Mira nuestros proyectos y únete al equipo.',
     'index.projectsTitle': 'Nuestros Proyectos',
     'index.projectsMore': 'Ver todos los proyectos',
     'index.projectsIndex': 'Índice',
@@ -168,7 +168,7 @@ export const ui = {
     'index.cta.contact': 'Contáctanos',
     'index.cta.apply': 'Únete al Staff',
 
-    'staff.desc': 'Equipo de Banned Studios.',
+    'staff.desc': 'Conoce al equipo de Banned Studios: programadores, constructores, diseñadores y compositores detrás de nuestros eventos y series de Minecraft.',
 
     'staff.skill.scripwriter': 'Guionista',
     'staff.skill.helper': 'Ayudante',
@@ -188,33 +188,33 @@ export const ui = {
     'staff.teamTitle': 'Equipo de Banned Studios',
     'staff.tgbTitle': 'La Mascota',
 
-    'launcher.desc': 'Nuestro launcher para obtener los recursos necesarios para participar en nuestros proyectos.',
+    'launcher.desc': 'Descarga Ban Game Launcher para Windows: instala los mods y recursos necesarios para participar en los eventos y series de Minecraft de Banned Studios.',
     'launcher.desc2': 'Nuestro launcher para poder obtener los recursos necesarios para participar en nuestros proyectos.',
     'launcher.warningTitle': 'Aviso · Beta',
     'launcher.warning': 'El launcher está en beta, por lo que algunas funciones están deshabilitadas. Si tienes algún problema, repórtalo con un ticket en nuestro ',
     'launcher.downloadWindows': 'Descargar para Windows',
 
     'terms.title': 'Términos y condiciones',
-    'terms.desc': 'Términos y condiciones para la realización de proyectos.',
+    'terms.desc': 'Términos y condiciones para participar en los proyectos, eventos y series de Banned Studios.',
     'terms.miniTitle': 'Próximamente...',
 
     'contact.title': 'Contacto',
     'contact.heading': 'Hablemos',
-    'contact.desc': 'Formulario para poder contactar con Banned Studios.',
+    'contact.desc': 'Contacta con Banned Studios para crear un evento, serie o servidor de Minecraft con nosotros: mods, mapas, configuración y soporte.',
 
     'apply.title': 'Postúlate',
     'apply.heading': 'Únete al equipo',
-    'apply.desc': 'Formulario para poder postularse a Banned Studios.',
+    'apply.desc': 'Únete a Banned Studios: postúlate como programador, constructor, diseñador, animador, compositor o moderador para nuestros proyectos de Minecraft.',
 
     'projects.title': 'Proyectos',
-    'projects.desc': 'Proyectos (eventos y series) que hemos realizado.',
+    'projects.desc': 'Todos los proyectos de Banned Studios: eventos y series de Minecraft con mods, mapas y modos de juego propios, de UHC a series de supervivencia.',
     'projects.miniTitle': 'Nuestros Proyectos',
 
     'projects.gallery': 'Galería',
     'projects.credits': 'Créditos',
 
     'about.title': 'Sobre Nosotros',
-    'about.desc': 'Información e historia de Banned Studios.',
+    'about.desc': 'Historia de Banned Studios, el estudio de Minecraft fundado en 2023 por Katto, FranNazurRM y Sir_Reviaj para crear eventos y series.',
     'about.miniTitle': 'Sobre Nosotros',
   },
 } as const;

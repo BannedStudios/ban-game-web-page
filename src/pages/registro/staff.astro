@@ -18,7 +18,7 @@ const roles = (s: string) => (s || "").split(",").map((k) => k.trim()).filter(Bo
 const unread = (await listSubmissions().catch(() => [])).filter((s) => !s.read).length;
 const nextOrder = staff.reduce((m: number, s: any) => Math.max(m, Number(s.order) || 0), -1) + 1;
 ---
-<Layout title="Registro de staff">
+<Layout title="Registro de staff" noindex>
     <MainPage class="mt-14">
         <section class="w-full max-w-[1040px] px-5 text-left">
             <AdminNav active="staff" badge={unread} />

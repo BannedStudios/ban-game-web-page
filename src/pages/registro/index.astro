@@ -22,7 +22,7 @@ const cards = [
   { num: '03', title: 'Postulaciones', value: of('apply').length, sub: `${of('apply').filter((s) => !s.read).length} sin leer`, href: '/registro/formularios/?f=apply', cta: 'Ver postulaciones' },
 ];
 ---
-<Layout title="Panel de admin">
+<Layout title="Panel de admin" noindex>
     <MainPage class="mt-14">
         <section class="w-full max-w-[1040px] px-5 text-left">
             <AdminNav active="panel" badge={unread} />

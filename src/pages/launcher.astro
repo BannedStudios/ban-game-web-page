@@ -26,10 +26,12 @@ const t = useTranslations(lang);
         </div>
 
         <div class="flex flex-wrap flex-col items-center justify-center mt-8">
-            <a href="https://cdn.stackedhost.crysistudio.xyz/ban-game-launcher/release/latest/ban-game-launcher-setup.exe" class="btn btn-primary">
+            {/* Descarga oculta por ahora. Para volver a activarla, cambia este botón por:
+                <a href="https://cdn.stackedhost.crysistudio.xyz/ban-game-launcher/release/latest/ban-game-launcher-setup.exe" class="btn btn-primary"><Windows /><span>{t("launcher.downloadWindows")}</span></a> */}
+            <span class="btn btn-ghost cursor-default opacity-80" aria-disabled="true">
                 <Windows />
-                <span>{t("launcher.downloadWindows")}</span>
-            </a>
+                <span>{t("launcher.soon")}</span>
+            </span>
         </div>
 
         <div class="frame frame-lg mt-12 w-[90%] max-w-[920px]">

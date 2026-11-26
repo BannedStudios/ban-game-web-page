@@ -85,6 +85,7 @@ export const ui = {
     'launcher.warningTitle': 'Notice · Beta',
     'launcher.warning': 'The launcher is in beta, so some features are disabled. If you run into a problem, report it with a ticket on our ',
     'launcher.downloadWindows': 'Download for Windows',
+    'launcher.soon': 'Coming soon for Windows',
 
     'terms.title': 'Terms and Conditions',
     'terms.desc': 'Terms and conditions for taking part in Banned Studios projects, events and series.',
@@ -193,6 +194,7 @@ export const ui = {
     'launcher.warningTitle': 'Aviso · Beta',
     'launcher.warning': 'El launcher está en beta, por lo que algunas funciones están deshabilitadas. Si tienes algún problema, repórtalo con un ticket en nuestro ',
     'launcher.downloadWindows': 'Descargar para Windows',
+    'launcher.soon': 'Próximamente para Windows',
 
     'terms.title': 'Términos y condiciones',
     'terms.desc': 'Términos y condiciones para participar en los proyectos, eventos y series de Banned Studios.',

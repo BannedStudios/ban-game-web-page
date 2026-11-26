@@ -6,8 +6,10 @@ const proyectos = defineCollection({
         type: z.string(),
         date: z.string(),
         desc: z.string(),
-        banner: z.boolean(),
+        banner: z.boolean().optional(),
         order: z.number(),
+        // hidden: true oculta el proyecto en toda la web (portada, índice, lista y su página da 404)
+        hidden: z.boolean().optional().default(false),
         gallery: z.array(z.object({
             type: z.string(),
             src: z.string().url(),

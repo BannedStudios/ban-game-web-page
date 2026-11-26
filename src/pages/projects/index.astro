@@ -5,8 +5,9 @@ import Title from '../../components/Title.astro';
 import MainPage from '../../components/MainPage.astro';
 import { getCollection, render } from "astro:content";
 import { getLang, useTranslations } from "../../i18n/utils";
-import BannerExtra from '../../components/BannerExtra.astro';
 import SectionHead from '../../components/SectionHead.astro';
+import PhotoStack from '../../components/PhotoStack.astro';
+import type { ImageMetadata } from 'astro';
 
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
@@ -18,11 +19,22 @@ const projects = info
   .find((item) => item.slug === "projects");
 
 const { Content } = await render(projects!);
+
+// Cabecera: las miniaturas de los 5 proyectos más recientes
+const allProjects = (await getCollection('proyectos', ({ data }) => !data.hidden))
+  .filter((item) => item.slug.startsWith(`${lang}/`))
+  .map((item) => ({ ...item.data, slug: item.slug.replace(`${lang}/`, "") }))
+  .sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
+const projectImages = import.meta.glob<{ default: ImageMetadata }>('../../assets/projects/*.{png,jpg,jpeg,webp,avif,svg}', { eager: true });
+const stack = allProjects.map((p) => ({
+  alt: p.title,
+  src: Object.entries(projectImages).find(([path]) => path.split('/').pop()?.replace(/\.[^.]+$/, '') === p.slug)?.[1]?.default,
+})).filter((p) => p.src).slice(0, 5) as { alt: string; src: ImageMetadata }[];
 ---
 
 <Layout title={t("projects.title")} image="/index/index3.webp" desc={t("projects.desc")}>
-    <BannerExtra src="projects"/>
-    <MainPage>
+    <MainPage class="mt-16">
+        <PhotoStack items={stack} more={Math.max(0, allProjects.length - stack.length)} class="mb-9" />
         <SectionHead kicker={t("nav.projects")} title={t("projects.miniTitle")} size="lg" as="h1" />
         <div class="px-4 mt-4 max-w-[900px] prose prose-invert prose-marca text-left">
             <Content/>

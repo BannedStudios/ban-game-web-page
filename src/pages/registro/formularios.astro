@@ -1,0 +1,129 @@
+---
+// Respuestas de Contacto y Postúlate (solo admin; lo protege middleware.ts)
+import MainPage from "../../components/MainPage.astro";
+import Layout from "../../layouts/Layout.astro";
+import AdminNav from "../../components/AdminNav.astro";
+import { FORMS } from "../../data/forms";
+import { listSubmissions, type FormId } from "../../libs/firestore/forms";
+
+const tab = (Astro.url.searchParams.get("f") === "apply" ? "apply" : "contact") as FormId;
+const all = await listSubmissions().catch(() => []);
+const items = all.filter((s) => s.form === tab);
+const count = (f: FormId) => all.filter((s) => s.form === f).length;
+const unread = (f: FormId) => all.filter((s) => s.form === f && !s.read).length;
+
+const form = FORMS[tab];
+const labelOf = (field: string, value: unknown) => {
+  const def = form.fields.find((f) => f.name === field);
+  const map = (v: string) => def?.options?.find((o) => o.value === v)?.label.es ?? v;
+  return Array.isArray(value) ? value.map((v) => map(String(v))).join(" · ") : map(String(value));
+};
+const date = (ms: number) => new Date(ms).toLocaleString("es", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+const titleOf = (d: Record<string, unknown>) => String(d.name || d.discord || d.email || "Sin nombre");
+---
+<Layout title="Formularios">
+    <MainPage class="mt-14">
+        <section class="w-full max-w-[1040px] px-5 text-left">
+            <AdminNav active="forms" badge={all.filter((s) => !s.read).length} />
+            <div class="flex items-end justify-between gap-6 flex-wrap">
+                <div>
+                    <div class="kicker">Admin · Formularios</div>
+                    <h1 class="word text-[clamp(2.4rem,5vw,3.9rem)] !leading-[1.05] mt-3">Formularios</h1>
+                    <div class="mono text-[13.4px] text-texto-3 mt-3">Contacto y Postúlate · solo administradores</div>
+                </div>
+            </div>
+
+            <!-- Pestañas -->
+            <div class="flex gap-2 mt-10 flex-wrap">
+                {(["contact", "apply"] as FormId[]).map((f) => (
+                    <a href={`?f=${f}`} class={`btn btn-sm ${f === tab ? "btn-primary" : "btn-ghost"}`}>
+                        {FORMS[f].title.es} · {count(f)}{unread(f) > 0 && <span class="ml-1">({unread(f)} nuevas)</span>}
+                    </a>
+                ))}
+            </div>
+
+            <ul id="subList" class="mt-6 border-t border-linea">
+                {items.length === 0 && <li class="py-10 mono text-[13.4px] text-texto-3">Todavía no hay respuestas.</li>}
+                {items.map((s) => (
+                    <li class={`sub ${s.read ? "" : "unread"}`} data-id={s.id}>
+                        <details>
+                            <summary class="flex items-center gap-4 py-4 cursor-pointer list-none">
+                                <span class="dot shrink-0" title={s.read ? "Leída" : "Nueva"}></span>
+                                <span class="display text-[20px] leading-none text-texto min-w-0 flex-1 truncate">{titleOf(s.data)}</span>
+                                <span class="mono text-[12.2px] text-texto-3 shrink-0 max-[560px]:hidden">{date(s.createdAt)}</span>
+                                <span class="text-oro shrink-0 chev">↓</span>
+                            </summary>
+                            <div class="pb-6 pl-[26px] max-[560px]:pl-0">
+                                <dl class="grid grid-cols-[220px_1fr] gap-x-6 gap-y-3 max-[640px]:grid-cols-1 max-[640px]:gap-y-1">
+                                    {form.fields.filter((f) => s.data[f.name] !== undefined && s.data[f.name] !== "").map((f) => (
+                                        <>
+                                            <dt class="field-label pt-[2px]">{f.label.es}</dt>
+                                            <dd class="text-[15px] text-texto whitespace-pre-wrap break-words max-[640px]:mb-2">{labelOf(f.name, s.data[f.name])}</dd>
+                                        </>
+                                    ))}
+                                </dl>
+                                <div class="flex gap-2 mt-5 flex-wrap items-center">
+                                    <button type="button" class="btn btn-ghost btn-sm toggle-read">{s.read ? "Marcar como nueva" : "Marcar como leída"}</button>
+                                    <button type="button" class="btn btn-ghost btn-sm btn-danger delete-sub">Eliminar</button>
+                                    <span class="mono text-[11.6px] text-texto-3 ml-2">{date(s.createdAt)} · {s.lang?.toUpperCase()}</span>
+                                </div>
+                            </div>
+                        </details>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    </MainPage>
+</Layout>
+
+<style>
+    :global(.sub) { border-bottom: 1px solid var(--color-linea); padding: 0 14px 0 6px; }
+    :global(.sub summary::-webkit-details-marker) { display: none; }
+    :global(.sub .dot) { width: 8px; height: 8px; background: var(--color-linea-2); }
+    :global(.sub.unread .dot) { background: var(--color-oro); }
+    :global(.sub details[open] .chev) { transform: rotate(180deg); }
+    :global(.sub .chev) { transition: transform .2s ease; }
+    :global(.btn-danger:hover) { background: #5a1f1a; color: #ffb4a8; }
+</style>
+
+<script>
+    function init() {
+        const list = document.getElementById("subList");
+        if (!list || list.dataset.ready) return;
+        list.dataset.ready = "1";
+
+        const call = (method: string, body: object) =>
+            fetch("/api/forms/", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+
+        // Al abrir una respuesta nueva se marca como leída
+        list.addEventListener("toggle", async (e) => {
+            const d = e.target as HTMLDetailsElement;
+            const li = d.closest("li") as HTMLElement;
+            if (!d.open || !li.classList.contains("unread")) return;
+            if ((await call("PATCH", { id: li.dataset.id, read: true })).ok) {
+                li.classList.remove("unread");
+                (li.querySelector(".toggle-read") as HTMLElement).textContent = "Marcar como nueva";
+            }
+        }, true);
+
+        list.addEventListener("click", async (e) => {
+            const btn = (e.target as HTMLElement).closest("button");
+            const li = btn?.closest("li") as HTMLElement | null;
+            if (!btn || !li) return;
+            if (btn.classList.contains("toggle-read")) {
+                const read = li.classList.contains("unread");
+                if ((await call("PATCH", { id: li.dataset.id, read })).ok) {
+                    li.classList.toggle("unread", !read);
+                    btn.textContent = read ? "Marcar como nueva" : "Marcar como leída";
+                }
+            }
+            if (btn.classList.contains("delete-sub")) {
+                if (!confirm("¿Eliminar esta respuesta? No se puede deshacer.")) return;
+                if ((await call("DELETE", { id: li.dataset.id })).ok) li.remove();
+                else alert("No se pudo eliminar");
+            }
+        });
+    }
+    init();
+    document.addEventListener("astro:after-swap", init);
+</script>

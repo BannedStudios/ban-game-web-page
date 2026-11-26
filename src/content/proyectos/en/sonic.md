@@ -9,6 +9,7 @@ gallery:
     type: video
     src: 'https://www.youtube.com/watch?v=osygu3aYL4k'
 desc: Coming soon...
+hidden: true
 order: 13
 date: '2026'
 credits:

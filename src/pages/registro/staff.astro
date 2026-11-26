@@ -1,264 +1,366 @@
 ---
 import MainPage from "../../components/MainPage.astro";
-import Title from "../../components/Title.astro";
 import Layout from "../../layouts/Layout.astro";
+import AdminNav from "../../components/AdminNav.astro";
+import { listSubmissions } from "../../libs/firestore/forms";
+import { ui } from "../../i18n/ui";
+import { getLang } from "../../i18n/utils";
+import { getAllStaff } from "../../libs/firestore/staff";
 
-import { getAllStaff } from "../../libs/firestore/staff"
-const staff = await getAllStaff()
+const lang = getLang(Astro.cookies, Astro.request);
+const staff = (await getAllStaff()).sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
+
+// Roles disponibles (claves staff.skill.*) con su nombre traducido: se eligen como fichas en vez de escribir la clave
+const dict = ui[lang] as Record<string, string>;
+const skills = Object.keys(dict).filter((k) => k.startsWith("staff.skill.")).map((k) => ({ key: k, label: dict[k] }));
+const label = (key: string) => dict[key.trim()] ?? key.trim();
+const roles = (s: string) => (s || "").split(",").map((k) => k.trim()).filter(Boolean);
+const unread = (await listSubmissions().catch(() => [])).filter((s) => !s.read).length;
+const nextOrder = staff.reduce((m: number, s: any) => Math.max(m, Number(s.order) || 0), -1) + 1;
 ---
-<Layout title="Registro">
-    <MainPage>
-        <section id="proyectos" class="flex flex-col justify-center items-center px-5 max-w-[1000px]">
-            <Title class="mb-5 mt-5">Registro de Staff</Title>
+<Layout title="Registro de staff">
+    <MainPage class="mt-14">
+        <section class="w-full max-w-[1040px] px-5 text-left">
+            <AdminNav active="staff" badge={unread} />
+            <!-- Cabecera -->
+            <div class="flex items-end justify-between gap-6 flex-wrap">
+                <div>
+                    <div class="kicker">Admin · Staff</div>
+                    <h1 class="word text-[clamp(2.4rem,5vw,3.9rem)] !leading-[1.05] mt-3">Staff</h1>
+                    <div class="mono text-[13.4px] text-texto-3 mt-3"><span id="staffCount">{staff.length}</span> miembros · solo administradores</div>
+                </div>
+                <a href="/staff/" class="link-arrow">Ver página de staff</a>
+            </div>
 
-            <form id="addStaffForm" class="flex flex-row flex-wrap gap-3 mb-10 justify-center items-center">
-                <input
-                    id="nameInput"
-                    type="text"
-                    placeholder="Name"
-                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
-                    required
-                />
-                <input
-                    id="linkInput"
-                    type="text"
-                    placeholder="Link"
-                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
-                    required
-                />
-                <input
-                    id="skillsInput"
-                    type="text"
-                    placeholder="Skills"
-                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
-                    required
-                />
-                <input
-                    id="avatarInput"
-                    type="text"
-                    placeholder="Avatar"
-                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
-                    required
-                />
-                <input
-                    id="orderInput"
-                    type="number"
-                    placeholder="Order"
-                    class="p-3 bg-[#7070701a] border-[1.5px] border-[#7070704d] rounded-lg focus:ring-0"
-                    required
-                />
-                <button
-                    type="submit"
-                    class="bg-[#7070701a] border-[1.5px] border-[#7070704d] cursor-pointer px-5 py-3 rounded-lg font-medium text-white"
-                >
-                Agregar
-                </button>
+            <!-- Añadir miembro -->
+            <form id="addStaffForm" class="card p-7 mt-10 max-[560px]:p-5" data-form="add">
+                <div class="flex items-center justify-between gap-4">
+                    <h2 class="display text-[24px] text-texto">Añadir miembro</h2>
+                    <span class="num text-[13.4px]">Nuevo</span>
+                </div>
+                <div class="grid grid-cols-[1fr_1fr_1fr_110px] gap-4 mt-5 max-[860px]:grid-cols-2 max-[480px]:grid-cols-1">
+                    <label class="field"><span>Nombre</span><div class="inb"><input name="name" type="text" placeholder="Katto" required /></div></label>
+                    <label class="field"><span>Enlace</span><div class="inb"><input name="link" type="text" placeholder="https://…" required /></div></label>
+                    <label class="field"><span>Avatar (URL)</span><div class="inb"><input name="avatar" type="text" placeholder="https://web.b4nned.xyz/staff/…" required /></div></label>
+                    <label class="field"><span>Orden</span><div class="inb"><input name="order" type="number" min="0" value={nextOrder} required /></div></label>
+                </div>
+                <fieldset class="mt-5">
+                    <legend class="field-label">Roles</legend>
+                    <div class="flex flex-wrap gap-2 mt-2" data-skills>
+                        {skills.map((s) => (
+                            <label class="chip"><input type="checkbox" value={s.key} /><span>{s.label}</span></label>
+                        ))}
+                    </div>
+                </fieldset>
+                <div class="flex items-center justify-between gap-4 mt-6 flex-wrap">
+                    <p class="form-msg mono text-[12.2px] text-texto-3" aria-live="polite"></p>
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
             </form>
-    
-            <ul id="staffList" class="space-y-3 w-full">
-                {staff.map((staff) => (
-                    <li data-id={staff.id} class="bg-[#7070701a] border-[1.5px] border-[#7070704d] p-4 rounded-xl flex justify-between items-center gap-2">
-                        <span class="text-sm sm:text-base text-left flex flex-col">
-                            <span class="text-white">Name: <span class="text-gray-300">{staff.name}</span></span>
-                            <span class="text-white">Link: <span class="text-gray-300">{staff.link}</span></span>
-                            <span class="text-white">Skills: <span class="text-gray-300">{staff.skills}</span></span>
-                            <span class="text-white">Avatar: <span class="text-gray-300">{staff.avatar}</span></span>
-                            <span class="text-white">Order: <span class="text-gray-300">{staff.order}</span></span>
-                        </span>
-                        <div class="flex flex-wrap gap-2">
-                            <button
-                                class="edit-btn bg-blue-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer mr-2"
-                            >
-                                Editar
-                            </button>
-                            <button
-                                class="delete-btn bg-red-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer"
-                            >
-                                Eliminar
-                            </button>
+
+            <!-- Lista: se reordena arrastrando desde el asa (⋮⋮) de cada fila; el orden se guarda al soltar -->
+            <div class="flex items-center justify-between gap-4 mt-10 flex-wrap">
+                <h2 class="display text-[24px] text-texto">Miembros</h2>
+                <p id="orderMsg" class="mono text-[12.2px] text-texto-3" aria-live="polite">Arrastra desde ⋮⋮ para cambiar el orden</p>
+            </div>
+            <ul id="staffList" class="mt-4 border-t border-linea">
+                {staff.map((m: any) => (
+                    <li class="staff-row" data-id={m.id} data-name={m.name} data-link={m.link} data-skills={m.skills} data-avatar={m.avatar} data-order={m.order}>
+                        <button type="button" class="drag-handle" aria-label="Arrastrar para cambiar el orden" title="Arrastrar para cambiar el orden">
+                            <svg width="12" height="18" viewBox="0 0 12 18" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.6"/><circle cx="9" cy="3" r="1.6"/><circle cx="3" cy="9" r="1.6"/><circle cx="9" cy="9" r="1.6"/><circle cx="3" cy="15" r="1.6"/><circle cx="9" cy="15" r="1.6"/></svg>
+                        </button>
+                        <span class="num text-[13.4px] w-[28px]" data-f="order">{String(m.order ?? 0).padStart(2, "0")}</span>
+                        <img src={m.avatar} alt="" width="56" height="56" loading="lazy" class="w-[56px] h-[56px] object-cover chamfer-sm bg-superficie shrink-0" data-f="avatar" />
+                        <div class="min-w-0 flex-1">
+                            <div class="display text-[21px] leading-none text-texto" data-f="name">{m.name}</div>
+                            <div class="mono text-[11.6px] uppercase tracking-[.04em] text-texto-3 mt-[6px]" data-f="skills">{roles(m.skills).map(label).join(" · ")}</div>
+                            <a href={m.link} target="_blank" rel="noopener noreferrer" class="mono text-[12.2px] text-texto-2 hover:text-oro transition-colors duration-300 mt-[4px] block truncate" data-f="link">{m.link}</a>
+                        </div>
+                        <div class="flex gap-2 shrink-0">
+                            <button type="button" class="btn btn-ghost btn-sm edit-btn">Editar</button>
+                            <button type="button" class="btn btn-ghost btn-sm btn-danger delete-btn">Eliminar</button>
                         </div>
                     </li>
                 ))}
             </ul>
-
-            <div id="editModal" class="fixed inset-0 bg-black/60 hidden justify-center items-center z-50">
-                <div class="bg-[#1f1f1f] p-6 rounded-xl w-[90%] max-w-md border border-[#7070704d]">
-                  <h2 class="text-white text-lg mb-4">Editar de Staff</h2>
-              
-                  <form id="editStaffForm" class="flex flex-col gap-3">
-                    <input id="editName" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
-                    <input id="editLink" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
-                    <input id="editSkills" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
-                    <input id="editAvatar" type="text" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
-                    <input id="editOrder" type="number" class="p-3 bg-[#7070701a] border border-[#7070704d] rounded-lg text-white" required />
-              
-                    <div class="flex justify-end gap-3 mt-4">
-                      <button
-                        type="button"
-                        id="closeModalBtn"
-                        class="px-3 py-1.5 bg-gray-500 rounded-lg text-white cursor-pointer"
-                      >
-                        Cancelar
-                      </button>
-                      <button
-                        type="submit"
-                        class="px-3 py-1.5 bg-blue-600 rounded-lg text-white cursor-pointer"
-                      >
-                        Guardar
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
         </section>
+
+        <!-- Editar miembro -->
+        <div id="editModal" class="fixed inset-0 z-[2000] hidden items-center justify-center bg-black/70 backdrop-blur-[4px] p-5">
+            <form id="editStaffForm" class="frame frame-lg w-full max-w-[560px]" data-form="edit">
+                <div class="card p-7 max-[560px]:p-5 text-left">
+                    <div class="kicker">Editar</div>
+                    <h2 class="display text-[26px] text-texto mt-2" id="editTitle">Miembro</h2>
+                    <div class="grid grid-cols-[1fr_110px] gap-4 mt-5 max-[480px]:grid-cols-1">
+                        <label class="field"><span>Nombre</span><div class="inb"><input name="name" type="text" required /></div></label>
+                        <label class="field"><span>Orden</span><div class="inb"><input name="order" type="number" min="0" required /></div></label>
+                        <label class="field col-span-2 max-[480px]:col-span-1"><span>Enlace</span><div class="inb"><input name="link" type="text" required /></div></label>
+                        <label class="field col-span-2 max-[480px]:col-span-1"><span>Avatar (URL)</span><div class="inb"><input name="avatar" type="text" required /></div></label>
+                    </div>
+                    <fieldset class="mt-5">
+                        <legend class="field-label">Roles</legend>
+                        <div class="flex flex-wrap gap-2 mt-2" data-skills>
+                            {skills.map((s) => (
+                                <label class="chip"><input type="checkbox" value={s.key} /><span>{s.label}</span></label>
+                            ))}
+                        </div>
+                    </fieldset>
+                    <p class="form-msg mono text-[12.2px] text-texto-3 mt-4" aria-live="polite"></p>
+                    <div class="flex justify-end gap-3 mt-4">
+                        <button type="button" id="closeModalBtn" class="btn btn-ghost">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </MainPage>
-  </Layout>
-  
-  <script>
-    init();
-  
+</Layout>
+
+<script is:inline type="application/json" id="skillLabels" set:html={JSON.stringify(Object.fromEntries(skills.map((s) => [s.key, s.label])))}></script>
+
+<style>
+    /* Campos (manual · formularios): etiqueta mono arriba, corte en diagonal con línea fina; dorada al enfocar */
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field > span, .field-label {
+        font-family: var(--font-mono); font-size: 11.6px; letter-spacing: .14em; text-transform: uppercase; color: var(--color-texto-3);
+    }
+    /* Mismo método que el botón con contorno: el contenedor (con el corte) hace de borde y el campo va 1 px
+       hacia dentro con el mismo corte, así la línea sigue también las diagonales */
+    .inb {
+        --cut: 7px;
+        padding: 1px; background: var(--color-linea-2);
+        clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+        transition: background-color .25s ease;
+    }
+    .inb:focus-within { background: var(--color-oro); }
+    .field input::placeholder { color: var(--color-texto-3); opacity: .7; }
+    .field input {
+        display: block; width: 100%; padding: 10px 12px; font-size: 15px; color: var(--color-texto);
+        background: var(--color-fondo); border: 0; outline: none;
+        clip-path: polygon(calc(var(--cut) - .4px) 0, 100% 0, 100% calc(100% - var(--cut) + .4px), calc(100% - var(--cut) + .4px) 100%, 0 100%, 0 calc(var(--cut) - .4px));
+    }
+
+    /* Fichas de rol: fantasma; marcadas en dorado */
+    .chip { cursor: pointer; }
+    .chip input { position: absolute; opacity: 0; pointer-events: none; }
+    .chip span {
+        display: inline-block; padding: 6px 11px; font-family: var(--font-mono); font-size: 11.6px; letter-spacing: .06em; text-transform: uppercase;
+        color: var(--color-texto-2); background: var(--color-fantasma);
+        clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+        transition: background-color .2s ease, color .2s ease;
+    }
+    .chip:hover span { color: var(--color-texto); }
+    .chip input:checked + span { background: var(--color-oro); color: var(--color-fondo); }
+    .chip input:focus-visible + span { outline: 1px solid var(--color-oro); outline-offset: 2px; }
+
+    /* Fila de miembro, como el índice de proyectos */
+    :global(.staff-row) { display: flex; align-items: center; gap: 18px; padding: 16px 14px 16px 6px; border-bottom: 1px solid var(--color-linea); }
+    @media (max-width: 560px) {
+        :global(.staff-row) { flex-wrap: wrap; gap: 12px 14px; }
+        :global(.staff-row) > div:last-child { width: 100%; }
+    }
+    :global(.btn-danger:hover) { background: #5a1f1a; color: #ffb4a8; }
+
+    /* Arrastrar para ordenar */
+    :global(.drag-handle) {
+        display: grid; place-items: center; width: 28px; height: 44px; flex: none; color: var(--color-texto-3);
+        cursor: grab; touch-action: none; background: none; border: 0; transition: color .2s ease;
+    }
+    :global(.drag-handle:hover) { color: var(--color-oro); }
+    :global(.staff-row.dragging) {
+        position: relative; z-index: 5; background: var(--color-sup); outline: 1px solid var(--color-oro); outline-offset: -1px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .45); cursor: grabbing;
+    }
+    :global(.staff-row.dragging .drag-handle) { color: var(--color-oro); cursor: grabbing; }
+    :global(body.sorting) { user-select: none; cursor: grabbing; }
+
+    #editModal.open { display: flex; }
+</style>
+
+<script>
+    type Member = { id?: string; name: string; link: string; skills: string; avatar: string; order: number };
+
+    const labels: Record<string, string> = JSON.parse(document.getElementById("skillLabels")?.textContent || "{}");
+    const roleText = (s: string) => s.split(",").map((k) => k.trim()).filter(Boolean).map((k) => labels[k] ?? k).join(" · ");
+
+    const field = (form: HTMLFormElement, name: string) => form.querySelector(`[name="${name}"]`) as HTMLInputElement;
+    const msg = (form: HTMLFormElement, text: string, error = false) => {
+        const p = form.querySelector(".form-msg") as HTMLElement;
+        p.textContent = text;
+        p.style.color = error ? "#ff9d8f" : "";
+    };
+
+    function read(form: HTMLFormElement): Member | null {
+        const skills = [...form.querySelectorAll<HTMLInputElement>("[data-skills] input:checked")].map((c) => c.value).join(", ");
+        const data = {
+            name: field(form, "name").value.trim(),
+            link: field(form, "link").value.trim(),
+            avatar: field(form, "avatar").value.trim(),
+            order: Number(field(form, "order").value),
+            skills,
+        };
+        if (!skills) { msg(form, "Elige al menos un rol", true); return null; }
+        if (Number.isNaN(data.order)) { msg(form, "El orden debe ser un número", true); return null; }
+        return data;
+    }
+
+    function fill(form: HTMLFormElement, m: Member) {
+        field(form, "name").value = m.name;
+        field(form, "link").value = m.link;
+        field(form, "avatar").value = m.avatar;
+        field(form, "order").value = String(m.order);
+        const selected = m.skills.split(",").map((k) => k.trim());
+        form.querySelectorAll<HTMLInputElement>("[data-skills] input").forEach((c) => (c.checked = selected.includes(c.value)));
+    }
+
+    // Pinta una fila con textContent (sin innerHTML con datos)
+    function paint(li: HTMLElement, m: Member) {
+        Object.assign(li.dataset, { name: m.name, link: m.link, skills: m.skills, avatar: m.avatar, order: String(m.order) });
+        (li.querySelector('[data-f="order"]') as HTMLElement).textContent = String(m.order).padStart(2, "0");
+        (li.querySelector('[data-f="avatar"]') as HTMLImageElement).src = m.avatar;
+        (li.querySelector('[data-f="name"]') as HTMLElement).textContent = m.name;
+        (li.querySelector('[data-f="skills"]') as HTMLElement).textContent = roleText(m.skills);
+        const a = li.querySelector('[data-f="link"]') as HTMLAnchorElement;
+        a.href = m.link; a.textContent = m.link;
+    }
+
+    function fromRow(li: HTMLElement): Member {
+        const d = li.dataset;
+        return { id: d.id, name: d.name || "", link: d.link || "", skills: d.skills || "", avatar: d.avatar || "", order: Number(d.order) || 0 };
+    }
+
     function init() {
-      const form = document.getElementById("addStaffForm");
-      const list = document.getElementById("staffList");
-  
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const name = document.getElementById("nameInput").value.trim();
-        const link = document.getElementById("linkInput").value.trim();
-        const skills = document.getElementById("skillsInput").value.trim();
-        const avatar = document.getElementById("avatarInput").value.trim();
-        const order = Number(document.getElementById("orderInput").value.trim());
+        const addForm = document.getElementById("addStaffForm") as HTMLFormElement | null;
+        const list = document.getElementById("staffList");
+        const modal = document.getElementById("editModal");
+        const editForm = document.getElementById("editStaffForm") as HTMLFormElement | null;
+        const count = document.getElementById("staffCount");
+        if (!addForm || !list || !modal || !editForm) return;
 
-        if (!name || !link || !skills || !avatar || !order) return alert("Complete todos los campos");
-  
-        const res = await fetch("/api/staff", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, link, skills, avatar, order })
+        let editing: HTMLElement | null = null;
+        const updateCount = () => { if (count) count.textContent = String(list.children.length); };
+        const closeModal = () => { modal.classList.remove("open"); editing = null; };
+
+        addForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = read(addForm);
+            if (!data) return;
+            msg(addForm, "Guardando…");
+            const res = await fetch("/api/staff/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+            if (!res.ok) return msg(addForm, "No se pudo agregar (¿sesión de admin?)", true);
+            const created: Member = await res.json();
+            const template = list.firstElementChild as HTMLElement | null;
+            if (template) {
+                const li = template.cloneNode(true) as HTMLElement;
+                li.dataset.id = created.id;
+                paint(li, { ...data, ...created });
+                list.appendChild(li);
+            } else {
+                location.reload();
+            }
+            addForm.reset();
+            field(addForm, "order").value = String(data.order + 1);
+            msg(addForm, `${data.name} agregado`);
+            updateCount();
         });
-  
-        if (res.ok) {
-          const newCode = await res.json();
-          const li = document.createElement("li");
-          li.dataset.id = newCode.id;
-          li.className = "bg-[#7070701a] border-[1.5px] border-[#7070704d] p-4 rounded-xl flex justify-between items-center";
-          li.innerHTML = `<span class="text-sm sm:text-base text-left flex flex-col">
-                  <span class="text-white">Name: <span class="text-gray-300">${newCode.name}</span></span>
-                  <span class="text-white">Link: <span class="text-gray-300">${newCode.link}</span></span>
-                  <span class="text-white">Skills: <span class="text-gray-300">${newCode.skills}</span></span>
-                  <span class="text-white">Avatar: <span class="text-gray-300">${newCode.avatar}</span></span>
-                  <span class="text-white">Order: <span class="text-gray-300">${newCode.order}</span></span>
-                </span>
-                <div class="flex flex-wrap gap-2">
-                    <button
-                        class="edit-btn bg-blue-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer mr-2"
-                    >
-                        Editar
-                    </button>
-                    <button
-                        class="delete-btn bg-red-600/90 text-white text-sm px-3 py-1.5 rounded-md cursor-pointer"
-                    >
-                        Eliminar
-                    </button>
-                </div>`;
-          list.appendChild(li);
-  
-          form.reset();
-        } else {
-          alert("Error al agregar el staff");
-        }
-      });
-  
-      list.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("delete-btn")) {
-          const li = e.target.closest("li");
-          const id = li.dataset.id;
-  
-          if (!confirm("¿Eliminar este staff?")) return;
-  
-          const res = await fetch("/api/staff", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id }),
-          });
-  
-          if (res.ok) {
-            li.remove();
-          } else {
-            alert("Error al eliminar el staff");
-          }
-        }
-      });
 
-        const editModal = document.getElementById("editModal");
-        const editForm = document.getElementById("editStaffForm");
+        list.addEventListener("click", async (e) => {
+            const btn = (e.target as HTMLElement).closest("button");
+            const li = btn?.closest("li") as HTMLElement | null;
+            if (!btn || !li) return;
 
-        let currentEditId = null;
+            if (btn.classList.contains("delete-btn")) {
+                if (!confirm(`¿Eliminar a ${li.dataset.name} del staff? No se puede deshacer.`)) return;
+                const res = await fetch("/api/staff/", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: li.dataset.id }) });
+                if (!res.ok) return alert("No se pudo eliminar");
+                li.remove();
+                updateCount();
+            }
 
-        function openModal(data) {
-            editModal.classList.remove("hidden");
-            editModal.classList.add("flex");
-
-            document.getElementById("editName").value = data.name;
-            document.getElementById("editLink").value = data.link;
-            document.getElementById("editSkills").value = data.skills;
-            document.getElementById("editAvatar").value = data.avatar;
-            document.getElementById("editOrder").value = data.order;
-        }
-
-        function closeModal() {
-            editModal.classList.add("hidden");
-            editModal.classList.remove("flex");
-        }
-
-        document.getElementById("closeModalBtn").addEventListener("click", closeModal);
-
-        document.getElementById("staffList").addEventListener("click", (e) => {
-            if (e.target.classList.contains("edit-btn")) {
-                const li = e.target.closest("li");
-                const id = li.dataset.id;
-
-                currentEditId = id;
-
-                const name = li.querySelector("span span:nth-child(1) span").textContent;
-                const link = li.querySelector("span span:nth-child(2) span").textContent;
-                const skills = li.querySelector("span span:nth-child(3) span").textContent;
-                const avatar = li.querySelector("span span:nth-child(4) span").textContent;
-                const order = li.querySelector("span span:nth-child(5) span").textContent;
-
-                openModal({ name, link, skills, avatar, order });
+            if (btn.classList.contains("edit-btn")) {
+                editing = li;
+                const m = fromRow(li);
+                fill(editForm, m);
+                (document.getElementById("editTitle") as HTMLElement).textContent = m.name;
+                msg(editForm, "");
+                modal.classList.add("open");
+                field(editForm, "name").focus();
             }
         });
 
         editForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-
-            const name = document.getElementById("editName").value.trim();
-            const link = document.getElementById("editLink").value.trim();
-            const skills = document.getElementById("editSkills").value.trim();
-            const avatar = document.getElementById("editAvatar").value.trim();
-            const order = Number(document.getElementById("editOrder").value.trim());
-
-            const res = await fetch("/api/staff", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: currentEditId, name, link, skills, avatar, order }),
-            });
-
-            if (!res.ok) return alert("Error al actualizar");
-
-            const li = document.querySelector(`li[data-id="${currentEditId}"]`);
-            li.querySelector("span span:nth-child(1) span").textContent = name;
-            li.querySelector("span span:nth-child(2) span").textContent = link;
-            li.querySelector("span span:nth-child(3) span").textContent = skills;
-            li.querySelector("span span:nth-child(4) span").textContent = avatar;
-            li.querySelector("span span:nth-child(5) span").textContent = order;
-
+            if (!editing) return;
+            const data = read(editForm);
+            if (!data) return;
+            msg(editForm, "Guardando…");
+            const res = await fetch("/api/staff/", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing.dataset.id, ...data }) });
+            if (!res.ok) return msg(editForm, "No se pudo guardar", true);
+            paint(editing, { id: editing.dataset.id, ...data });
             closeModal();
         });
+
+        // --- Reordenar arrastrando desde el asa ---
+        const orderMsg = document.getElementById("orderMsg");
+        const setOrderMsg = (text: string, error = false) => { if (orderMsg) { orderMsg.textContent = text; orderMsg.style.color = error ? "#ff9d8f" : ""; } };
+        let dragged: HTMLElement | null = null;
+        let before = "";
+
+        list.addEventListener("pointerdown", (e) => {
+            const handle = (e.target as HTMLElement).closest(".drag-handle");
+            if (!handle) return;
+            e.preventDefault();
+            dragged = handle.closest("li") as HTMLElement;
+            before = [...list.children].map((li) => (li as HTMLElement).dataset.id).join(",");
+            dragged.classList.add("dragging");
+            document.body.classList.add("sorting");
+            (handle as HTMLElement).setPointerCapture(e.pointerId);
+        });
+
+        list.addEventListener("pointermove", (e) => {
+            if (!dragged) return;
+            // coloca la fila antes de la primera cuya mitad quede por debajo del cursor
+            const rows = [...list.children].filter((li) => li !== dragged) as HTMLElement[];
+            const next = rows.find((li) => { const r = li.getBoundingClientRect(); return e.clientY < r.top + r.height / 2; });
+            if (next) { if (next !== dragged.nextElementSibling) list.insertBefore(dragged, next); }
+            else if (list.lastElementChild !== dragged) list.appendChild(dragged);
+            // desplaza la página si se arrastra cerca de los bordes
+            if (e.clientY < 60) window.scrollBy(0, -12);
+            else if (e.clientY > window.innerHeight - 60) window.scrollBy(0, 12);
+        });
+
+        const drop = async () => {
+            if (!dragged) return;
+            dragged.classList.remove("dragging");
+            document.body.classList.remove("sorting");
+            dragged = null;
+            const rows = [...list.children] as HTMLElement[];
+            if (rows.map((li) => li.dataset.id).join(",") === before) return;
+
+            // nuevo orden 0, 1, 2… y solo se guardan los que cambian
+            const changed = rows.map((li, i) => ({ li, i })).filter(({ li, i }) => Number(li.dataset.order) !== i);
+            rows.forEach((li, i) => { (li.querySelector('[data-f="order"]') as HTMLElement).textContent = String(i).padStart(2, "0"); });
+            setOrderMsg(`Guardando orden (${changed.length})…`);
+            const results = await Promise.all(changed.map(({ li, i }) => {
+                const m = fromRow(li);
+                return fetch("/api/staff/", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...m, order: i }) })
+                    .then((r) => { if (r.ok) li.dataset.order = String(i); return r.ok; })
+                    .catch(() => false);
+            }));
+            const failed = results.filter((ok) => !ok).length;
+            if (failed) setOrderMsg(`No se pudo guardar el orden de ${failed} miembro(s); recarga la página`, true);
+            else setOrderMsg("Orden guardado");
+            const addOrder = field(addForm, "order");
+            if (addOrder) addOrder.value = String(rows.length);
+        };
+        list.addEventListener("pointerup", drop);
+        list.addEventListener("pointercancel", drop);
+
+        document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
+        modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
     }
-  
-    document.addEventListener("astro:after-swap", () => {
-      init();
-    })
+
+    init();
+    document.addEventListener("astro:after-swap", init);
 </script>

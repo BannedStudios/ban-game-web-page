@@ -24,20 +24,19 @@ const staffPictures = await Promise.all(
 );
 ---
 
-<!-- Tarjeta de equipo (manual de marca): avatar 1:1 con esquinas cortadas, nombre en Anton, roles en mono y marco al pasar el cursor -->
-<div class="flex flex-wrap justify-center gap-5 max-w-[1200px] px-5">
+<!-- Tarjeta de equipo (manual · componentes web), medidas ×1,22:
+     avatar 1:1 de 72 px con corte de 9; nombre en Anton 13 px; roles en mono 8,5 px en mayúsculas; marco de 10 px al pasar el cursor. -->
+<div class="flex flex-wrap justify-center gap-x-[18px] gap-y-[26px] max-w-[1240px] px-5">
   {
     staffPictures.map((profile) => {
       const Tag = profile.link ? 'a' : 'div';
       return (
         <Tag href={profile.link} target={profile.link ? "_blank" : undefined} rel={profile.link ? "noopener noreferrer" : undefined}
-             class="frame frame-sm frame-hover group block w-[176px] text-left">
-          <div class="overflow-hidden chamfer-lg bg-fantasma">
-            <img src={profile.avatar} alt={profile.name} width="156" height="156" loading="lazy"
-                 class="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-[1.05]" />
-          </div>
-          <div class="display text-[1.15rem] text-texto mt-3 group-hover:text-oro transition-colors duration-300">{profile.name}</div>
-          <p class="mono text-[0.72rem] uppercase tracking-[.04em] leading-snug text-texto-3 mt-1">{profile.skills}</p>
+             class="frame frame-sm frame-hover group block w-[172px] text-left max-[420px]:w-[150px]">
+          <img src={profile.avatar} alt={profile.name} width="155" height="155" loading="lazy"
+               class="block w-[155px] h-[155px] max-[420px]:w-[133px] max-[420px]:h-[133px] object-cover chamfer bg-superficie" />
+          <div class="display text-[23px] tracking-[.04em] leading-none text-texto mt-[12px] group-hover:text-oro transition-colors duration-300">{profile.name}</div>
+          <p class="mono text-[12.2px] uppercase tracking-[.04em] leading-[1.4] text-texto-3 mt-[6px] min-h-[34px]">{profile.skills}</p>
         </Tag>
       )
     })

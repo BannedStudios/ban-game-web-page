@@ -1,5 +1,4 @@
 ---
-import Download from "../Icons/Download.astro";
 import NavButtons from "./NavButtons.astro";
 import { getLang, useTranslations } from '../../i18n/utils';
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/astro/components";
@@ -7,80 +6,83 @@ import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/astro/comp
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
+// Botón «Panel» junto a la cuenta: solo si la sesión tiene rol admin (lo mismo que exige middleware.ts)
+let isAdmin = false;
+try { isAdmin = (Astro.locals.auth()?.sessionClaims as any)?.metadata?.role === "admin"; } catch {}
+
 const targetLang = lang === "es" ? "en" : "es";
 const targetLabel = lang === "es" ? "English" : "Español";
-const targetLabelShort = lang === "es" ? "EN" : "ES";
+
+// Icono de descarga del manual (botón del launcher)
+const WDL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
 ---
 
-<div class="mb-[64px]">
-    <!-- Barra superior fija sobre el fondo (manual de marca · componentes web) -->
-    <header class="bg-fondo/80 backdrop-blur-[10px] fixed w-full h-[64px] z-[1000] border-b border-linea">
-        <div class="max-w-[1200px] flex items-center justify-between gap-6 mx-auto px-5 h-full">
-            <div class="flex items-center gap-4">
-                <button type="button" aria-label="Menú" class="hamburger hidden flex-col gap-[4px] cursor-pointer z-[1001] relative w-[22px] max-[1050px]:flex" id="hamburger">
-                    <span class="block w-[22px] h-[2px] bg-texto rounded-[2px] transition-all duration-300 ease-in-out"></span>
-                    <span class="block w-[22px] h-[2px] bg-texto rounded-[2px] transition-all duration-150 ease-in-out"></span>
-                    <span class="block w-[22px] h-[2px] bg-texto rounded-[2px] transition-all duration-300 ease-in-out"></span>
-                </button>
-
-                <a href="/" class="flex items-center gap-2.5 group" aria-label="Banned Studios">
-                    <span class="mark w-[28px] transition-transform duration-300 group-hover:scale-110"></span>
-                    <span class="display text-[1.15rem] tracking-[.05em] text-texto max-[420px]:hidden">Banned Studios</span>
-                </a>
-            </div>
+<!-- Barra superior (manual · página web): transparente sobre el fondo, solo la línea inferior; se desplaza con la página. 50 px en la maqueta (58 px reales) -->
+<div class="h-[58px] max-[1050px]:h-[56px]">
+    <header id="barra" class="absolute top-0 w-full z-[1000]">
+        <div class="max-w-[1240px] h-[58px] max-[1050px]:h-[56px] mx-auto px-5 flex items-center justify-between border-b border-linea">
+            <a href="/" class="flex items-center gap-[11px]" aria-label="Banned Studios">
+                <span class="mark w-[27px] max-[1050px]:w-[22px]"></span>
+                <span class="display text-[18.3px] tracking-[.05em] !text-texto max-[1050px]:text-[16px] max-[560px]:hidden">Banned Studios</span>
+            </a>
 
             <nav class="max-[1050px]:hidden">
-                <ul class="flex flex-row gap-7">
+                <ul class="flex flex-row gap-[27px]">
                     <NavButtons/>
                 </ul>
             </nav>
 
-            <div class="flex flex-row items-center gap-2">
-                <button type="button" data-lang-toggle data-target-lang={targetLang} class="btn btn-ghost btn-sm" title={targetLabel}>
-                    <span class="max-[560px]:hidden">{targetLabel}</span><span class="hidden max-[560px]:inline">{targetLabelShort}</span>
-                </button>
-
-                <a href="/launcher/" class="btn btn-secondary btn-sm">
-                    <Download class="w-4 h-4"/>
-                    <span class="max-[720px]:hidden">Ban Game Launcher</span><span class="hidden max-[720px]:inline">Launcher</span>
-                </a>
-
-                <div class="flex max-[640px]:hidden">
-                    <SignedOut>
-                        <SignInButton mode="modal" class="btn btn-ghost btn-sm">
-                            {t('nav.login')}
-                        </SignInButton>
-                    </SignedOut>
-                    <SignedIn>
-                        <UserButton/>
-                    </SignedIn>
-                </div>
+            <div class="flex flex-row items-center gap-[8.5px] max-[1050px]:hidden">
+                <button type="button" data-lang-toggle data-target-lang={targetLang} class="btn btn-ghost btn-sm">{targetLabel}</button>
+                <a href="/launcher/" class="btn btn-secondary btn-sm"><Fragment set:html={WDL} />Ban Game Launcher</a>
+                <SignedOut>
+                    <SignInButton mode="modal" class="btn btn-ghost btn-sm">{t('nav.login')}</SignInButton>
+                </SignedOut>
+                <SignedIn>
+                    <UserButton/>
+                    {isAdmin && <a href="/registro/" class="btn btn-ghost btn-sm" title="Panel de admin">Panel</a>}
+                </SignedIn>
             </div>
+
+            <!-- Móvil (maqueta): logo a la izquierda y menú a la derecha -->
+            <button type="button" aria-label="Menú" aria-expanded="false" aria-controls="menu" class="hamburger hidden flex-col gap-[3.7px] cursor-pointer z-[1001] relative max-[1050px]:flex" id="hamburger">
+                <span class="block w-[20px] h-[2.4px] bg-texto rounded-[2px] transition-all duration-300 ease-in-out"></span>
+                <span class="block w-[20px] h-[2.4px] bg-texto rounded-[2px] transition-all duration-150 ease-in-out"></span>
+                <span class="block w-[20px] h-[2.4px] bg-texto rounded-[2px] transition-all duration-300 ease-in-out"></span>
+            </button>
         </div>
     </header>
 </div>
 
-<!-- Menú lateral en móvil -->
-<div class="menu fixed top-[64px] left-0 w-full max-w-[360px] h-[calc(100%-64px)] bg-fondo/95 backdrop-blur-[10px] border-r border-linea p-6 z-[999]" id="menu">
-    <ul class="flex flex-col gap-5 text-[1.05rem]">
-        <NavButtons/>
-
-        <li class="hidden max-[640px]:flex pt-3 rule">
+<!-- Menú lateral en móvil (manual · barra superior): enlaces numerados, idioma y sesión como fantasma, launcher con contorno.
+     Se desplaza con la página como la barra; el contenedor recorta el menú cerrado para que no ensanche la página.
+     En teléfono ocupa todo el ancho; en tablet, 340 px con un velo sobre el resto. -->
+<div id="menu-capa" class="absolute top-[56px] left-0 w-full h-[calc(100svh-56px)] overflow-hidden pointer-events-none z-[999] min-[1051px]:hidden">
+    <div id="menu-velo" class="absolute inset-0 bg-black/55 opacity-0 transition-opacity duration-300"></div>
+    <nav class="menu absolute top-0 right-0 w-full max-w-[340px] max-[560px]:max-w-none h-full flex flex-col bg-fondo/95 backdrop-blur-[10px] border-l border-linea max-[560px]:border-l-0 px-5 pt-2 pb-6 overflow-y-auto" id="menu" aria-label="Menú">
+        <ul class="menu-links flex flex-col">
+            <NavButtons/>
+        </ul>
+        <!-- Idioma y launcher; debajo, la cuenta (iniciar sesión, o foto + Panel) en su propia fila -->
+        <div class="flex flex-wrap gap-[8.5px] mt-7">
+            <button type="button" data-lang-toggle data-target-lang={targetLang} class="btn btn-ghost">{targetLabel}</button>
+            <a href="/launcher/" class="btn btn-secondary"><Fragment set:html={WDL} />Ban Game Launcher</a>
+        </div>
+        <div class="flex items-center gap-3 mt-5 pt-5 border-t border-linea">
             <SignedOut>
-                <SignInButton mode="modal" class="btn btn-ghost btn-sm mt-3">
-                    {t('nav.login')}
-                </SignInButton>
+                <SignInButton mode="modal" class="btn btn-ghost">{t('nav.login')}</SignInButton>
             </SignedOut>
             <SignedIn>
                 <UserButton/>
+                {isAdmin && <a href="/registro/" class="btn btn-ghost">Panel</a>}
             </SignedIn>
-        </li>
-    </ul>
+        </div>
+    </nav>
 </div>
 
 <style>
     .hamburger.open span:nth-child(1) {
-        transform: translateY(6px) rotate(45deg);
+        transform: translateY(6.1px) rotate(45deg);
     }
 
     .hamburger.open span:nth-child(2) {
@@ -89,7 +91,7 @@ const targetLabelShort = lang === "es" ? "EN" : "ES";
     }
 
     .hamburger.open span:nth-child(3) {
-        transform: translateY(-6px) rotate(-45deg);
+        transform: translateY(-6.1px) rotate(-45deg);
     }
 
     .hamburger:hover span {
@@ -97,12 +99,34 @@ const targetLabelShort = lang === "es" ? "EN" : "ES";
     }
 
     .menu {
-        transform: translateX(-100%);
+        transform: translateX(100%);
         transition: transform 0.3s ease-in-out;
     }
 
-    .menu.open {
+    #menu-capa.open {
+        pointer-events: auto;
+    }
+
+    #menu-capa.open .menu {
         transform: translateX(0);
+    }
+
+    #menu-capa.open #menu-velo {
+        opacity: 1;
+    }
+
+    /* Enlaces del menú: filas con línea, número dorado en mono */
+    .menu-links :global(li) {
+        border-bottom: 1px solid var(--color-linea);
+    }
+
+    .menu-links :global(a) {
+        display: flex;
+        align-items: baseline;
+        /* Escala del menú móvil: texto como el cuerpo (16 px) y filas de 48 px, el mínimo cómodo para el dedo */
+        padding: 12px 0;
+        font-size: 16px;
+        line-height: 24px;
     }
 </style>
 
@@ -115,19 +139,29 @@ const targetLabelShort = lang === "es" ? "EN" : "ES";
 
     function init () {
         const hamburger = document.getElementById("hamburger");
-        const menu = document.getElementById("menu");
+        const capa = document.getElementById("menu-capa");
 
-        if (hamburger != null && menu != null) {
+        document.documentElement.style.overflow = "";
+
+        if (hamburger != null && capa != null) {
+            const setOpen = (open: boolean) => {
+                capa.classList.toggle("open", open);
+                hamburger.classList.toggle("open", open);
+                hamburger.setAttribute("aria-expanded", String(open));
+                // Con el menú abierto la página no se mueve: ni fijo ni se va con el scroll
+                document.documentElement.style.overflow = open ? "hidden" : "";
+            };
             hamburger.addEventListener("click", () => {
-                menu.classList.toggle("open");
-                hamburger.classList.toggle("open");
+                const open = !capa.classList.contains("open");
+                // Si se abre con la página algo bajada, se sube arriba para que el menú quede justo bajo la barra
+                if (open && window.scrollY > 0) window.scrollTo({ top: 0 });
+                setOpen(open);
             });
-            window.addEventListener("resize", () => {
-                if (window.innerWidth >= 1050) {
-                    menu.classList.remove("open");
-                    hamburger.classList.remove("open");
-                }
-            });
+            // Se cierra al tocar fuera, al elegir un enlace o con Escape
+            document.getElementById("menu-velo")?.addEventListener("click", () => setOpen(false));
+            capa.querySelectorAll(".menu-links a").forEach(a => a.addEventListener("click", () => setOpen(false)));
+            document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
+            window.addEventListener("resize", () => { if (window.innerWidth > 1050) setOpen(false); });
         }
 
         const toggleButtons = document.querySelectorAll('[data-lang-toggle]');

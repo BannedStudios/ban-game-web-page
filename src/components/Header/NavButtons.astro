@@ -6,27 +6,12 @@ import { getLang, useTranslations } from '../../i18n/utils';
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
-// Enlaces numerados (manual de marca · barra superior). El logo lleva a Inicio.
+// Enlaces numerados de la maqueta: Proyectos, Staff, Postúlate, Contacto. El logo lleva a Inicio.
 const sections = [
-    {
-        label: t('nav.projects'),
-        href: `/projects/`,
-        desc: t('nav.projectsDesc')
-    },
-    {
-        label: t('nav.staff'),
-        href: `/staff/`,
-        desc: t('nav.staffDesc')
-    },
-    {
-        label: t('nav.apply'),
-        href: `/apply/`,
-        desc: t('nav.applyDesc')
-    },
-    {
-        label: t('nav.contact'),
-        href: `/contact/`,
-    }
+    { label: t('nav.projects'), href: `/projects/`, desc: t('nav.projectsDesc') },
+    { label: t('nav.staff'), href: `/staff/`, desc: t('nav.staffDesc') },
+    { label: t('nav.apply'), href: `/apply/`, desc: t('nav.applyDesc') },
+    { label: t('nav.contact'), href: `/contact/` },
 ];
 ---
 
@@ -35,10 +20,10 @@ const sections = [
         const active = currentPath.startsWith(section.href);
         return (
             <li>
+                <!-- 11 px, texto suave; número en mono dorado con 5 px de separación -->
                 <a href={section.href} title={section.desc} aria-current={active ? "page" : undefined}
-                   class={`group flex items-baseline gap-1.5 text-[0.9rem] transition-colors duration-300 ease ${active ? "text-texto" : "text-texto-2 hover:text-texto"}`}>
-                    <span class="num text-[0.75rem]">0{i + 1}</span>
-                    <span class={`border-b pb-0.5 transition-colors duration-300 ${active ? "border-oro" : "border-transparent group-hover:border-linea-2"}`}>{section.label}</span>
+                   class={`text-[13.4px] max-[1050px]:text-[16px] transition-colors duration-300 ${active ? "text-texto" : "text-texto-2 hover:text-texto"}`}>
+                    <span class="num mr-[6px]">0{i + 1}</span>{section.label}
                 </a>
             </li>
         )

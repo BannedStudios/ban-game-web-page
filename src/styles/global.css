@@ -2,8 +2,10 @@
 @plugin '@tailwindcss/typography';
 
 /* ============================================================
-   Banned Studios · sistema visual de la web (según el manual de marca)
-   Paleta Oro, Anton para titulares, Inter para texto, mono para datos.
+   Banned Studios · sistema visual de la web
+   Copia literal del manual de marca (págs. "Página web" y "Componentes web").
+   La maqueta del manual mide 982 px de contenido para un contenedor real de 1200 px:
+   todas las medidas están pasadas con ×1,22.
    ============================================================ */
 
 @font-face {
@@ -13,18 +15,21 @@
 }
 
 @theme {
+  /* Paleta Oro (manual · color principal) */
   --color-oro: #f0b83a;
   --color-oro-claro: #f6c445;
   --color-oro-oscuro: #ca9b31;
+  /* Neutros (manual · estilo del launcher) */
   --color-fondo: #0b0a08;
-  --color-sup: #14110d;
-  --color-sup-2: #1a1610;
-  --color-fantasma: #24201a;
+  --color-sup: #14110d;        /* tarjeta de proyecto */
+  --color-sup-2: #1a1610;      /* avisos y campos enfocados */
+  --color-superficie: #1e1a13;
+  --color-fantasma: #24201a;   /* botón fantasma */
   --color-texto: #f4ede0;
   --color-texto-2: #b9ae9a;
-  --color-texto-3: #8a8070;
-  --color-linea: rgba(255, 236, 200, 0.08);
-  --color-linea-2: rgba(255, 236, 200, 0.14);
+  --color-texto-3: #7d7363;
+  --color-linea: rgba(255, 214, 120, 0.09);
+  --color-linea-2: rgba(255, 214, 120, 0.18);
 
   --font-display: 'Anton', 'Impact', sans-serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -35,42 +40,53 @@
   html { scrollbar-color: #2a251c transparent; scroll-behavior: smooth; }
   ::selection { background: rgba(240, 184, 58, 0.35); color: #fff; }
 
-  /* Fondo de la marca: negro cálido, halo dorado y retícula isométrica */
+  /* Fondo de la maqueta: viñeta + degradado radial negro cálido */
   body {
+    position: relative;
     background-color: var(--color-fondo);
     background-image:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(224, 184, 98, 0.07) 0%, transparent 70%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 0 v104 M0 0 v104 M60 0 v104 M0 17.32 L60 52 M0 69.28 L60 104 M0 -34.64 L60 0 M0 121.28 L60 156 M60 17.32 L0 52 M60 69.28 L0 104 M60 -34.64 L0 0 M60 121.28 L0 156' fill='none' stroke='rgba(255,214,120,0.045)'/%3E%3C/svg%3E"),
-      radial-gradient(ellipse 60% 90% at 50% 50%, #17140f 0%, #0f0d0a 55%, #0b0a08 100%);
-    background-size: auto, 60px 104px, auto;
+      radial-gradient(ellipse 80% 120% at 50% 50%, transparent 52%, rgba(0, 0, 0, .33) 100%),
+      radial-gradient(ellipse 60% 90% at 50% 50%, #201e1a 0%, #12100c 55%, #0b0a08 100%);
     background-attachment: fixed;
     color: var(--color-texto-2);
+  }  /* Patrón de cubos de b4nned.xyz: rejilla isométrica 60×104, líneas al 12 % (como en la maqueta) */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 0 v104 M0 0 v104 M60 0 v104 M0 17.32 L60 52 M0 69.28 L60 104 M0 -34.64 L60 0 M0 121.28 L60 156 M60 17.32 L0 52 M60 69.28 L0 104 M60 -34.64 L0 0 M60 121.28 L0 156' fill='none' stroke='rgba(255,214,120,0.12)'/%3E%3C/svg%3E");
+    background-size: 60px 104px;
   }
 }
 
 @layer components {
-  /* --- Esquinas cortadas, como la arista del cubo --- */
-  .chamfer { clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
-  .chamfer-sm { clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); }
-  .chamfer-lg { clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px); }
+  /* --- Esquinas cortadas (la arista del cubo) --- */
+  .chamfer { clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px); }      /* imagen 9 px */
+  .chamfer-sm { clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px); }
+  .chamfer-lg { clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); } /* tarjeta 12 px */
+  /* Videos e imágenes de galería: solo el corte en diagonal de 15 px, sin borde */
+  .media {
+    display: block; overflow: hidden; background: var(--color-superficie);
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  }
+  .media > * { display: block; overflow: hidden; }
+  .media lite-youtube, .media iframe { border-radius: 0; }
 
-  /* --- Botones --- */
+  /* --- Botones (manual · CB): md 10,5 px · 9×15 · corte 8 / sm 9,5 px · 6×11 · corte 6 --- */
   .btn {
-    --cut: 8px;
+    --cut: 10px;
     position: relative; isolation: isolate;
-    display: inline-flex; align-items: center; justify-content: center; gap: .55em;
-    padding: .8em 1.3em; font-family: var(--font-sans); font-weight: 700; font-size: .8rem; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8.5px;
+    padding: 11px 18px; font-family: var(--font-sans); font-weight: 700; font-size: 12.8px; line-height: 1;
     letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; cursor: pointer;
     clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
-    transition: background-color .25s ease, color .25s ease, transform .25s ease;
+    transition: background-color .25s ease, color .25s ease;
   }
-  .btn svg { width: 1.15em; height: 1.15em; flex: none; }
-  .btn-sm { --cut: 6px; padding: .65em 1em; font-size: .7rem; }
-  .btn-lg { --cut: 10px; padding: 1em 1.6em; font-size: .9rem; }
-  /* Acción principal: un solo botón dorado por sección */
+  .btn svg { width: 13.5px; height: 13.5px; flex: none; }
+  .btn-sm { --cut: 7px; gap: 7px; padding: 7px 13px; font-size: 11.6px; }
+  .btn-sm svg { width: 13px; height: 13px; }
+  /* Primario: un solo botón dorado por sección */
   .btn-primary { background: var(--color-oro); color: var(--color-fondo); }
   .btn-primary:hover { background: var(--color-oro-claro); }
-  /* Contorno dorado (el launcher) */
+  /* Con contorno dorado de 1 px (el launcher) */
   .btn-secondary { background: var(--color-oro); color: var(--color-oro); }
   .btn-secondary::before {
     content: ""; position: absolute; inset: 1px; z-index: -1; background: var(--color-fondo);
@@ -78,50 +94,49 @@
     transition: background-color .25s ease;
   }
   .btn-secondary:hover::before { background: var(--color-sup-2); }
-  /* Fantasma: idioma, sesión y acciones secundarias */
+  /* Fantasma: idioma y sesión */
   .btn-ghost { background: var(--color-fantasma); color: var(--color-texto); }
   .btn-ghost:hover { background: #2e2920; }
-  /* Botón cuadrado con icono (carruseles) */
-  .btn-icon { --cut: 6px; padding: .6em; }
+  .btn-icon { --cut: 7px; padding: 9px; }
 
-  /* Enlace subrayado con flecha */
+  /* Enlace subrayado (manual · CLINK): 10,5 px, borde dorado de 1 px y flecha dorada */
   .link-arrow {
-    display: inline-flex; align-items: center; gap: .45em; padding-bottom: 3px;
-    font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
-    color: var(--color-texto); border-bottom: 1px solid var(--color-oro); transition: gap .25s ease, color .25s ease;
+    display: inline-flex; align-items: center; gap: 7px; padding-bottom: 4px;
+    font-weight: 700; font-size: 12.8px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+    color: var(--color-texto); border-bottom: 1px solid var(--color-oro); transition: gap .25s ease;
   }
   .link-arrow::after { content: "→"; color: var(--color-oro); }
-  .link-arrow:hover { gap: .75em; color: #fff; }
+  .link-arrow:hover { gap: 11px; }
 
   /* --- Tipografía --- */
-  /* Titular en Anton con el degradado dorado (el padding deja ver las tildes) */
+  /* Titular: Anton en mayúsculas, interletrado 3 %, interlineado 0,9, degradado dorado de titulares */
   .word {
-    font-family: var(--font-display); text-transform: uppercase; letter-spacing: .03em; line-height: .95;
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: .03em; line-height: .9; font-weight: 400;
     background: linear-gradient(180deg, #f2c256 0%, #f0b83a 55%, #ce9e32 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
-    padding-top: .12em; margin-top: -.12em;
+    padding-top: .12em; margin-top: -.12em; /* deja ver las tildes */
   }
-  .display { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .03em; line-height: 1; color: #fff; }
-  /* Antetítulo con línea dorada */
-  .kicker {
-    display: inline-flex; align-items: center; gap: .75em; font-size: .72rem; font-weight: 600;
-    letter-spacing: .34em; text-transform: uppercase; color: var(--color-texto-2);
-  }
-  .kicker::before { content: ""; width: 22px; height: 1.5px; background: var(--color-oro); flex: none; }
+  .display { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .03em; line-height: 1; color: #fff; font-weight: 400; }
+  /* Etiqueta de sección (maqueta · "Proyectos"): 10 px, 600, +0,32 em, dorada */
+  .kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 12.2px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--color-oro); }
+  /* Lema "Minecraft · gato · Studio" (maqueta): 10 px, 600, +0,36 em, texto suave, línea dorada de 22×1,5 */
+  .tagline { display: inline-flex; align-items: center; gap: 12px; font-size: 12.2px; font-weight: 600; letter-spacing: .36em; text-transform: uppercase; color: var(--color-texto-2); }
+  .tagline::before { content: ""; width: 27px; height: 1.8px; background: var(--color-oro); flex: none; }
+  .tagline svg { color: var(--color-oro); flex: none; }
   .mono { font-family: var(--font-mono); }
   .num { font-family: var(--font-mono); color: var(--color-oro); }
 
-  /* --- Logo (gato) como máscara, para teñirlo con la paleta --- */
+  /* --- Logo (máscara del símbolo con el degradado del logo, 135°) --- */
   .mark {
     display: inline-block; flex: none; aspect-ratio: 1;
     -webkit-mask: url('/brand/gato.png') center / contain no-repeat; mask: url('/brand/gato.png') center / contain no-repeat;
     background: linear-gradient(135deg, #f2c35a 0%, #f0b83a 50%, #ca9b31 100%);
   }
 
-  /* --- Marco de esquinas: la firma de la marca --- */
-  .frame { position: relative; padding: 10px; }
+  /* --- Marco de esquinas (manual · WFRAME): esquinas doradas al 75 %, trazo de 2 px --- */
+  .frame { position: relative; padding: 12px; }
   .frame::before {
-    --fc: rgba(255, 214, 120, .75); --fs: 16px; --fw: 2px;
+    --fc: rgba(255, 214, 120, .75); --fs: 20px; --fw: 2px;
     content: ""; position: absolute; inset: 0; pointer-events: none;
     background:
       linear-gradient(var(--fc), var(--fc)) top left / var(--fs) var(--fw) no-repeat,
@@ -132,40 +147,44 @@
       linear-gradient(var(--fc), var(--fc)) bottom left / var(--fw) var(--fs) no-repeat,
       linear-gradient(var(--fc), var(--fc)) bottom right / var(--fs) var(--fw) no-repeat,
       linear-gradient(var(--fc), var(--fc)) bottom right / var(--fw) var(--fs) no-repeat;
-    transition: opacity .3s ease, inset .3s ease;
+    transition: opacity .3s ease;
   }
-  .frame-sm::before { --fs: 12px; --fw: 1.5px; }
-  .frame-lg::before { --fs: 22px; }
-  /* Marco que aparece al pasar el cursor */
-  .frame-hover::before { opacity: 0; inset: 6px; }
-  .group:hover .frame-hover::before, .frame-hover:hover::before, .frame-hover:focus-visible::before { opacity: 1; inset: 0; }
+  .frame-lg::before { --fs: 24px; }             /* flyer de la portada: 20 px */
+  .frame-sm { padding: 8.5px; }
+  .frame-sm::before { --fs: 15px; --fw: 1.5px; } /* tarjetas: 12 px · 1,5 px */
+  .frame-xs { padding: 7px; }
+  .frame-xs::before { --fs: 12px; --fw: 1.5px; } /* avatar del equipo: 10 px · 1,5 px */
+  /* Marco que aparece al pasar el cursor (tarjetas de proyecto y de equipo) */
+  .frame-hover::before { opacity: 0; }
+  .group:hover .frame-hover::before, .frame-hover:hover::before, .frame-hover:focus-visible::before { opacity: 1; }
 
-  /* --- Tarjetas y superficies --- */
-  .card { background: var(--color-sup); clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px); }
+  /* --- Tarjeta (maqueta · tarjeta de proyecto): #14110d con corte de 12 px --- */
+  .card { background: var(--color-sup); clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); }
 
-  /* --- Etiquetas con rombo: el color indica el tipo --- */
+  /* --- Etiquetas (manual · TAGC): mono 9,5 px, +0,12 em, rombo de 5 px, fondo del color al 12 %, corte 5 --- */
   .tag {
     --c: var(--color-oro);
-    display: inline-flex; align-items: center; gap: .5em; padding: .35em .75em .35em .65em;
-    font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; line-height: 1;
+    display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px 5px 10px;
+    font-family: var(--font-mono); font-size: 11.6px; letter-spacing: .12em; text-transform: uppercase; line-height: 1;
     color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
-    clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+    clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
   }
-  .tag::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); flex: none; }
+  .tag::before { content: ""; width: 6px; height: 6px; background: currentColor; transform: rotate(45deg); flex: none; }
   .tag-serie { --c: #c3c8d0; }
   .tag-beta { --c: #f0854a; }
   .tag-pronto { --c: #8fc4ff; }
 
-  /* --- Avisos: borde lateral y título en mono --- */
+  /* --- Aviso (manual): borde lateral de 2 px, fondo #1a1610, corte inferior de 10 px, título en mono --- */
   .notice {
     --c: #f0854a;
-    border-left: 2px solid var(--c); background: var(--color-sup-2); padding: .9rem 1.2rem 1rem 1.1rem; text-align: left;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+    border-left: 2px solid var(--c); background: var(--color-sup-2); padding: 11px 17px 12px 15px; text-align: left;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
   }
-  .notice-title { display: flex; align-items: center; gap: .55em; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
-  .notice-title::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); }
+  .notice-title { display: flex; align-items: center; gap: 8.5px; font-family: var(--font-mono); font-size: 11.6px; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+  .notice-title::before { content: ""; width: 6px; height: 6px; background: currentColor; transform: rotate(45deg); }
+  .notice p { font-size: 13.4px; line-height: 1.45; color: var(--color-texto-2); margin-top: 5px; }
 
-  /* Línea de sección */
+  /* Líneas de la maqueta */
   .rule { border-top: 1px solid var(--color-linea-2); }
 }
 
@@ -188,6 +207,42 @@ astro-embed-tweet blockquote, .twitter-tweet:not(.twitter-tweet-rendered) {
   background: var(--color-sup) !important;
   border-radius: 0 !important;
   color: var(--color-texto-2) !important;
-  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
 }
 astro-embed-tweet a { color: var(--color-oro) !important; }
+
+/* --- Formularios (Contacto, Postúlate, registros de admin) ---
+   Etiqueta mono arriba; el campo lleva el corte en diagonal con línea fina (mismo método que el botón con contorno:
+   el contenedor .inb hace de línea y el campo va 1 px hacia dentro con el mismo corte). Dorado al enfocar. */
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field > span, .field-label {
+  font-family: var(--font-mono); font-size: 11.6px; letter-spacing: .14em; text-transform: uppercase; color: var(--color-texto-3);
+}
+.inb {
+  --cut: 7px;
+  padding: 1px; background: var(--color-linea-2);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: background-color .25s ease;
+}
+.inb:focus-within { background: var(--color-oro); }
+.field input, .field textarea {
+  display: block; width: 100%; padding: 10px 12px; font-size: 15px; color: var(--color-texto);
+  background: var(--color-fondo); border: 0; outline: none; resize: vertical;
+  clip-path: polygon(calc(var(--cut) - .4px) 0, 100% 0, 100% calc(100% - var(--cut) + .4px), calc(100% - var(--cut) + .4px) 100%, 0 100%, 0 calc(var(--cut) - .4px));
+}
+.field textarea { min-height: 140px; line-height: 1.55; }
+.field input::placeholder, .field textarea::placeholder { color: var(--color-texto-3); opacity: .7; }
+.field input:user-invalid { color: #ffb4a8; }
+
+/* Opciones (radio / casillas) como fichas: fantasma; marcadas en dorado */
+.chip { cursor: pointer; position: relative; }
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip span {
+  display: inline-block; padding: 7px 12px; font-family: var(--font-mono); font-size: 11.6px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--color-texto-2); background: var(--color-fantasma);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  transition: background-color .2s ease, color .2s ease;
+}
+.chip:hover span { color: var(--color-texto); }
+.chip input:checked + span { background: var(--color-oro); color: var(--color-fondo); }
+.chip input:focus-visible + span { outline: 1px solid var(--color-oro); outline-offset: 2px; }

@@ -1,0 +1,82 @@
+---
+// Panel de admin: resumen de staff y formularios con accesos directos (solo admin; lo protege middleware.ts)
+import MainPage from "../../components/MainPage.astro";
+import Layout from "../../layouts/Layout.astro";
+import AdminNav from "../../components/AdminNav.astro";
+import { getAllStaff } from "../../libs/firestore/staff";
+import { listSubmissions } from "../../libs/firestore/forms";
+import { FORMS } from "../../data/forms";
+
+const [staff, subs] = await Promise.all([
+  getAllStaff().catch(() => []),
+  listSubmissions().catch(() => []),
+]);
+const of = (f: 'contact' | 'apply') => subs.filter((s) => s.form === f);
+const unread = subs.filter((s) => !s.read).length;
+const latest = subs.slice(0, 5);
+const date = (ms: number) => new Date(ms).toLocaleString("es", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+
+const cards = [
+  { num: '01', title: 'Staff', value: staff.length, sub: 'miembros en la web', href: '/registro/staff/', cta: 'Gestionar staff' },
+  { num: '02', title: 'Contacto', value: of('contact').length, sub: `${of('contact').filter((s) => !s.read).length} sin leer`, href: '/registro/formularios/?f=contact', cta: 'Ver mensajes' },
+  { num: '03', title: 'Postulaciones', value: of('apply').length, sub: `${of('apply').filter((s) => !s.read).length} sin leer`, href: '/registro/formularios/?f=apply', cta: 'Ver postulaciones' },
+];
+---
+<Layout title="Panel de admin">
+    <MainPage class="mt-14">
+        <section class="w-full max-w-[1040px] px-5 text-left">
+            <AdminNav active="panel" badge={unread} />
+
+            <div class="kicker">Admin · Banned Studios</div>
+            <h1 class="word text-[clamp(2.4rem,5vw,3.9rem)] !leading-[1.05] mt-3">Panel</h1>
+            <div class="mono text-[13.4px] text-texto-3 mt-3">{unread > 0 ? `${unread} respuestas sin leer` : 'Todo al día'}</div>
+
+            <!-- Resumen -->
+            <div class="grid grid-cols-3 gap-5 mt-10 max-[860px]:grid-cols-1">
+                {cards.map((c) => (
+                    <a href={c.href} class="frame frame-sm frame-hover group block">
+                        <article class="card p-6 h-full flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <span class="num text-[13.4px]">{c.num}</span>
+                                <span class="mono text-[11.6px] uppercase tracking-[.14em] text-texto-3">{c.title}</span>
+                            </div>
+                            <div class="word text-[64px] leading-none mt-5">{c.value}</div>
+                            <div class="mono text-[12.2px] text-texto-3 mt-2">{c.sub}</div>
+                            <span class="link-arrow mt-6 self-start group-hover:text-oro">{c.cta}</span>
+                        </article>
+                    </a>
+                ))}
+            </div>
+
+            <!-- Últimas respuestas -->
+            <section class="rule mt-14 pt-[25px] grid grid-cols-[minmax(0,280px)_1fr] gap-[40px] max-[860px]:grid-cols-1 max-[860px]:gap-5">
+                <div>
+                    <div class="kicker">Formularios</div>
+                    <h2 class="display text-[30px] text-texto mt-3">Últimas respuestas</h2>
+                    <a href="/registro/formularios/" class="link-arrow mt-5">Ver todas</a>
+                </div>
+                <ol>
+                    {latest.length === 0 && <li class="py-6 mono text-[13.4px] text-texto-3 border-b border-linea">Todavía no hay respuestas.</li>}
+                    {latest.map((s) => (
+                        <li class="border-b border-linea">
+                            <a href={`/registro/formularios/?f=${s.form}`} class="group flex items-center gap-4 py-4">
+                                <span class={`w-[8px] h-[8px] shrink-0 ${s.read ? 'bg-linea-2' : 'bg-oro'}`}></span>
+                                <span class="display text-[19px] leading-none text-texto group-hover:text-oro transition-colors duration-300 truncate flex-1 min-w-0">{String(s.data.name || s.data.discord || s.data.email || 'Sin nombre')}</span>
+                                <span class={`tag ${s.form === 'apply' ? 'tag-serie' : ''} shrink-0 max-[480px]:hidden`}>{FORMS[s.form].title.es}</span>
+                                <span class="mono text-[12.2px] text-texto-3 shrink-0 max-[560px]:hidden">{date(s.createdAt)}</span>
+                                <span class="text-oro shrink-0">→</span>
+                            </a>
+                        </li>
+                    ))}
+                </ol>
+            </section>
+
+            <!-- Accesos directos -->
+            <div class="flex flex-wrap gap-3 mt-14">
+                <a href="/staff/" class="btn btn-ghost btn-sm">Página de staff</a>
+                <a href="/contact/" class="btn btn-ghost btn-sm">Formulario de contacto</a>
+                <a href="/apply/" class="btn btn-ghost btn-sm">Formulario de postulación</a>
+            </div>
+        </section>
+    </MainPage>
+</Layout>

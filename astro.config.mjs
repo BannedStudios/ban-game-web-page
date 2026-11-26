@@ -15,7 +15,8 @@ const redirectMap = Object.fromEntries(
 
 // https://astro.build/config
 export default defineConfig({
-  trailingSlash: "always",
+  // "ignore": acepta rutas con y sin barra final (Clerk a veces vuelve sin barra y daba 404)
+  trailingSlash: "ignore",
   
   image: {
     remotePatterns: [

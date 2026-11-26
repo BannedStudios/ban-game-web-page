@@ -7,7 +7,7 @@ import { getLang } from "../i18n/utils";
 const lang = getLang(Astro.cookies, Astro.request);
 
 // Más recientes primero; el número es el "order" del proyecto, como en el índice de la portada
-const allProjects = await getCollection('proyectos');
+const allProjects = await getCollection('proyectos', ({ data }) => !data.hidden);
 const rawProjects = allProjects
   .filter((item) => item.slug.startsWith(`${lang}/`))
   .map((item) => ({
@@ -27,24 +27,26 @@ const projectPictures = rawProjects.map((project) => {
 });
 ---
 
-<!-- Tarjeta de proyecto (manual de marca · componentes web): imagen, número, título, tipo y fecha; marco al pasar el cursor -->
-<div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 w-full max-w-[1200px] px-5">
+<!-- Tarjeta de proyecto (manual · componentes web), medidas ×1,22:
+     marco 12 px · 1,5 px al pasar el cursor; tarjeta #14110d con corte de 12; flyer 4:5 de 92×115 con corte de 9;
+     número en mono 10 px, título Anton 18 px (1,02), etiqueta y fecha en mono 9,5 px. -->
+<div class="grid grid-cols-[repeat(auto-fill,minmax(480px,1fr))] max-[560px]:grid-cols-1 gap-[28px] w-full max-w-[1240px] px-5">
   {
     projectPictures.map((project) => {
       const isSerie = project.type?.toLowerCase().startsWith('seri');
       return (
         <a href={`/projects/${project.slug}/`} class="frame frame-sm frame-hover group block">
-          <article class="card p-2.5 h-full flex flex-col">
-            <div class="overflow-hidden chamfer">
-              <Image src={project.avatar!} alt={project.title} format="webp" quality="high" width={520} height={520}
-                     class="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-[1.04]" transition:name={project.slug} />
-            </div>
-            <div class="px-2 pt-4 pb-2 flex flex-col gap-3 flex-1">
-              <span class="num text-[0.8rem]">{String(project.order).padStart(2, '0')}</span>
-              <h3 class="display text-[1.35rem] leading-[1.05] text-white group-hover:text-oro transition-colors duration-300">{project.title}</h3>
-              <div class="flex items-center justify-between gap-3 mt-auto">
+          <article class="card p-[11px] h-full flex gap-[26px] items-center max-[560px]:gap-[16px] max-[560px]:p-[9px]">
+            <Image src={project.avatar!} alt={project.title} format="webp" quality={92} widths={[128, 210, 256, 384, 420, 630, 800]} sizes="(max-width: 560px) 128px, 210px" loading="eager"
+                   class="block w-[210px] h-auto max-h-[262px] object-contain chamfer shrink-0 max-[560px]:w-[128px] max-[560px]:max-h-[160px]" />
+            <div class="flex flex-col justify-between self-stretch py-[6px] pr-3 min-w-0">
+              <div>
+                <span class="num text-[14.6px]">{String(project.order).padStart(2, '0')}</span>
+                <h3 class="display text-[34px] leading-[1.02] text-white mt-[10px] max-[560px]:text-[23px] group-hover:text-oro transition-colors duration-300">{project.title}</h3>
+              </div>
+              <div>
                 <span class={`tag ${isSerie ? 'tag-serie' : ''}`}>{project.type}</span>
-                <span class="mono text-[0.78rem] text-texto-3">{project.date}</span>
+                <div class="mono text-[13.4px] text-texto-3 mt-[10px]">{project.date}</div>
               </div>
             </div>
           </article>

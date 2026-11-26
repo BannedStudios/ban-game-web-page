@@ -1,0 +1,116 @@
+---
+// Formulario propio con el estilo de la marca. Envía a /api/forms, que lo guarda en Firebase.
+import { FORMS, type Lang } from "../data/forms";
+import { getLang } from "../i18n/utils";
+
+const { form: formId } = Astro.props as { form: 'contact' | 'apply' };
+const lang = getLang(Astro.cookies, Astro.request) as Lang;
+const form = FORMS[formId];
+const L = {
+  es: { required: 'Obligatorio', send: 'Enviar', sending: 'Enviando…', error: 'No se pudo enviar. Inténtalo de nuevo.', another: 'Enviar otro' },
+  en: { required: 'Required', send: 'Send', sending: 'Sending…', error: 'Could not send. Please try again.', another: 'Send another' },
+}[lang];
+---
+<div class="w-full max-w-[860px] text-left">
+    <div class="flex flex-col gap-3 max-w-[680px]">
+        {form.intro.map((p) => <p class="text-[15.9px] leading-[1.6]">{p[lang]}</p>)}
+    </div>
+
+    <form class="brand-form card p-8 mt-8 max-[560px]:p-5" data-form={form.id} data-lang={lang} data-sent={form.sent[lang]} data-error={L.error} data-sending={L.sending} data-send={L.send} novalidate>
+        <!-- Trampa para bots: oculto para las personas -->
+        <div class="absolute -left-[9999px]" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off" /></label></div>
+
+        <div class="grid grid-cols-2 gap-x-5 gap-y-5 max-[640px]:grid-cols-1">
+            {form.fields.map((f) => (
+                f.type === 'radio' || f.type === 'checkbox' ? (
+                    <fieldset class="col-span-2 max-[640px]:col-span-1" data-group={f.name} data-type={f.type}>
+                        <legend class="field-label">{f.label[lang]}{f.required && <span class="text-oro"> *</span>}</legend>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            {f.options!.map((o) => (
+                                <label class="chip"><input type={f.type} name={f.name} value={o.value} /><span>{o.label[lang]}</span></label>
+                            ))}
+                        </div>
+                    </fieldset>
+                ) : (
+                    <label class={`field ${f.half ? '' : 'col-span-2 max-[640px]:col-span-1'}`}>
+                        <span>{f.label[lang]}{f.required && <b class="text-oro font-normal"> *</b>}</span>
+                        <div class="inb">
+                            {f.type === 'textarea'
+                                ? <textarea name={f.name} rows="6" maxlength={f.max} required={f.required} placeholder={f.placeholder?.[lang]}></textarea>
+                                : <input name={f.name} type={f.type === 'number' ? 'number' : f.type} min={f.type === 'number' ? 1 : undefined} max={f.type === 'number' ? 120 : undefined} maxlength={f.type === 'number' ? undefined : f.max} required={f.required} placeholder={f.placeholder?.[lang]} />}
+                        </div>
+                    </label>
+                )
+            ))}
+        </div>
+
+        <div class="flex items-center justify-between gap-4 mt-8 flex-wrap">
+            <p class="mono text-[12.2px] text-texto-3"><span class="text-oro">*</span> {L.required}</p>
+            <div class="flex items-center gap-4 flex-wrap">
+                <p class="form-msg mono text-[12.2px]" aria-live="polite"></p>
+                <button type="submit" class="btn btn-primary">{L.send}</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Confirmación -->
+    <div class="form-done hidden frame frame-lg mt-8" data-done={form.id}>
+        <div class="card p-8 text-center flex flex-col items-center">
+            <div class="kicker">{form.title[lang]}</div>
+            <p class="display text-[26px] text-texto mt-3 max-w-[520px]">{form.sent[lang]}</p>
+            <button type="button" class="btn btn-ghost btn-sm mt-6" data-again>{L.another}</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function init() {
+        document.querySelectorAll<HTMLFormElement>("form.brand-form").forEach((form) => {
+            if (form.dataset.ready) return;
+            form.dataset.ready = "1";
+            const startedAt = Date.now();
+            const msg = form.querySelector(".form-msg") as HTMLElement;
+            const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+            const done = form.parentElement!.querySelector(".form-done") as HTMLElement;
+            const say = (t: string, err = false) => { msg.textContent = t; msg.style.color = err ? "#ff9d8f" : ""; };
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                // Validación del navegador (obligatorios, correo…) con el mensaje en el propio campo
+                const bad = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input[required], textarea[required], input[type=email], input[type=number]")].find((el) => !el.checkValidity());
+                if (bad) { bad.reportValidity(); return; }
+
+                const data: Record<string, string | string[]> = {};
+                form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(".field input, .field textarea").forEach((el) => { data[el.name] = el.value; });
+                form.querySelectorAll<HTMLElement>("[data-group]").forEach((g) => {
+                    const checked = [...g.querySelectorAll<HTMLInputElement>("input:checked")].map((c) => c.value);
+                    const name = g.dataset.group!;
+                    data[name] = g.dataset.type === "radio" ? (checked[0] ?? "") : checked;
+                });
+
+                btn.disabled = true; say(form.dataset.sending || "…");
+                try {
+                    const res = await fetch("/api/forms/", {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ form: form.dataset.form, lang: form.dataset.lang, data, startedAt, website: (form.querySelector('[name="website"]') as HTMLInputElement).value }),
+                    });
+                    const out = await res.json().catch(() => ({}));
+                    if (!res.ok) { say(out.error || form.dataset.error || "Error", true); return; }
+                    form.reset(); say("");
+                    form.classList.add("hidden"); done.classList.remove("hidden");
+                    done.scrollIntoView({ behavior: "smooth", block: "center" });
+                } catch {
+                    say(form.dataset.error || "Error", true);
+                } finally {
+                    btn.disabled = false;
+                }
+            });
+
+            done.querySelector("[data-again]")?.addEventListener("click", () => {
+                done.classList.add("hidden"); form.classList.remove("hidden");
+            });
+        });
+    }
+    init();
+    document.addEventListener("astro:after-swap", init);
+</script>

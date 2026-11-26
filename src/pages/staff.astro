@@ -6,7 +6,7 @@ import { getAllStaff } from '../libs/firestore/staff';
 import MainPage from '../components/MainPage.astro';
 import BriefCase from '../components/Icons/BriefCase.astro';
 import MiniTitle from '../components/MiniTitle.astro';
-import BannerExtra from '../components/BannerExtra.astro';
+import PhotoStack from '../components/PhotoStack.astro';
 
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
@@ -39,11 +39,11 @@ const tgb = [
 ---
 
 <Layout title="Staff" image="/index/index2.webp" desc={`${t("staff.desc")}`}>
-    <BannerExtra src="staff"/>
-    <MainPage>
+    <MainPage class="mt-16">
+      <PhotoStack items={staff.slice(0, 5).map((m) => ({ src: m.avatar, alt: m.name }))} more={Math.max(0, staff.length - 5)} class="mb-9" />
       <div class="kicker">Staff</div>
       <MiniTitle class="mt-3 mb-6">{t("staff.miniTitle")}</MiniTitle>
-      <a class="btn btn-primary btn-lg" href="/apply/">
+      <a class="btn btn-primary" href="/apply/">
         <BriefCase />
         <span>{t("staff.apply")}</span>
       </a>

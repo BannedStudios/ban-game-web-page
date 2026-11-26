@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
 import MainPage from "../components/MainPage.astro";
-import Title from "../components/Title.astro";
 import Layout from "../layouts/Layout.astro";
 import SectionHead from "../components/SectionHead.astro";
 import { getLang, useTranslations } from "../i18n/utils";
@@ -20,9 +19,8 @@ const { Content } = await render(about!);
 
 <Layout title={t("about.title")} image="/pages/index.webp" desc={t("about.desc")}>
     <MainPage class="mt-16">
-        <div class="frame frame-lg mb-8">
-            <img src="/brand/logo3d.webp" alt="Banned Studios" width="120" height="120" class="block w-[120px] h-[120px] -m-2 object-contain" />
-        </div>
+        <!-- Gato plano de la marca dentro del marco de esquinas -->
+        <div class="frame frame-lg mb-9"><span class="mark block w-[72px]"></span></div>
         <SectionHead kicker={t("hero.title")} title={t("about.miniTitle")} size="lg" as="h1" />
         <div class="px-4 mt-8 max-w-[900px] prose prose-invert prose-marca text-left">
             <Content/>

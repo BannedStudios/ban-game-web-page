@@ -1,0 +1,22 @@
+---
+// Navegación común del panel de admin (/registro/): pestañas con la sección activa en dorado
+const { active, badge = 0 } = Astro.props as { active: 'panel' | 'staff' | 'forms'; badge?: number };
+const items = [
+  { id: 'panel', label: 'Panel', href: '/registro/' },
+  { id: 'staff', label: 'Staff', href: '/registro/staff/' },
+  { id: 'forms', label: 'Formularios', href: '/registro/formularios/' },
+];
+---
+<nav class="flex items-center justify-between gap-4 flex-wrap pb-4 mb-10 border-b border-linea" aria-label="Panel de admin">
+    <div class="flex items-center gap-2 flex-wrap">
+        <span class="mono text-[11.6px] tracking-[.14em] uppercase text-texto-3 mr-2">Admin</span>
+        {items.map((it, i) => (
+            <a href={it.href} aria-current={active === it.id ? 'page' : undefined}
+               class={`btn btn-sm ${active === it.id ? 'btn-primary' : 'btn-ghost'}`}>
+                <span class={`num ${active === it.id ? '!text-fondo' : ''}`}>0{i + 1}</span>{it.label}
+                {it.id === 'forms' && badge > 0 && <span class={`ml-1 ${active === it.id ? '' : 'text-oro'}`}>· {badge}</span>}
+            </a>
+        ))}
+    </div>
+    <a href="/" class="link-arrow">Volver a la web</a>
+</nav>

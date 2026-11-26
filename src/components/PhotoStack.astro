@@ -1,0 +1,31 @@
+---
+// Fila de miniaturas superpuestas dentro del marco de esquinas (cabecera de Proyectos y Staff).
+// Acepta imágenes importadas (se optimizan) o URLs. "more" añade una ficha final con «+N».
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Item { src: string | ImageMetadata; alt: string }
+const { items = [], more = 0, size = 64, class: cls = '' } = Astro.props as { items: Item[]; more?: number; size?: number; class?: string };
+
+// Alto fijo y ancho según la proporción de la imagen (sin recortar). Las URLs (avatares) se tratan como cuadradas.
+const thumbs = await Promise.all(items.map(async (it) => {
+  if (typeof it.src === 'string') return { alt: it.alt, src: it.src, w: size };
+  const w = Math.round(size * it.src.width / it.src.height);
+  const img = await getImage({ src: it.src, width: w * 2, height: size * 2, format: 'webp', quality: 90 });
+  return { alt: it.alt, src: img.src, w };
+}));
+const overlap = Math.round(size * 0.22);
+---
+<div class={`frame shrink-0 ${cls}`}>
+    <div class="flex items-center" style={`padding-right:${overlap}px`}>
+        {thumbs.map((t, i) => (
+            <img src={t.src} alt={t.alt} width={t.w} height={size} loading="eager"
+                 class="block object-cover chamfer-sm bg-superficie ring-2 ring-fondo transition-transform duration-300 hover:-translate-y-1"
+                 style={`width:${t.w}px;height:${size}px;margin-right:-${overlap}px;z-index:${thumbs.length - i}`} />
+        ))}
+        {more > 0 && (
+            <span class="grid place-items-center chamfer-sm bg-fantasma mono text-oro text-[14px]"
+                  style={`width:${size}px;height:${size}px;margin-right:-${overlap}px`}>+{more}</span>
+        )}
+    </div>
+</div>

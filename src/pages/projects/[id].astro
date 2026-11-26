@@ -7,7 +7,6 @@ import MiniTitle from '../../components/MiniTitle.astro';
 import MainPage from '../../components/MainPage.astro';
 import Prev from '../../components/Icons/Prev.astro';
 import Next from '../../components/Icons/Next.astro';
-import Banner from '../../components/Banner.astro';
 import StaffCard from '../../components/StaffCard.astro';
 import Desc from '../../components/Desc.astro';
 import TweetEmbed from '../../components/TweetEmbed.astro';
@@ -23,7 +22,7 @@ const { id } = Astro.params;
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
-const allProjects = await getCollection('proyectos');
+const allProjects = await getCollection('proyectos', ({ data }) => !data.hidden);
 const projectEntry = allProjects.find((item) => item.slug === `${lang}/${id}`);
 
 if (!projectEntry) {
@@ -53,13 +52,12 @@ const credits = proyecto.credits || [];
 ---
 
 <Layout title={proyecto.title} desc={proyecto.desc}>
-    {proyecto.banner && <Banner src={proyecto.slug}/>}
-    <MainPage>
-        {!proyecto.banner && <section class="flex flex-col justify-center items-center">
+    <MainPage class="mt-8">
+        <section class="flex flex-col justify-center items-center">
             <div class="frame frame-lg mt-8">
-                <Image src={image} alt={proyecto.title} format="webp" quality="high" class="w-[250px] h-[250px] object-cover chamfer-lg" transition:name={proyecto.slug}/>
+                <Image src={image} alt={proyecto.title} format="webp" quality={92} widths={[240, 320, 480, 640, 800]} sizes="(max-width: 380px) 240px, 320px" loading="eager" class="block w-[320px] h-auto max-h-[420px] object-contain rounded-[4px] max-[380px]:w-[240px]"/>
             </div>
-        </section>}
+        </section>
 
         <Title class="mt-8">{proyecto.title}</Title>
         <div class="flex items-center gap-4 mt-4">
@@ -71,21 +69,21 @@ const credits = proyecto.credits || [];
         </div>
 
         {gallery.length > 0 && (
-            <>
+            <div data-carousel-root class="contents">
                 <MiniTitle class="mt-12">{t("projects.gallery")}</MiniTitle>
                 <div class="w-[calc(100vw-40px)] max-w-[800px] mt-6 mb-5 overflow-hidden">
-                    <div id="carousel" class="flex items-center gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory">
+                    <div data-carousel data-gap="16" class="flex items-center gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory">
                         {
                             videos.map((video) => (
-                                <div class="w-[370px] max-w-[85vw] snap-start shrink-0 overflow-hidden chamfer-lg">
+                                <div class="w-[calc((100%-16px)/2)] max-[560px]:w-full snap-start shrink-0 media">
                                     <YTVideo url={video.src} title={video.title}/>
                                 </div>
                             ))
                         }
                         {
                             images.map((image) => (
-                                <a href={image.link} title={image.title} target="_blank" class="w-[370px] max-w-[85vw] snap-start shrink-0 overflow-hidden chamfer-lg">
-                                    <img src={image.src} class="object-cover w-full transition duration-500 ease hover:scale-[1.1] aspect-[16/9]" />
+                                <a href={image.link} title={image.title} target="_blank" class="w-[calc((100%-16px)/2)] max-[560px]:w-full snap-start shrink-0 media">
+                                    <span><img src={image.src} class="block object-cover w-full aspect-[16/9]" /></span>
                                 </a>
                             ))
                         }
@@ -93,10 +91,10 @@ const credits = proyecto.credits || [];
                 </div>
 
                 <div class="flex flex-row gap-2">
-                    <button id="prev" class="btn btn-ghost btn-icon" aria-label="Anterior"><Prev class="w-5 h-5"/></button>
-                    <button id="next" class="btn btn-ghost btn-icon" aria-label="Siguiente"><Next class="w-5 h-5"/></button>
+                    <button data-carousel-prev class="btn btn-ghost btn-icon" aria-label="Anterior"><Prev class="w-5 h-5"/></button>
+                    <button data-carousel-next class="btn btn-ghost btn-icon" aria-label="Siguiente"><Next class="w-5 h-5"/></button>
                 </div>
-            </>
+            </div>
         )}
 
         {credits.length > 0 && (
@@ -125,23 +123,6 @@ const credits = proyecto.credits || [];
 </style>
 
 <script>
-    init();
-
-    document.addEventListener('astro:after-swap', init);
-
-    function init () {
-        const carousel = document.getElementById('carousel');
-        const prev = document.getElementById('prev');
-        const next = document.getElementById('next');
-
-        if (next == null || prev == null || carousel == null) return;
-        
-        next.addEventListener('click', () => {
-            carousel.scrollBy({ left: 300, behavior: 'smooth' });
-        });
-        
-        prev.addEventListener('click', () => {
-            carousel.scrollBy({ left: -300, behavior: 'smooth' });
-        });
-    }
+    // Carrusel común (portada y galería de proyectos): ver src/scripts/carousel.ts
+    import '../../scripts/carousel';
 </script>

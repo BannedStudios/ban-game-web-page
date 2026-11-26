@@ -1,11 +1,18 @@
 ---
-import Layout from "../layouts/Layout.astro"
+import Layout from "../layouts/Layout.astro";
+import MainPage from "../components/MainPage.astro";
+import SectionHead from "../components/SectionHead.astro";
+import BrandForm from "../components/BrandForm.astro";
 import { getLang, useTranslations } from "../i18n/utils";
 
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 ---
 
+<!-- Formulario propio (antes forms.app): las respuestas se guardan en Firebase y se ven en /registro/formularios/ -->
 <Layout title={t("apply.title")} image="/pages/staff.webp" desc={t("apply.desc")}>
-    <iframe id="" allowtransparency="true" allowfullscreen="true" allow="geolocation; microphone; camera" src="https://3a6m514f.forms.app/form/67bd34a11a3737e353d2626a" frameborder="0" class="w-full h-[calc(100vh-55px)]"></iframe>
+    <MainPage class="mt-16 px-5">
+        <SectionHead kicker={t("apply.title")} title={t("apply.heading")} size="md" as="h1" align="center" class="mb-10 max-w-[860px]" />
+        <BrandForm form="apply" />
+    </MainPage>
 </Layout>

@@ -3,12 +3,13 @@ import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { getCollection } from "astro:content";
 import { getLang, useTranslations } from "../i18n/utils";
+import Cat from "./Icons/Cat.astro";
 
 const lang = getLang(Astro.cookies, Astro.request);
 const t = useTranslations(lang);
 
 // Último proyecto = el de mayor "order"
-const all = await getCollection('proyectos');
+const all = await getCollection('proyectos', ({ data }) => !data.hidden);
 const latest = all
   .filter((item) => item.slug.startsWith(`${lang}/`))
   .map((item) => ({ ...item.data, slug: item.slug.replace(`${lang}/`, "") }))
@@ -21,54 +22,53 @@ const latestImage = latest && Object.entries(projectImages).find(([path]) => {
 })?.[1]?.default;
 
 const isSerie = latest?.type?.toLowerCase().startsWith('seri');
+
+// "Creando para<br>creadores." — el salto va antes de la última palabra, como en la maqueta
+const title = t('hero.title');
+const cut = title.lastIndexOf(' ');
+const titleA = title.slice(0, cut);
+const titleB = title.slice(cut + 1);
 ---
 
-<!-- Portada (manual de marca · página web): lockup con el lema a la izquierda y el último proyecto a la derecha -->
-<section class="hero relative w-full max-w-[1200px] mx-auto px-5 pt-14 pb-14 grid grid-cols-[1.15fr_1fr] gap-12 items-center max-[1100px]:grid-cols-1 max-[1100px]:gap-14 max-[1100px]:pt-10">
-    <div class="hero-in">
-        <div class="flex items-center gap-7 max-[560px]:flex-col max-[560px]:items-start max-[560px]:gap-5">
-            <div class="frame frame-lg shrink-0 relative">
-                <div class="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle,rgba(224,184,98,.16)_0%,transparent_70%)] scale-150"></div>
-                <img src="/brand/logo3d.webp" alt="Banned Studios" width="150" height="150" class="block w-[150px] h-[150px] -m-3 object-contain max-[560px]:w-[110px] max-[560px]:h-[110px]" loading="eager" />
+<!-- Portada (manual · página web). Maqueta: columnas 440 px + resto, 30 px de separación (×1,22). -->
+<section class="w-full max-w-[1240px] mx-auto px-5 pt-[22px] grid grid-cols-[538px_1fr] gap-[37px] items-center max-[1100px]:grid-cols-1 max-[1100px]:gap-10 max-[1100px]:pt-8">
+    <div class="pt-[10px]">
+        <div class="flex items-center gap-[27px] max-[560px]:gap-5">
+            <!-- Logo 3D (124 px) dentro del marco de esquinas, con el halo dorado del logo -->
+            <div class="frame shrink-0 relative max-[560px]:hidden">
+                <div class="absolute left-1/2 top-1/2 w-[366px] h-[366px] -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none bg-[radial-gradient(circle,rgba(224,184,98,.0575)_0%,rgba(224,184,98,.01725)_80px,transparent_183px)]"></div>
+                <img src="/brand/logo3d.webp" alt="Banned Studios" width="152" height="152" class="block w-[152px] h-[152px] max-w-none -m-[17px] object-contain max-[560px]:w-[104px] max-[560px]:h-[104px] max-[560px]:-m-3" loading="eager" />
             </div>
             <div>
-                <div class="kicker">Minecraft <span class="mark w-[14px]"></span> Studio</div>
-                <h1 class="word text-[clamp(2.6rem,5.4vw,4.4rem)] mt-3">{t('hero.title')}</h1>
+                <div class="tagline max-[560px]:text-[13.8px] max-[560px]:tracking-[.32em]">Minecraft <Cat size={15} /> Studio</div>
+                <h1 class="word text-[58.7px] mt-[12px] max-[560px]:text-[clamp(42px,14.5vw,55px)] max-[560px]:mt-[10px]">{titleA}<br class="max-[560px]:hidden" /> {titleB}</h1>
             </div>
         </div>
-        <p class="mt-6 max-w-[460px] text-[1.02rem] leading-relaxed">
-            {t('hero.desc')}
-            <a href="/about/" class="text-texto underline decoration-oro underline-offset-4 hover:text-oro transition-colors duration-300">{t('hero.descLink')}</a>
-        </p>
-        <div class="flex flex-wrap gap-6 items-center mt-8">
-            <a class="btn btn-primary btn-lg" href="#proyectos">{t('index.viewProjects')}</a>
+        <!-- En móvil la maqueta no lleva el texto ni el enlace: el botón va después del último proyecto -->
+        <p class="text-[15.9px] leading-[1.6] mt-[17px] max-w-[440px] max-[560px]:hidden">{t('hero.lead')}</p>
+        <div class="flex flex-wrap gap-[22px] items-center mt-[22px] max-[560px]:hidden">
+            <a class="btn btn-primary" href="#proyectos">{t('index.viewProjects')}</a>
             <a class="link-arrow" href="/contact/">{t('index.cta.contact')}</a>
         </div>
     </div>
 
     {latest && (
-        <div class="hero-in hero-in-2 min-w-0 flex gap-8 items-center max-[560px]:flex-col max-[560px]:items-start">
+        <!-- Último proyecto: imagen con su proporción real dentro del marco (20 px), título en Anton, etiqueta y enlace -->
+        <div class="flex gap-[32px] items-center max-[560px]:gap-5 max-[380px]:gap-4">
             <a href={`/projects/${latest.slug}/`} class="frame frame-lg group shrink-0" aria-label={latest.title}>
-                <Image src={latestImage!} alt={latest.title} format="webp" quality="high" width={520} height={520} loading="eager"
-                       class="block w-[240px] h-[240px] object-cover chamfer-lg transition-transform duration-500 group-hover:scale-[1.03] max-[560px]:w-[200px] max-[560px]:h-[200px]" transition:name={latest.slug} />
+                <Image src={latestImage!} alt={latest.title} format="webp" quality={92} widths={[112, 140, 260, 280, 420, 520, 780, 800]} sizes="(max-width: 380px) 112px, (max-width: 560px) 140px, 260px" loading="eager"
+                       class="block w-[260px] h-auto max-h-[340px] object-contain rounded-[4px] max-[560px]:w-[140px] max-[560px]:max-h-[190px] max-[380px]:w-[112px]" />
             </a>
-            <div>
-                <div class="mono text-[0.75rem] tracking-[.14em] text-oro uppercase">{t('index.latest')}</div>
-                <a href={`/projects/${latest.slug}/`} class="display block text-[clamp(1.9rem,3.4vw,2.4rem)] mt-2 break-words hover:text-oro transition-colors duration-300">{latest.title}</a>
-                <span class={`tag mt-3 ${isSerie ? 'tag-serie' : ''}`}>{latest.type}</span>
-                <p class="mt-3 text-[0.9rem] leading-relaxed max-w-[280px] line-clamp-3">{latest.desc}</p>
-                <a href={`/projects/${latest.slug}/`} class="link-arrow mt-5">{t('index.viewProject')}</a>
+            <div class="min-w-0">
+                <div class="mono text-[12.2px] tracking-[.14em] text-oro uppercase">{t('index.latest')}</div>
+                <a href={`/projects/${latest.slug}/`} class="display block text-[41.5px] mt-[10px] max-w-[300px] [overflow-wrap:normal] hover:text-oro transition-colors duration-300 max-[560px]:text-[clamp(20px,7vw,26px)]">{latest.title}</a>
+                <span class={`tag mt-[12px] ${isSerie ? 'tag-serie' : ''}`}>{latest.type}</span>
+                <p class="text-[14.7px] leading-[1.55] mt-[12px] max-w-[281px] line-clamp-3 max-[560px]:hidden">{latest.desc}</p>
+                <a href={`/projects/${latest.slug}/`} class="link-arrow mt-[17px]">{t('index.viewProject')}</a>
             </div>
         </div>
     )}
+    <div class="hidden max-[560px]:block -mt-4">
+        <a class="btn btn-primary btn-sm" href="#proyectos">{t('index.viewProjects')}</a>
+    </div>
 </section>
-
-<style>
-    @keyframes heroIn {
-        from { opacity: 0; transform: translateY(16px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .hero-in { animation: heroIn .9s cubic-bezier(.2,.7,.2,1) both; }
-    .hero-in-2 { animation-delay: .15s; }
-    @media (prefers-reduced-motion: reduce) { .hero-in { animation: none; } }
-</style>

@@ -16,6 +16,7 @@ export const ui = {
     'hero.title': 'Creating for creators.',
     'hero.desc': 'Studio of server development (events or series) of Minecraft Semi-professionals.',
     'hero.descLink': 'Learn more...',
+    'hero.lead': 'Minecraft servers, events and series: mods, maps and organization under one team.',
 
     '404.title': '404',
     '404.miniTitle': 'Page not found.',
@@ -41,6 +42,13 @@ export const ui = {
     'index.viewProjects': 'View projects',
     'index.videosTitle': 'Featured Videos',
     'index.servicesTitle': 'What We Offer',
+    'index.servicesKicker': 'Services',
+    'index.teamKicker': 'Team',
+    'index.teamTitle': 'Our team',
+    'index.teamCount': 'members · since 2023',
+    'index.teamDesc': 'Developers, builders, designers and composers working together on every project.',
+    'index.teamLink': 'Meet the staff',
+    'index.servicesCount': '03 areas · one team',
     'index.services.mods.title': 'Mods & Plugins',
     'index.services.mods.desc': 'Development of custom mechanics, items, interfaces, and systems tailored to your server or project.',
     'index.services.builds.title': 'Building & Maps',
@@ -83,9 +91,11 @@ export const ui = {
     'terms.miniTitle': 'Coming soon...',
 
     'contact.title': 'Contact',
+    'contact.heading': "Let's talk",
     'contact.desc': 'Form to contact to Banned Studios.',
 
     'apply.title': 'Apply',
+    'apply.heading': 'Join the team',
     'apply.desc': 'Form to apply to Banned Studios.',
 
     'projects.title': 'Projects',
@@ -114,6 +124,7 @@ export const ui = {
     'hero.title': 'Creando para creadores.',
     'hero.desc': 'Estudio de desarrollo de servidores (eventos o series) de Minecraft Semi-profesionales.',
     'hero.descLink': 'Saber más...',
+    'hero.lead': 'Servidores, eventos y series de Minecraft: mods, mapas y organización bajo un mismo equipo.',
 
     '404.title': '404',
     '404.miniTitle': 'Página no encontrada.',
@@ -139,6 +150,13 @@ export const ui = {
     'index.viewProjects': 'Ver proyectos',
     'index.videosTitle': 'Videos destacados',
     'index.servicesTitle': '¿Qué Ofrecemos?',
+    'index.servicesKicker': 'Servicios',
+    'index.teamKicker': 'Equipo',
+    'index.teamTitle': 'Nuestro equipo',
+    'index.teamCount': 'miembros · desde 2023',
+    'index.teamDesc': 'Programadores, constructores, diseñadores y compositores trabajando juntos en cada proyecto.',
+    'index.teamLink': 'Conoce al staff',
+    'index.servicesCount': '03 áreas · un mismo equipo',
     'index.services.mods.title': 'Mods y Plugins',
     'index.services.mods.desc': 'Desarrollo de mecánicas, items, interfaces y sistemas personalizados adaptados a tu servidor o proyecto.',
     'index.services.builds.title': 'Construcción y Mapas',
@@ -181,9 +199,11 @@ export const ui = {
     'terms.miniTitle': 'Próximamente...',
 
     'contact.title': 'Contacto',
+    'contact.heading': 'Hablemos',
     'contact.desc': 'Formulario para poder contactar con Banned Studios.',
 
     'apply.title': 'Postúlate',
+    'apply.heading': 'Únete al equipo',
     'apply.desc': 'Formulario para poder postularse a Banned Studios.',
 
     'projects.title': 'Proyectos',

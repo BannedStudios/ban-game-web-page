@@ -9,6 +9,7 @@ gallery:
     title: "SONIC CHAMPIONS! | Próximo evento colaboración con The VYROX Project \U0001F33B"
     src: 'https://www.youtube.com/watch?v=osygu3aYL4k'
 desc: Proximamente...
+hidden: true
 order: 13
 date: '2026'
 credits:
